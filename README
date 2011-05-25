@@ -8,7 +8,7 @@
 
 To do
 =====
-- Write user documentation
+ + Write user documentation
 
 
 Library dependencies
@@ -16,21 +16,33 @@ Library dependencies
 
 Only for demos:
 
-- OpenGL development libraries
-- FLTK development libraries                    <http://www.fltk.org/>
-- OpenCV development libraries (libhighgui)     <http://opencv.willowgarage.com/>
+ + OpenGL development libraries
+ + FLTK development libraries                    <http://www.fltk.org/>
+ + OpenCV development libraries (libhighgui)     <http://opencv.willowgarage.com/>
+
+
+Supported training algorithms
+=============================
+
+ + BATCH (Gradient Descent)
+ + RPROP
+ + RPROP+
+ + RPROP-
+ + IRPROP+
+ + IRPROP-
 
 
 Building with CMake
 ===================
 
-$ cd Serotonina
-$ cmake ./ -DCMAKE_INSTALL_PREFIX=<PATH>
-$ make
-# make install
+ $ cd Serotonina
+ $ cmake ./ -DCMAKE_INSTALL_PREFIX=<PATH>
+ $ make
+ # make install
 
 
 Compile with Serotonina
 =======================
 
-$ g++ -lserotonina <FILES> -o <BIN>
+ $ g++ -lserotonina <FILES> -o <BIN>
+ 
