@@ -33,21 +33,29 @@ find_package( OpenCV REQUIRED )
 # Percorso degli headers
 include_directories(
 
-	${CMAKE_SOURCE_DIR}/include
-	${CMAKE_BINARY_DIR}/include
+	"${CMAKE_SOURCE_DIR}/include"
+	"${CMAKE_BINARY_DIR}/include"
 )
 
 # Imposto i file di configurazione generati automaticamente
-configure_file (
+configure_file(
 
-	${CMAKE_SOURCE_DIR}/include/serotonina/version.hpp.in
-	${CMAKE_BINARY_DIR}/include/serotonina/version.hpp
+	"${CMAKE_SOURCE_DIR}/include/serotonina/version.hpp.in"
+	"${CMAKE_BINARY_DIR}/include/serotonina/version.hpp"
 )
 
-configure_file (
+configure_file(
 
-	${CMAKE_SOURCE_DIR}/include/extra/version.hpp.in
-	${CMAKE_BINARY_DIR}/include/extra/version.hpp
+	"${CMAKE_SOURCE_DIR}/include/extra/version.hpp.in"
+	"${CMAKE_BINARY_DIR}/include/extra/version.hpp"
+)
+
+# Imposto lo script per la disinstallazione
+configure_file(
+
+	"${CMAKE_SOURCE_DIR}/cmake_uninstall.cmake.in"
+	"${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+	IMMEDIATE @ONLY
 )
 
 # Imposto la cartella delle librerie generate
@@ -98,13 +106,26 @@ target_link_libraries( st_face_recognition ${FLTK_LIBRARIES} )
 target_link_libraries( st_face_recognition ${OPENGL_LIBRARIES} )
 target_link_libraries( st_face_recognition ${OpenCV_LIBS} )
 
-# Installatore
+# Installatore della libreria
 install_targets( /lib serotonina )
 
+# Installatore degli headers
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/include/serotonina
 		 DESTINATION ${CMAKE_INSTALL_PREFIX}/include
 		 FILES_MATCHING
 		 PATTERN "*"
 		 PATTERN "*.in" EXCLUDE )
 
+# Installatore delle informazioni per pkg-config
+install( FILES ${CMAKE_SOURCE_DIR}/pkgconfig/serotonina.pc
+		 DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig )
+
+# Memorizzo le cartelle di destinazione
+file( WRITE "${CMAKE_SOURCE_DIR}/install_directory.txt"
+
+	"${CMAKE_INSTALL_PREFIX}/include/serotonina\n"
+)
+
+# Aggiungo il "make uninstall"
+add_custom_target( uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake )
 
