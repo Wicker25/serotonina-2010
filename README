@@ -13,6 +13,16 @@ To do
  + Write user documentation
 
 
+Authors
+=======
+See AUTHORS file for more details.
+
+
+License
+=======
+See COPYING file for more details.
+
+
 Library dependencies
 ====================
 Only for demos:
@@ -43,3 +53,5 @@ Building with CMake
 Compile with Serotonina
 =======================
  $ g++ `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
+
+ 

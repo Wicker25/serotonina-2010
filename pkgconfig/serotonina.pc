@@ -6,7 +6,7 @@ libdir=${exec_prefix}/lib
 includedir=${prefix}/include/serotonina
 
 Name: Serotonina
-Description: A C++ Simple Artificial Neural Network Library
+Description: A Simple C++ Artificial Neural Network Library
 Version: 1.0.0
 Libs: -L${libdir} -lserotonina
 Cflags: -I${includedir}
