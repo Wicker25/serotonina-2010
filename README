@@ -34,7 +34,7 @@ Only for demos:
 
 Supported training algorithms
 =============================
- + BATCH (Gradient Descent)
+ + BATCH (Delta Rule + Momentum)
  + RPROP
  + RPROP+
  + RPROP-
