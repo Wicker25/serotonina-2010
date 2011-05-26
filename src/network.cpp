@@ -430,10 +430,10 @@ Network::UpdateWeightsBatch() {
 		synapse_t = this->connections[t]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->first_synapse + ( ( this->layers[t]->size + 1 ) * this->layers[t + 1]->size );
+		end_synapse_t = this->connections[t]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t < end_synapse_t; synapse_t++ ) {
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Calcolo la modifica del peso
 			synapse_t->delta_weight = - this->learning_rate * synapse_t->dEdw + this->momentum * synapse_t->delta_weight;
@@ -464,10 +464,10 @@ Network::UpdateWeightsRprop() {
 		synapse_t = this->connections[t]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->first_synapse + ( ( this->layers[t]->size + 1 ) * this->layers[t + 1]->size );
+		end_synapse_t = this->connections[t]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t < end_synapse_t; synapse_t++ ) {
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
 			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
@@ -525,10 +525,10 @@ Network::UpdateWeightsRpropPlus() {
 		synapse_t = this->connections[t]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->first_synapse + ( ( this->layers[t]->size + 1 ) * this->layers[t + 1]->size );
+		end_synapse_t = this->connections[t]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t < end_synapse_t; synapse_t++ ) {
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
 			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
@@ -593,11 +593,10 @@ Network::UpdateWeightsRpropMinus() {
 		synapse_t = this->connections[t]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->first_synapse + ( ( this->layers[t]->size + 1 ) * this->layers[t + 1]->size );
+		end_synapse_t = this->connections[t]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t < end_synapse_t; synapse_t++ ) {
-
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
 			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
 
@@ -645,10 +644,10 @@ Network::UpdateWeightsIRpropPlus() {
 		synapse_t = this->connections[t]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->first_synapse + ( ( this->layers[t]->size + 1 ) * this->layers[t + 1]->size );
+		end_synapse_t = this->connections[t]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t < end_synapse_t; synapse_t++ ) {
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
 			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
@@ -714,10 +713,10 @@ Network::UpdateWeightsIRpropMinus() {
 		synapse_t = this->connections[t]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->first_synapse + ( ( this->layers[t]->size + 1 ) * this->layers[t + 1]->size );
+		end_synapse_t = this->connections[t]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t < end_synapse_t; synapse_t++ ) {
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
 			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
