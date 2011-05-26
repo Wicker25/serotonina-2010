@@ -52,6 +52,13 @@ Building with CMake
 
 Compile with Serotonina
 =======================
+Compile as shared library:
+
  $ g++ `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
+
+Compile as static library:
+
+ $ g++ -static `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
+
 
  
