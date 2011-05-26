@@ -184,25 +184,26 @@ void
 Network::InizializeWeight() {
 
 	// Iteratori
-	size_t j, i;
 	short int t = ( this->layers.size() - 1 ) - 1;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
+	Synapse *end_synapse_t;
 
-	// Reinizializzo i pesi sinaptici con valori casuali
+	// Aggiorno tutti i pesi sinaptici della rete usando la Regola Delta con il Momentum
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
 		synapse_t = this->connections[t]->first_synapse;
 
-		for ( i = 0; i <= this->layers[t]->size; i++ ) {
+		// Ricavo la sinapsi finale
+		end_synapse_t = this->connections[t]->last_synapse;
 
-			for ( j = 0; j < this->layers[t + 1]->size; j++, synapse_t++ ) {
+		// Ciclo per tutti i pesi sinaptici tra i due strati
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
-				// Inizializzo il peso sinaptico
-				synapse_t->weight = get_rand();
-			}
+			// Inizializzo il peso sinaptico
+			synapse_t->weight = get_rand();
 		}
 	}
 }

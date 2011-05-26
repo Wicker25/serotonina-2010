@@ -51,7 +51,6 @@
 #define __SIGMOID__(x)		1.0 / ( 1.0 + std::exp(-x) )
 #define __D_SIGMOID__(x)	x * ( 1 - x )
 
-
 namespace Serotonina { // Namespace di Serotonina
 
 // Algoritmi di apprendimento
