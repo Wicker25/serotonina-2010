@@ -147,6 +147,9 @@ Ocr::Ocr( int width, int height ) : Fl_Gl_Window( width, height, _OCR_TITLE_ ) {
 		this->character_choice->add( buffer );
 	}
 
+	// Aggiungo la voce "Nessun carattere" al menù
+	this->character_choice->add( "- Non e' un carattere -" );
+
 	// Creo il pulsante per l'aggiunta del carattere
 	this->add_char_button = new Fl_Button( 140, 10, 140, 24, "Aggiungi carattere" );
 	this->add_char_button->callback( (Fl_Callback *) Ocr::add_char_button_callback, (void *) this );
@@ -215,11 +218,23 @@ Ocr::AddCharacterData() {
 		// Percorso al file di destinazione
 		char path[100];
 
-		// Costruisco il percorso di destinazione
-		snprintf( path, 100, "data/character/train/%c.part", 'a' + (char) choice );
+		// Controllo se si vuole aggiungere un carattere
+		if ( choice < _OCR_CHARACTER_NUM_ ) {
 
-		// Log di lavoro
-		printf( "Memorizzo la nuova lettera '%c'...\n", 'A' + (char) choice );
+			// Costruisco il percorso di destinazione
+			snprintf( path, 100, "data/character/train/%c.part", 'a' + (char) choice );
+
+			// Log di lavoro
+			printf( "Memorizzo la nuova lettera '%c'...\n", 'A' + (char) choice );
+
+		} else {
+
+			// Costruisco il percorso di destinazione
+			snprintf( path, 100, "data/character/train/_noise.part" );
+
+			// Log di lavoro
+			printf( "Memorizzo il nuovo non-carattere...\n" );
+		}
 
 		// Apro un flusso al file di destinazione
 		std::ofstream file( path, std::ios_base::out | std::ios_base::app );
@@ -323,7 +338,7 @@ Ocr::TrainNetwork( int choice ) {
 	if ( in.is_open() ) {
 
 		// Scrivo l'intestazione nel file di addestramento
-		out << "# DISTURBO" << std::endl;
+		out << "# NON CARATTERI" << std::endl;
 
 		// Leggo tutte le informazioni sul carattere
 		while ( !in.eof() ) {
@@ -334,7 +349,7 @@ Ocr::TrainNetwork( int choice ) {
 			// ... e le copio nel file di addestramento con l'uscita desiderata
 			if ( !buffer.empty() ) {
 
-				out << buffer << " : 0.0000" << std::endl;
+				out << buffer << ": 0.0000" << std::endl;
 			}
 		}
 
