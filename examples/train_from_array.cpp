@@ -24,18 +24,18 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include <serotonina/network.hpp>
+#include <serotonina.hpp>
 
 int main( int argc, char **argv ) {
 
-	const Serotonina::Precision inputs[] =	{
+	const Serotonina::T_Precision inputs[] =	{
 												0, 0,
 												0, 1,
 												1, 0,
 												1, 1
 											};
 
-	const Serotonina::Precision outputs[] =	{
+	const Serotonina::T_Precision outputs[] =	{
 												0,
 												1,
 												1,
@@ -49,8 +49,8 @@ int main( int argc, char **argv ) {
 	network.Train( inputs, outputs, 4, 0.00001, 100000, 5000 );
 
 	// Avvio la rete neurale
-	Serotonina::Precision in[2];
-	const Serotonina::Precision *out;
+	Serotonina::T_Precision in[2];
+	const Serotonina::T_Precision *out;
 
 	// Eseguo alcuni test con la rete neurale
 	in[0] = 0;

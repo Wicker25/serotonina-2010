@@ -24,7 +24,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include <serotonina/network.hpp>
+#include <serotonina.hpp>
 
 int main( int argc, char **argv ) {
 
@@ -36,8 +36,8 @@ int main( int argc, char **argv ) {
 	network.TrainOnFile( "train/coder.train", 0.000001, 100000, 5000 );
 
 	// Eseguo la rete neurale
-	Serotonina::Precision in[3] = { 0, 1, 1 };
-	const Serotonina::Precision *out = network.Run( in );
+	Serotonina::T_Precision in[3] = { 0, 1, 1 };
+	const Serotonina::T_Precision *out = network.Run( in );
 
 	// Stampo i valori delle uscite
 	printf( "Uscite: " );

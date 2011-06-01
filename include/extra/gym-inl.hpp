@@ -72,8 +72,8 @@ Gym::static_start_training( void *data ) {
 }
 
 inline int
-Gym::static_update_plot(	Network *network, size_t epochs, Precision max_error,
-							const Precision *outputs, size_t outputs_size, void *data ) {
+Gym::static_update_plot(	Network *network, size_t epochs, T_Precision max_error,
+							const T_Precision *outputs, size_t outputs_size, void *data ) {
 
 	// Ricavo un puntatore alla finestra principale
 	Gym *gym = static_cast< Gym * >( data );

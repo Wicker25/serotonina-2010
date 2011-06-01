@@ -36,8 +36,8 @@
 
 #include <serotonina/version.hpp>
 
-#define _COMMENT_	'#'
-#define _SEPARATOR_	':'
+#define _COMMENT_		'#'
+#define _SEPARATOR_		':'
 
 #define __ABS__(x)			((x > 0) ? x : -x)
 #define __MIN__(x,y)		((x < y) ? x : y)
@@ -69,13 +69,13 @@ class Network;
 
 // Precisione dei valori
 //typedef float Precision;
-typedef double Precision;
+typedef double T_Precision;
 
 // Segnale di apprendimento
-typedef int (*ReportSignal)( Network *, size_t, Precision, const Precision *, size_t, void * );
+typedef int (*ReportSignal)( Network *, size_t, T_Precision, const T_Precision *, size_t, void * );
 
 // Genera un numero casuale tra 0 e 1
-Precision get_rand();
+T_Precision get_rand();
 
 // Alloca dinamicamente un vettore a due dimensioni
 template < typename TYPE >
@@ -86,24 +86,24 @@ template < typename TYPE >
 void dealloc_2dim( TYPE **vect, size_t size );
 
 // Estrae i valori numerici da una stringa di testo
-size_t values_on_string( const std::string &str, std::vector< Precision > &vect );
+size_t values_on_string( const std::string &str, std::vector< T_Precision > &vect );
 
 
 // Struttura di un neurone della rete
 struct Neuron {
 
-	Precision value;	// Valore di trasferimento
-	Precision dEdy;		// Errore del neurone
+	T_Precision value;	// Valore di trasferimento
+	T_Precision dEdy;		// Errore del neurone
 };
 
 // Struttura di una connessione tra due neuroni (sinapsi)
 struct Synapse {
 
-	Precision weight;			// Peso della connessione
-	Precision delta_weight;		// Spostamento del peso della connessione
-	Precision dEdw;				// Errore della connessione
-	Precision prev_dEdw;		// Errore precedente della connessione
-	Precision learning_rate;	// Tasso di apprendimento della connessione (per i metoti RPROP)
+	T_Precision weight;			// Peso della connessione
+	T_Precision delta_weight;		// Spostamento del peso della connessione
+	T_Precision dEdw;				// Errore della connessione
+	T_Precision prev_dEdw;		// Errore precedente della connessione
+	T_Precision learning_rate;	// Tasso di apprendimento della connessione (per i metoti RPROP)
 
 	// Metodo costruttore
 	Synapse() {
@@ -193,8 +193,8 @@ public:
 	/** INIZIO METODI STATICI **/
 
 	// Stampa i rapporti dell'addestramento 
-	static int training_report(	Network *network, size_t epochs, Precision max_error,
-									const Precision *outputs, size_t outputs_size, void *data );
+	static int training_report(	Network *network, size_t epochs, T_Precision max_error,
+									const T_Precision *outputs, size_t outputs_size, void *data );
 	/** FINE METODI STATICI **/
 
 
@@ -207,26 +207,26 @@ public:
 	void SetTrainingAlgorithm( TrainAlgorithm algorithm );
 
 	// Imposta il tasso di apprendimento e il momentum
-	void SetTrainingParameters( Precision learning_rate_, Precision momentum_ );
+	void SetTrainingParameters( T_Precision learning_rate_, T_Precision momentum_ );
 
 	// Imposta i fattori di incremento e decremento del RPROP
-	void SetRpropFactor( Precision increase_factor_, Precision decrease_factor_ );
+	void SetRpropFactor( T_Precision increase_factor_, T_Precision decrease_factor_ );
 
 	// Ritorna l'errore della rete
-	Precision GetError() const;
+	T_Precision GetError() const;
 
 	// Reinizializza i pesi sinaptici con valori casuali
 	void InizializeWeight();
 
 	// Esegue la rete neurale
-	const Precision *Run( const Precision *input );
+	const T_Precision *Run( const T_Precision *input );
 
 	// Addestra la rete neurale usando degli esempi
-	void Train( const Precision *input_samples, const Precision *output_samples, size_t n_samples, 
-				Precision target_error, size_t max_epochs, size_t epochs_between_reports );
+	void Train( const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
+				T_Precision target_error, size_t max_epochs, size_t epochs_between_reports );
 
 	// Addestra la rete neurale usando degli esempi in un file
-	void TrainOnFile( const std::string &training_file, Precision target_error, size_t max_epochs, size_t epochs_between_reports );
+	void TrainOnFile( const std::string &training_file, T_Precision target_error, size_t max_epochs, size_t epochs_between_reports );
 
 	// Salva la rete neurale in un file
 	void Save( const std::string &path );
@@ -246,19 +246,19 @@ private:
 	std::vector< LayerConnections * > connections;
 
 	// Dati di uscita
-	Precision *output_data;
+	T_Precision *output_data;
 
 	// Errore della rete
-	Precision net_error, prev_net_error;
+	T_Precision net_error, prev_net_error;
 
 	// Tipo di appredimento
 	TrainAlgorithm train_algorithm;
 
 	// Tasso di appredimento e momentum
-	Precision learning_rate, momentum;
+	T_Precision learning_rate, momentum;
 
 	// Fattore di incremento e decremento del RPROP
-	Precision increase_factor, decrease_factor;
+	T_Precision increase_factor, decrease_factor;
 
 	// Funzione di report dell'addestramento
 	ReportSignal report_function;
@@ -268,7 +268,7 @@ private:
 
 
 	// Calcola l'errore delle uscite
-	void ComputeError( const Precision *target );
+	void ComputeError( const T_Precision *target );
 
 	// Retropropaga l'errore nella rete
 	void BackpropagateError();

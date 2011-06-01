@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto le versioni degli strumenti
 set( SEROTONINA_VERSION_MAJOR 1 )
 set( SEROTONINA_VERSION_MINOR 0 )
-set( SEROTONINA_VERSION_PATCH 1 )
+set( SEROTONINA_VERSION_PATCH 2 )
 
 set( SEROTONINA_PLOT_VERSION_MAJOR 1 )
 set( SEROTONINA_PLOT_VERSION_MINOR 0 )
@@ -73,7 +73,7 @@ set( SEROTONINA_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src )
 set( SEROTONINA_BINARY_DIR ${CMAKE_BINARY_DIR}/bin )
 
 # Libreria Serotonina
-add_library( serotonina SHARED ${SEROTONINA_SOURCE_DIR}/network.cpp )
+add_library( serotonina SHARED ${SEROTONINA_SOURCE_DIR}/network.cpp ${SEROTONINA_SOURCE_DIR}/network-train.cpp )
 target_link_libraries( serotonina m )
 
 # Libreria per i grafici di Serotonina

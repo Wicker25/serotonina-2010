@@ -40,8 +40,7 @@
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl_File_Chooser.H>
 
-#include <serotonina/network.hpp>
-#include <serotonina/network-inl.hpp>
+#include <serotonina.hpp>
 
 #include "extra/version.hpp"
 #include "extra/plot.hpp"
@@ -85,8 +84,8 @@ public:
 	static void *static_start_training( void *data );
 
 	// Aggiorna i grafici della rete neurale (statico)
-	static int static_update_plot(	Network *network, size_t epochs, Precision max_error,
-									const Precision *outputs, size_t outputs_size, void *data );
+	static int static_update_plot(	Network *network, size_t epochs, T_Precision max_error,
+									const T_Precision *outputs, size_t outputs_size, void *data );
 
 	/** FINE METODI STATICI **/
 
@@ -102,8 +101,8 @@ public:
 	void SaveNeuralNetwork();
 
 	// Aggiorna i grafici della rete neurale
-	int UpdatePlot(	Network *network, size_t epochs, Precision max_error,
-					const Precision *outputs, size_t outputs_size );
+	int UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
+					const T_Precision *outputs, size_t outputs_size );
 
 	// Funzione per la gestione degli eventi della finestra
 	virtual int handle( int event );
@@ -127,13 +126,13 @@ private:
 	size_t output_size;
 
 	// Ingressi del training set
-	std::vector< Precision > inputs_data;
+	std::vector< T_Precision > inputs_data;
 
 	// Uscite del training set
-	std::vector< Precision > outputs_data;
+	std::vector< T_Precision > outputs_data;
 
 	// Dati sull'errore massimo
-	std::vector< Precision > error_data;
+	std::vector< T_Precision > error_data;
 
 	// Uscita mostrata nel grafico
 	size_t graph_output;

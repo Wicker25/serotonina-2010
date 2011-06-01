@@ -43,8 +43,7 @@
 #include <FL/fl_draw.H>
 #include <FL/gl.h>
 
-#include <serotonina/network.hpp>
-#include <serotonina/network-inl.hpp>
+#include <serotonina.hpp>
 
 #include "extra/color.hpp"
 

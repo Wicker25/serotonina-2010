@@ -543,7 +543,7 @@ Gym::LoadTrainingSet() {
 			if ( !line.empty() && line.at(0) != _COMMENT_ ) {
 
 				// Valori estratti
-				std::vector< Precision > value;
+				std::vector< T_Precision > value;
 
 				// Estraggo i valori di ingresso
 				if ( values_on_string( line, value ) != 2 ) {
@@ -632,7 +632,7 @@ Gym::LoadTestSet() {
 			if ( !line.empty() && line.at(0) != _COMMENT_ ) {
 
 				// Valori estratti
-				std::vector< Precision > value;
+				std::vector< T_Precision > value;
 
 				// Estraggo i valori di ingresso
 				if ( values_on_string( line, value ) != 2 ) {
@@ -770,10 +770,10 @@ Gym::StartTraining() {
 		case TRAIN_BATCH: {
 
 			// Ricavo il tasso di apprendimento
-			const Precision eps = (Precision) this->learning_rate_input->value();
+			const T_Precision eps = (T_Precision) this->learning_rate_input->value();
 
 			// Ricavo il momentum
-			const Precision momentum = (Precision) this->momentum_input->value();
+			const T_Precision momentum = (T_Precision) this->momentum_input->value();
 
 			// Imposto il tasso di apprendimento e il momentum
 			this->neural_network->SetTrainingParameters( eps, momentum );
@@ -785,10 +785,10 @@ Gym::StartTraining() {
 		case TRAIN_RPROP: {
 
 			// Ricavo il fatto di incremento
-			const Precision increase_factor = (Precision) this->increase_factor_input->value();
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
 
 			// Ricavo il fatto di decremento
-			const Precision decrease_factor = (Precision) this->decrease_factor_input->value();
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i fattori di incremento e decremento del RPROP+
 			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
@@ -800,10 +800,10 @@ Gym::StartTraining() {
 		case TRAIN_RPROP_PLUS: {
 
 			// Ricavo il fatto di incremento
-			const Precision increase_factor = (Precision) this->increase_factor_input->value();
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
 
 			// Ricavo il fatto di decremento
-			const Precision decrease_factor = (Precision) this->decrease_factor_input->value();
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i fattori di incremento e decremento del RPROP+
 			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
@@ -815,10 +815,10 @@ Gym::StartTraining() {
 		case TRAIN_RPROP_MINUS: {
 
 			// Ricavo il fatto di incremento
-			const Precision increase_factor = (Precision) this->increase_factor_input->value();
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
 
 			// Ricavo il fatto di decremento
-			const Precision decrease_factor = (Precision) this->decrease_factor_input->value();
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i fattori di incremento e decremento del RPROP-
 			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
@@ -830,10 +830,10 @@ Gym::StartTraining() {
 		case TRAIN_IRPROP_PLUS: {
 
 			// Ricavo il fatto di incremento
-			const Precision increase_factor = (Precision) this->increase_factor_input->value();
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
 
 			// Ricavo il fatto di decremento
-			const Precision decrease_factor = (Precision) this->decrease_factor_input->value();
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i fattori di incremento e decremento del RPROP+
 			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
@@ -845,10 +845,10 @@ Gym::StartTraining() {
 		case TRAIN_IRPROP_MINUS: {
 
 			// Ricavo il fatto di incremento
-			const Precision increase_factor = (Precision) this->increase_factor_input->value();
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
 
 			// Ricavo il fatto di decremento
-			const Precision decrease_factor = (Precision) this->decrease_factor_input->value();
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i fattori di incremento e decremento del RPROP-
 			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
@@ -860,7 +860,7 @@ Gym::StartTraining() {
 	}
 
 	// Ricavo l'errore desiderato
-	const Precision desired_error = (Precision) this->desired_error_input->value();
+	const T_Precision desired_error = (T_Precision) this->desired_error_input->value();
 
 	// Ricavo le epoche massime
 	const size_t max_epochs = (size_t) this->max_epochs_input->value();
@@ -903,8 +903,8 @@ Gym::StartTraining() {
 }
 
 int
-Gym::UpdatePlot(	Network *network, size_t epochs, Precision max_error,
-					const Precision *outputs, size_t outputs_size ) {
+Gym::UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
+					const T_Precision *outputs, size_t outputs_size ) {
 
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
@@ -926,16 +926,16 @@ Gym::UpdatePlot(	Network *network, size_t epochs, Precision max_error,
 	for ( ; i < this->n_test_samples; i++ ) {
 
 		// Ingressi del campione
-		std::vector< Precision > inputs_sample;
+		std::vector< T_Precision > inputs_sample;
 
 		// Preparo il vettore con gli ingressi del campione
 		for ( j = 0; j < this->input_size; j++ ) {
 
-			inputs_sample.push_back( (Precision) this->inputs_data[ i * this->input_size + j ] );
+			inputs_sample.push_back( (T_Precision) this->inputs_data[ i * this->input_size + j ] );
 		}
 
 		// Eseguo la rete neurale con gli ingressi dell'esempio
-		const Precision *out = this->neural_network->Run( &inputs_sample[0] );
+		const T_Precision *out = this->neural_network->Run( &inputs_sample[0] );
 
 		// Memorizzo le uscite della rete
 		for ( j = 0; j < this->output_size; j++ ) {
@@ -951,13 +951,13 @@ Gym::UpdatePlot(	Network *network, size_t epochs, Precision max_error,
 	Fl::lock();
 
 	// Uscite desiderate e della rete del campione
-	std::vector< Precision > desired, net;
+	std::vector< T_Precision > desired, net;
 
 	// Preparo i vettori con le uscite del campione
 	for ( j = 0; j < this->n_test_samples; j++ ) {
 
-		desired.push_back( (Precision) this->outputs_data[ this->graph_output + j * this->output_size ] );
-		net.push_back( (Precision) net_data[ this->graph_output + j * this->output_size ] );
+		desired.push_back( (T_Precision) this->outputs_data[ this->graph_output + j * this->output_size ] );
+		net.push_back( (T_Precision) net_data[ this->graph_output + j * this->output_size ] );
 	}
 
 	// Aggiungo i dati al grafico delle uscite
