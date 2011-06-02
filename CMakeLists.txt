@@ -28,7 +28,8 @@ set( SEROTONINA_FACE_RECOGNITION_VERSION_MINOR 0 )
 set( SEROTONINA_FACE_RECOGNITION_VERSION_PATCH 0 )
 
 # Aggiungo una direttiva al compilatore
-add_definitions( -Wall )
+add_definitions( -Wall -ansi )
+# -pedantic -pedantic-errors
 
 # Imposto le dipendenze necessarie
 find_package( FLTK REQUIRED )

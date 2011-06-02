@@ -85,15 +85,6 @@ Ocr::Ocr( int width, int height ) : Fl_Gl_Window( width, height, _OCR_TITLE_ ) {
 	this->thread_id				= 0;
 	this->precision_character	= 0.0;
 
-	// Ricavo l'area di delimitazione del carattere
-	Rectangle &rect = this->char_boundary;
-
-	// Inizializzo l'area di delimitazione del carattere
-	rect.left	= 0;
-	rect.top	= 0;
-	rect.right	= ARTBOARD_W - 1;
-	rect.bottom	= ARTBOARD_H - 1;
-
 	// Pulisco la tavola da disegno
 	this->ClearArtboard();
 
@@ -993,7 +984,7 @@ Ocr::draw() {
 	Fl_Gl_Window::draw();
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 
 /* INIZIO FUNZIONE PRINCIPALE */

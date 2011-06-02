@@ -112,6 +112,6 @@ private:
 	void DrawData( size_t index, float offx, float offy, float xdiv, float ydiv );
 };
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

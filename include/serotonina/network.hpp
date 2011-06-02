@@ -93,27 +93,39 @@ size_t values_on_string( const std::string &str, std::vector< T_Precision > &vec
 struct Neuron {
 
 	T_Precision value;	// Valore di trasferimento
-	T_Precision dEdy;		// Errore del neurone
+	T_Precision dEdy;	// Errore del neurone
+};
+
+// Struttura contenente i dati per l'addestramento
+struct TrainData {
+
+	T_Precision delta_weight;	// Spostamento del peso della connessione
+	T_Precision dEdw;			// Errore della connessione
+	T_Precision prev_dEdw;		// Errore precedente della connessione
+	T_Precision learning_rate;	// Tasso di apprendimento della connessione (per i metoti RPROP)
+
+	// Metodo costruttore
+	TrainData() {
+
+		// Inizializzo i parametri dell'addestramento
+		delta_weight	= 0.0;
+		dEdw			= 0.0;
+		prev_dEdw		= 0.0;
+		learning_rate	= 0.1;
+	}
 };
 
 // Struttura di una connessione tra due neuroni (sinapsi)
 struct Synapse {
 
-	T_Precision weight;			// Peso della connessione
-	T_Precision delta_weight;		// Spostamento del peso della connessione
-	T_Precision dEdw;				// Errore della connessione
-	T_Precision prev_dEdw;		// Errore precedente della connessione
-	T_Precision learning_rate;	// Tasso di apprendimento della connessione (per i metoti RPROP)
+	T_Precision weight;		// Peso della connessione
+	TrainData *train;	// Dati per l'addestramento
 
 	// Metodo costruttore
 	Synapse() {
 
-		// Inizializzo i pesi e gli altri parametri della sinapsi
-		weight			= get_rand();
-		delta_weight	= 0.0;
-		dEdw			= 0.0;
-		prev_dEdw		= 0.0;
-		learning_rate	= 0.1;
+		// Inizializzo il peso sinaptico con un valore casuale
+		weight = get_rand();
 	}
 };
 
@@ -273,28 +285,34 @@ private:
 	// Retropropaga l'errore nella rete
 	void BackpropagateError();
 
-	// Aggiorno i pesi sinaptici utilizzando la Regola Delta con il Momentum
+	// Crea le strutture per l'addestramento
+	void CreateTrainData();
+
+	// Cancella le strutture per l'addestramento
+	void DeleteTrainData();
+
+	// Aggiorna i pesi sinaptici utilizzando la Regola Delta con il Momentum
 	void UpdateWeightsBatch();
 
-	// Aggiorno i pesi sinaptici utilizzando la RPROP
+	// Aggiorna i pesi sinaptici utilizzando la RPROP
 	void UpdateWeightsRprop();
 
-	// Aggiorno i pesi sinaptici utilizzando la RPROP+
+	// Aggiorna i pesi sinaptici utilizzando la RPROP+
 	void UpdateWeightsRpropPlus();
 
-	// Aggiorno i pesi sinaptici utilizzando la RPROP-
+	// Aggiorna i pesi sinaptici utilizzando la RPROP-
 	void UpdateWeightsRpropMinus();
 
-	// Aggiorno i pesi sinaptici utilizzando la IRPROP+
+	// Aggiorna i pesi sinaptici utilizzando la IRPROP+
 	void UpdateWeightsIRpropPlus();
 
-	// Aggiorno i pesi sinaptici utilizzando la IRPROP-
+	// Aggiorna i pesi sinaptici utilizzando la IRPROP-
 	void UpdateWeightsIRpropMinus();
 
 	// Carica la rete neurale da un file (principale)
 	void Load( const std::string &path, bool new_ );
 };
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

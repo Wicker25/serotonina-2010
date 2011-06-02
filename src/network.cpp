@@ -80,7 +80,7 @@ Network::training_report(	Network *network, size_t epochs, T_Precision max_error
 							const T_Precision *outputs, size_t outputs_size, void *data ) {
 
 	// Stampo il rapporto dell'addestramento 
-	printf( "  Epochs #%zu, current error: %.10F\n", epochs, (double) max_error );
+	printf( "  Epochs #%zu, current error: %.10f\n", epochs, (double) max_error );
 
 	return 0;
 }
@@ -225,7 +225,7 @@ Network::Run( const T_Precision *input ) {
 	// Carico i valori in ingresso
 	for ( i = 0; i < this->layers[0]->size; i++ ) {
 
-		this->layers[0]->neurons[i].value = input[i];
+		this->layers[0]->neurons[i].value = __BETWEEN__( input[i], 0.0, 1.0 );
 	}
 
 	// Attivazione interna del neurone
@@ -315,7 +315,7 @@ Network::Save( const std::string &path ) {
 		file << this->layers[t]->size << " ";
 	}
 
-	file <<  std::endl;
+	file << std::endl;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_i, *last_synapse_i;
@@ -537,6 +537,6 @@ Network::Load( const std::string &path, bool new_ ) {
 	#endif
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

@@ -983,7 +983,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
 
 	// Costruisco il testo del nuovo log di lavoro
 	char str_buffer[200];
-	snprintf( str_buffer, 200, "\n  Epochs #%zu, current error: %.10F", epochs, (double) max_error );
+	snprintf( str_buffer, 200, "\n  Epochs #%zu, current error: %.10f", epochs, (double) max_error );
 
 	// Aggiorno il log di lavoro
 	this->log_buffer->append( str_buffer );
@@ -996,7 +996,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
 	return 0;
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 
 /* INIZIO FUNZIONE PRINCIPALE */

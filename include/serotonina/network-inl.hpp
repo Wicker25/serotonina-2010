@@ -104,6 +104,6 @@ Network::SetReportSignal( ReportSignal function, void *data ) {
 	this->report_function_data = data;
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

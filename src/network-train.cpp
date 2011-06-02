@@ -69,12 +69,12 @@ Network::ComputeError( const T_Precision *target ) {
 		// Ciclo per tutti i neuroni del penultimo strato
 		for ( j = 0; neuron_j <= last_neuron_j; j++, neuron_j++, synapse_t++ ) {
 
-			synapse_t->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value ) * neuron_j->value;
+			synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value ) * neuron_j->value;
 		}
 
 		// Aggiungo l'errore del BIAS ai pesi sinaptici del neurone
 		// dE/dw_ji += dE/dy_i * f'(net_i)
-		synapse_t->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value );
+		synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value );
 
 		// Sposto l'iteratore oltre la sinapsi del BIAS, nella riga contente le sinapsi del neurone successivo
 		synapse_t++;
@@ -154,11 +154,67 @@ Network::BackpropagateError() {
 				if ( neuron_i == last_neuron_i + 1 )
 
 					// dE/dw_ij += dE/dy_j * f'(net_j)
-					synapse_t->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value );
+					synapse_t->train->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value );
 				else
 					// dE/dw_ij += dE/dy_j * f'(net_j) * Y_i
-					synapse_t->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value ) * neuron_i->value;
+					synapse_t->train->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value ) * neuron_i->value;
 			}
+		}
+	}
+}
+
+void
+Network::CreateTrainData() {
+
+	// Iteratori
+	short int t = ( this->layers.size() - 1 ) - 1;
+
+	// Iteratori delle sinapsi
+	Synapse *synapse_t;
+	Synapse *end_synapse_t;
+
+	// Creo le strutture necessarie all'addestramento
+	for ( ; t >= 0; t-- ) {
+
+		// Preparo l'iteratore delle sinapsi
+		synapse_t = this->connections[t]->first_synapse;
+
+		// Ricavo la sinapsi finale
+		end_synapse_t = this->connections[t]->last_synapse;
+
+		// Ciclo per tutti i pesi sinaptici tra i due strati
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
+
+			// Creo la struttura per l'addestramento
+			synapse_t->train = new TrainData;
+		}
+	}
+}
+
+void
+Network::DeleteTrainData() {
+
+	// Iteratori
+	short int t = ( this->layers.size() - 1 ) - 1;
+
+	// Iteratori delle sinapsi
+	Synapse *synapse_t;
+	Synapse *end_synapse_t;
+
+	// Cancello le strutture necessarie all'addestramento
+	for ( ; t >= 0; t-- ) {
+
+		// Preparo l'iteratore delle sinapsi
+		synapse_t = this->connections[t]->first_synapse;
+
+		// Ricavo la sinapsi finale
+		end_synapse_t = this->connections[t]->last_synapse;
+
+		// Ciclo per tutti i pesi sinaptici tra i due strati
+		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
+
+			// Cancello la struttura per l'addestramento
+			delete synapse_t->train;
 		}
 	}
 }
@@ -186,13 +242,13 @@ Network::UpdateWeightsBatch() {
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Calcolo la modifica del peso
-			synapse_t->delta_weight = - this->learning_rate * synapse_t->dEdw + this->momentum * synapse_t->delta_weight;
+			synapse_t->train->delta_weight = - this->learning_rate * synapse_t->train->dEdw + this->momentum * synapse_t->train->delta_weight;
 
 			// Aggiorno il peso sinaptico
-			synapse_t->weight += synapse_t->delta_weight;
+			synapse_t->weight += synapse_t->train->delta_weight;
 
 			// Azzero l'errore del peso sinaptico
-			synapse_t->dEdw = 0.0;
+			synapse_t->train->dEdw = 0.0;
 		}
 	}
 }
@@ -220,40 +276,40 @@ Network::UpdateWeightsRprop() {
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
-			T_Precision delta_sign = synapse_t->prev_dEdw * synapse_t->dEdw;
+			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
 
 			// Applico le regole della RPROP
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->learning_rate = __MIN__( synapse_t->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 				// Aggiorno il peso sinaptico
-				synapse_t->weight += - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
+				synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = synapse_t->dEdw;
+				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->learning_rate = __MAX__( synapse_t->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = 0.0;
+				synapse_t->train->prev_dEdw = 0.0;
 
 			} else { // if ( delta_sign == 0.0 )
 
 				// Aggiorno il peso sinaptico
-				synapse_t->weight += - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
-				synapse_t->prev_dEdw = synapse_t->dEdw;
+				synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 			}
 
 			// Azzero l'errore del peso sinaptico
-			synapse_t->dEdw = 0.0;
+			synapse_t->train->dEdw = 0.0;
 		}
 	}
 }
@@ -281,47 +337,47 @@ Network::UpdateWeightsRpropPlus() {
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
-			T_Precision delta_sign = synapse_t->prev_dEdw * synapse_t->dEdw;
+			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
 
 			// Applico le regole della RPROP+
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->learning_rate = __MIN__( synapse_t->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 				// Aggiorno il peso sinaptico
-				synapse_t->delta_weight = - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
-				synapse_t->weight += synapse_t->delta_weight;
+				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = synapse_t->dEdw;
+				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->learning_rate = __MAX__( synapse_t->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Ripristino il vecchio peso sinaptico precedente
-				synapse_t->weight -= synapse_t->delta_weight;
+				synapse_t->weight -= synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = 0.0;
+				synapse_t->train->prev_dEdw = 0.0;
 
 			} else { // if ( delta_sign == 0.0 )
 
 				// Aggiorno il peso sinaptico
-				synapse_t->delta_weight = - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
-				synapse_t->weight += synapse_t->delta_weight;
+				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = synapse_t->dEdw;
+				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 			}
 
 			// Azzero l'errore del peso sinaptico
-			synapse_t->dEdw = 0.0;
+			synapse_t->train->dEdw = 0.0;
 		}
 	}
 }
@@ -348,31 +404,31 @@ Network::UpdateWeightsRpropMinus() {
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
-			T_Precision delta_sign = synapse_t->prev_dEdw * synapse_t->dEdw;
+			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
 
 			// Applico le regole della RPROP-
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->learning_rate = __MIN__( synapse_t->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->learning_rate = __MAX__( synapse_t->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 			}
 
 			// Aggiorno il peso sinaptico
-			synapse_t->weight += - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
+			synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 
 			// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-			synapse_t->prev_dEdw = synapse_t->dEdw;
+			synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 
 			// Azzero l'errore del peso sinaptico
-			synapse_t->dEdw = 0.0;
+			synapse_t->train->dEdw = 0.0;
 		}
 	}
 }
@@ -400,48 +456,48 @@ Network::UpdateWeightsIRpropPlus() {
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
-			T_Precision delta_sign = synapse_t->prev_dEdw * synapse_t->dEdw;
+			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
 
 			// Applico le regole della IRPROP+
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->learning_rate = __MIN__( synapse_t->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 				// Aggiorno il peso sinaptico
-				synapse_t->delta_weight = - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
-				synapse_t->weight += synapse_t->delta_weight;
+				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = synapse_t->dEdw;
+				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->learning_rate = __MAX__( synapse_t->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Se l'errore è aumentato, ripristino il vecchio peso sinaptico precedente
 				if ( this->net_error > this->prev_net_error )
-					synapse_t->weight -= synapse_t->delta_weight;
+					synapse_t->weight -= synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = 0.0;
+				synapse_t->train->prev_dEdw = 0.0;
 
 			} else { // if ( delta_sign == 0.0 )
 
 				// Aggiorno il peso sinaptico
-				synapse_t->delta_weight = - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
-				synapse_t->weight += synapse_t->delta_weight;
+				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-				synapse_t->prev_dEdw = synapse_t->dEdw;
+				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 			}
 
 			// Azzero l'errore del peso sinaptico
-			synapse_t->dEdw = 0.0;
+			synapse_t->train->dEdw = 0.0;
 		}
 	}
 }
@@ -469,34 +525,34 @@ Network::UpdateWeightsIRpropMinus() {
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->learning_rate = __MAX__( synapse_t->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
-			T_Precision delta_sign = synapse_t->prev_dEdw * synapse_t->dEdw;
+			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
 
 			// Applico le regole della IRPROP-
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->learning_rate = __MIN__( synapse_t->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->learning_rate = __MAX__( synapse_t->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Azzero l'errore del peso sinaptico
-				synapse_t->dEdw = 0.0;
+				synapse_t->train->dEdw = 0.0;
 			}
 
 			// Aggiorno i pesi sinaptici
-			synapse_t->weight += - __SIGN__( synapse_t->dEdw ) * synapse_t->learning_rate;
+			synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 
 			// Memorizzo l'errore del peso sinaptico per il ciclo successivo
-			synapse_t->prev_dEdw = synapse_t->dEdw;
+			synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 
 			// Azzero l'errore del peso sinaptico
-			synapse_t->dEdw = 0.0;
+			synapse_t->train->dEdw = 0.0;
 		}
 	}
 }
@@ -511,6 +567,9 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 		printf( "Start training with %zu samples.\n", n_samples );
 
 	#endif
+
+	// Creo le strutture per l'addestramento
+	this->CreateTrainData();
 
 	// Numero delle epoche dell'addestramento
 	size_t epochs = 0;
@@ -597,6 +656,9 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 		this->report_function(	this, epochs, this->net_error, (const T_Precision *) this->output_data,
 								this->layers[this->layers.size() - 1]->size, this->report_function_data );
 	}
+
+	// Cancello le strutture per l'addestramento
+	this->DeleteTrainData();
 }
 
 void
@@ -707,6 +769,6 @@ Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t 
 	this->Train( &inputs[0], &outputs[0], n_samples, target_error, max_epochs, epochs_between_reports );
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

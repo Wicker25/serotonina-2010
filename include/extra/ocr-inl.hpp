@@ -49,6 +49,6 @@ Ocr::static_start_training( void *data ) {
 	return NULL;
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

@@ -131,6 +131,6 @@ Plot::PushData( Type *data_, size_t size, const ColorRGBub &color, bool points )
 	}
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

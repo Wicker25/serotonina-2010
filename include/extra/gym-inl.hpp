@@ -102,6 +102,6 @@ Gym::SaveNeuralNetwork() {
 	}
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

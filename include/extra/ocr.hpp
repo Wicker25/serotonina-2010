@@ -201,6 +201,6 @@ private:
 	void DrawCharBoundary( size_t x, size_t y );
 };
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif

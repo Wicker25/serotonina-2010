@@ -346,6 +346,6 @@ Plot::draw() {
 	Fl_Gl_Window::draw();
 }
 
-}; // Chiudo il namespace di Serotonina
+} // Chiudo il namespace di Serotonina
 
 #endif
