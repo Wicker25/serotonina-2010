@@ -1,6 +1,8 @@
+ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
+
 ============= Serotonina 1.0.3 - urgency=medium =============
 
-2011-06-02  Wicker25  <wicker25@gmail.com>
+2011-06-02  Wicker25  < wicker25@gmail.com >
 
     * all: Split `network.cpp` into `network-train.cpp`.
            Added `Network->CreateTrainData()` and `Network->DeleteTrainData()`
@@ -10,7 +12,7 @@
 
 =============== Serotonina 1.0.2 - urgency=low ===============
 
-2011-06-02  Wicker25  <wicker25@gmail.com>
+2011-06-02  Wicker25  < wicker25@gmail.com >
 
     * all: Added this ChangeLog file to the project.
            Added main header file for easy importing `include/serotonina.hpp`.
