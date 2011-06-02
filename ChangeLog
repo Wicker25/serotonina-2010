@@ -2,8 +2,9 @@
 
 2011-06-02  Wicker25  <wicker25@gmail.com>
 
-    * all: Added `Network->CreateTrainData()` and `Network->DeleteTrainData()`
-           functions to dynamic memory management during training.
+    * all: Split `network.cpp` into `network-train.cpp`.
+           Added `Network->CreateTrainData()` and `Network->DeleteTrainData()`
+           methods to dynamic memory management during training.
 
     * network.cpp (function `Network->Run`): Added network's input validation.
 
@@ -13,3 +14,4 @@
 
     * all: Added this ChangeLog file to the project.
            Added main header file for easy importing `include/serotonina.hpp`.
+
