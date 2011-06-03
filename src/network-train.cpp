@@ -35,8 +35,8 @@ namespace Serotonina { // Namespace di Serotonina
 void
 Network::ComputeError( const T_Precision *target ) {
 
-	// Iteratori
-	size_t j, i = 0;
+	// Iteratore
+	size_t i = 0;
 
 	// Iteratori dei neuroni
 	Neuron *neuron_j, *last_neuron_j;
@@ -53,7 +53,7 @@ Network::ComputeError( const T_Precision *target ) {
 	synapse_t = this->connections[this->layers.size() - 2]->first_synapse;
 
 	// Calcolo l'errore dello strato di uscita
-	for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
+	for ( ; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
 
 		// Calcolo l'errore dell'uscita
 		// dE/dy_i = -(T_i - Y_i)
@@ -67,7 +67,7 @@ Network::ComputeError( const T_Precision *target ) {
 		// dE/dw_ji += dE/dy_i * f'(net_i) * Y_j
 
 		// Ciclo per tutti i neuroni del penultimo strato
-		for ( j = 0; neuron_j <= last_neuron_j; j++, neuron_j++, synapse_t++ ) {
+		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_t++ ) {
 
 			synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value ) * neuron_j->value;
 		}

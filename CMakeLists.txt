@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto le versioni degli strumenti
 set( SEROTONINA_VERSION_MAJOR 1 )
 set( SEROTONINA_VERSION_MINOR 0 )
-set( SEROTONINA_VERSION_PATCH 3 )
+set( SEROTONINA_VERSION_PATCH 4 )
 
 set( SEROTONINA_PLOT_VERSION_MAJOR 1 )
 set( SEROTONINA_PLOT_VERSION_MINOR 0 )
@@ -116,6 +116,9 @@ target_link_libraries( st_face_recognition ${OpenCV_LIBS} )
 install_targets( /lib serotonina )
 
 # Installatore degli headers
+install( FILES ${CMAKE_SOURCE_DIR}/include/serotonina.hpp
+		 DESTINATION ${CMAKE_INSTALL_PREFIX}/include )
+
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/include/serotonina
 		 DESTINATION ${CMAKE_INSTALL_PREFIX}/include
 		 FILES_MATCHING

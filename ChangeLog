@@ -1,5 +1,15 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.0.4 - urgency=low =============
+
+2011-06-05  Wicker25  < wicker25@gmail.com >
+
+	* all: Added `examples/face.cpp`.
+
+    * network-train.cpp (function `Network->ComputeError`): Removed unused iterator `size_t j`.
+
+    * CMakeList.txt: Fixed `serotonina.hpp` installer.
+
 ============= Serotonina 1.0.3 - urgency=medium =============
 
 2011-06-02  Wicker25  < wicker25@gmail.com >
