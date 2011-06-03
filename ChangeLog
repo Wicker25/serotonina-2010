@@ -4,7 +4,7 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
 2011-06-05  Wicker25  < wicker25@gmail.com >
 
-	* all: Added `examples/face.cpp`.
+    * all: Added `examples/face.cpp`.
 
     * network-train.cpp (function `Network->ComputeError`): Removed unused iterator `size_t j`.
 
