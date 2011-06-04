@@ -32,6 +32,8 @@ Only for demos:
  + FLTK development libraries                         <http://www.fltk.org/>
  + OpenCV development libraries (only libhighgui)     <http://opencv.willowgarage.com/>
 
+Serotonina has no dependencies.
+
 
 Supported training algorithms
 =============================
