@@ -53,13 +53,13 @@ Building with CMake
  # make install
 
 
-Compile with Serotonina
+Linking with Serotonina
 =======================
-Compile as shared library:
+To link statically:
 
  $ g++ `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
 
-Compile as static library:
+To link dynamically:
 
  $ g++ -static `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
 

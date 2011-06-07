@@ -56,7 +56,7 @@ Network::ComputeError( const T_Precision *target ) {
 	for ( ; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
 
 		// Calcolo l'errore dell'uscita
-		// dE/dy_i = -(T_i - Y_i)
+		// dE/dy_i = -(D_i - Y_i)
 		neuron_i->dEdy = - ( target[i] - neuron_i->value );
 
 		// Preparo l'iteratore dei neuroni
@@ -64,7 +64,7 @@ Network::ComputeError( const T_Precision *target ) {
 		neuron_j		= this->layers[this->layers.size() - 2]->first_neuron;
 
 		// Calcolo l'errore dei pesi sinaptici del neurone
-		// dE/dw_ji += dE/dy_i * f'(net_i) * Y_j
+		// dE/dw_ji += dE/dy_i * dy_i/dP_i * Y_j
 
 		// Ciclo per tutti i neuroni del penultimo strato
 		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_t++ ) {
@@ -73,7 +73,7 @@ Network::ComputeError( const T_Precision *target ) {
 		}
 
 		// Aggiungo l'errore del BIAS ai pesi sinaptici del neurone
-		// dE/dw_ji += dE/dy_i * f'(net_i)
+		// dE/dw_ji += dE/dy_i * dy_i/dP_i
 		synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value );
 
 		// Sposto l'iteratore oltre la sinapsi del BIAS, nella riga contente le sinapsi del neurone successivo
@@ -139,7 +139,7 @@ Network::BackpropagateError() {
 				neuron_k		= this->layers[t + 2]->first_neuron;
 
 				// Calcolo l'errore retropropagato dai neuroni dello strato successivo
-				// dE/dy_j = SUM( dE/dy_k * f'(net_k) * w_jk )
+				// dE/dz_k = SUM( dE/dy_j * dy_j/dP_j * dP_j/dz_k )
 
 				// Ciclo per tutti i neuroni dello strato 't + 2'
 				for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += ( this->layers[t + 1]->size + 1 ) ) {
@@ -153,10 +153,10 @@ Network::BackpropagateError() {
 				// Calcolo l'errore dei pesi sinaptici del neurone tenendo conto del BIAS
 				if ( neuron_i == last_neuron_i + 1 )
 
-					// dE/dw_ij += dE/dy_j * f'(net_j)
+					// dE/dw_ij += dE/dy_j * dy_j/dP_j
 					synapse_t->train->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value );
 				else
-					// dE/dw_ij += dE/dy_j * f'(net_j) * Y_i
+					// dE/dw_ij += dE/dy_j * dy_j/dP_j * Z_i
 					synapse_t->train->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value ) * neuron_i->value;
 			}
 		}

@@ -242,7 +242,7 @@ Network::Run( const T_Precision *input ) {
 		neuron_i		= this->layers[t + 1]->first_neuron;
 
 		// Calcolo i valori di uscita dello strato corrente
-		// Y_i = f( SUM( w_ji - BIAS_i ) ) oppure Y_i = f( SUM( w_ji ) )
+		// Y_i = T( SUM( w_ji - BIAS_i ) ) oppure Y_i = T( SUM( w_ji ) )
 		for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
 
 			// Azzero il valore di attivazione del neurone
