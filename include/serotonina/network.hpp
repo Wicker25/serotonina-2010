@@ -71,7 +71,7 @@ class Network;
 typedef double T_Precision;
 
 // Segnale di apprendimento
-typedef int (*ReportSignal)( Network *, size_t, T_Precision, const T_Precision *, size_t, void * );
+typedef int (*ReportSignal)( Network *, size_t, time_t, T_Precision, const T_Precision *, size_t, void * );
 
 // Genera un numero casuale tra 0 e 1
 T_Precision get_rand();
@@ -173,6 +173,9 @@ struct LayerConnections {
 	// Puntatore all'ultima sinapsi
 	Synapse *last_synapse;
 
+	// Passo della riga
+	size_t row_step;
+
 	// Metodo costruttore
 	LayerConnections( size_t first_layer_size, size_t second_layer_size ) {
 
@@ -184,6 +187,9 @@ struct LayerConnections {
 
 		// Imposto il puntatore all'ultima prima sinapsi
 		this->last_synapse = &this->synapses[this->size - 1];
+
+		// Memorizzo il passo della righa
+		row_step = first_layer_size;
 	}
 
 	// Metodo distruttore
@@ -204,8 +210,8 @@ public:
 	/** INIZIO METODI STATICI **/
 
 	// Stampa i rapporti dell'addestramento 
-	static int training_report(	Network *network, size_t epochs, T_Precision max_error,
-									const T_Precision *outputs, size_t outputs_size, void *data );
+	static int training_report(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
+								const T_Precision *outputs, size_t outputs_size, void *data );
 	/** FINE METODI STATICI **/
 
 

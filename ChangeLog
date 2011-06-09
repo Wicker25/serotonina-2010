@@ -1,5 +1,15 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.0.5 - urgency=low =============
+
+2011-06-10  Wicker25  < wicker25@gmail.com >
+
+	* all: Improved performance!! :P
+
+    * network-train.cpp: Added elapsed time of training.
+
+    * network-train.cpp (function `Network->BackpropagateError`): Fixed stupid nested loop.
+
 ============= Serotonina 1.0.4 - urgency=low =============
 
 2011-06-05  Wicker25  < wicker25@gmail.com >
@@ -15,10 +25,11 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 2011-06-02  Wicker25  < wicker25@gmail.com >
 
     * all: Split `network.cpp` into `network-train.cpp`.
-           Added `Network->CreateTrainData()` and `Network->DeleteTrainData()`
-           methods to dynamic memory management during training.
 
     * network.cpp (function `Network->Run`): Added network's input validation.
+
+    * network-train.cpp: Added `Network->CreateTrainData()` and `Network->DeleteTrainData()`
+                         methods to dynamic memory management during training.
 
 =============== Serotonina 1.0.2 - urgency=low ===============
 

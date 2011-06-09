@@ -63,7 +63,7 @@ Network::ComputeError( const T_Precision *target ) {
 		neuron_j		= this->layers[this->layers.size() - 2]->first_neuron;
 
 		// Calcolo l'errore dei pesi sinaptici del neurone
-		// dE/dw_ji += dE/dy_i * dy_i/dP_i * Y_j
+		// dE/dw_ji += dE/dy_i * dy_i/dP_i * dP_i/dw_ji
 
 		// Ciclo per tutti i neuroni del penultimo strato
 		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_t++ ) {
@@ -71,11 +71,11 @@ Network::ComputeError( const T_Precision *target ) {
 			synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value ) * neuron_j->value;
 		}
 
-		// Aggiungo l'errore del BIAS ai pesi sinaptici del neurone
+		// Aggiungo l'errore del bias al peso sinaptico del neurone
 		// dE/dw_ji += dE/dy_i * dy_i/dP_i
 		synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value );
 
-		// Sposto l'iteratore oltre la sinapsi del BIAS, nella riga contente le sinapsi del neurone successivo
+		// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
 		synapse_t++;
 
 		// Aggiungo il quadrato dell'errore all'errore totale della rete (per il calcolo dell'errore quadratico medio)
@@ -86,78 +86,74 @@ Network::ComputeError( const T_Precision *target ) {
 void
 Network::BackpropagateError() {
 
-	// Errore da retropropagare
-	T_Precision backpropagation;
-
 	// Iteratori
 	short int t = ( (short int) this->layers.size() - 1 ) - 2;
 
-	// Iteratori delle sinapsi
-	Synapse *synapse_row_t, *synapse_t;
-	Synapse *synapse_row_t1, *synapse_t1;
+	// Delta per la correzione del peso sinaptico
+	T_Precision delta;
 
 	// Iteratori dei neuroni
 	Neuron *neuron_j, *last_neuron_j;
 	Neuron *neuron_i, *last_neuron_i;
 	Neuron *neuron_k, *last_neuron_k;
 
+	// Iteratori delle sinapsi
+	Synapse *synapse_t;
+	Synapse *synapse_row_t1, *synapse_t1;
+
 	// Retropropago l'errore nella rete
 	for ( ; t >= 0; t-- ) {
 
-		// Preparo l'iteratore delle sinapsi
-		synapse_row_t = this->connections[t]->first_synapse;
+		// Preparo gli iteratori delle sinapsi
+		synapse_t = this->connections[t]->first_synapse;
+		synapse_row_t1 = this->connections[t + 1]->first_synapse;
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_i	= this->layers[t]->last_neuron;
-		neuron_i		= this->layers[t]->first_neuron;
+		last_neuron_j	= this->layers[t + 1]->last_neuron;
+		neuron_j		= this->layers[t + 1]->first_neuron;
 
-		// Ciclo per tutti i neuroni dello strato 't'
-		for ( ; neuron_i <= ( last_neuron_i + 1 ); neuron_i++, synapse_row_t++ ) {
+		// Ciclo per tutti i neuroni dello strato 't + 1'
+		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_row_t1++ ) {
+
+			// Azzero l'errore sull'uscita 
+			neuron_j->dEdy = 0;
 
 			// Preparo l'iteratore delle sinapsi
-			synapse_t = synapse_row_t;
-
-			// Preparo l'iteratore delle sinapsi
-			synapse_row_t1 = this->connections[t + 1]->first_synapse;
+			synapse_t1 = synapse_row_t1;
 
 			// Preparo l'iteratore dei neuroni
-			last_neuron_j	= this->layers[t + 1]->last_neuron;
-			neuron_j		= this->layers[t + 1]->first_neuron;
+			last_neuron_k	= this->layers[t + 2]->last_neuron;
+			neuron_k		= this->layers[t + 2]->first_neuron;
 
-			// Ciclo per tutti i neuroni dello strato 't + 1'
-			for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_row_t1++, synapse_t += ( this->layers[t]->size + 1 ) ) {
+			// Calcolo l'errore retropropagato dai neuroni dello strato successivo
+			// dE/dz_k = SUM( dE/dy_j * dy_j/dP_j * dP_j/dz_k )
 
-				// Azzero l'errore da retropropagare
-				backpropagation = 0;
+			// Ciclo per tutti i neuroni dello strato 't + 2'
+			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->connections[t + 1]->row_step ) {
 
-				// Preparo l'iteratore delle sinapsi
-				synapse_t1 = synapse_row_t1;
-
-				// Preparo l'iteratore dei neuroni
-				last_neuron_k	= this->layers[t + 2]->last_neuron;
-				neuron_k		= this->layers[t + 2]->first_neuron;
-
-				// Calcolo l'errore retropropagato dai neuroni dello strato successivo
-				// dE/dz_k = SUM( dE/dy_j * dy_j/dP_j * dP_j/dz_k )
-
-				// Ciclo per tutti i neuroni dello strato 't + 2'
-				for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += ( this->layers[t + 1]->size + 1 ) ) {
-
-					backpropagation += neuron_k->dEdy * __D_SIGMOID__( neuron_k->value ) * synapse_t1->weight;
-				}
-
-				// Memorizzo l'errore del neurone
-				neuron_j->dEdy = backpropagation;
-
-				// Calcolo l'errore dei pesi sinaptici del neurone tenendo conto del BIAS
-				if ( neuron_i == last_neuron_i + 1 )
-
-					// dE/dw_ij += dE/dy_j * dy_j/dP_j
-					synapse_t->train->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value );
-				else
-					// dE/dw_ij += dE/dy_j * dy_j/dP_j * Z_i
-					synapse_t->train->dEdw += neuron_j->dEdy * __D_SIGMOID__( neuron_j->value ) * neuron_i->value;
+				neuron_j->dEdy += neuron_k->dEdy * __D_SIGMOID__( neuron_k->value ) * synapse_t1->weight;
 			}
+
+			// Calcolo il delta per la correzione del peso sinaptico
+			delta = neuron_j->dEdy * __D_SIGMOID__( neuron_j->value );
+
+			// Preparo l'iteratore dei neuroni
+			last_neuron_i	= this->layers[t]->last_neuron;
+			neuron_i		= this->layers[t]->first_neuron;
+
+			// Ciclo per tutti i neuroni dello strato 't'
+			for ( ; neuron_i <= last_neuron_i; neuron_i++, synapse_t++ ) {
+
+				// dE/dw_ij += dE/dy_j * dy_j/dP_j * Z_i
+				synapse_t->train->dEdw += delta * neuron_i->value;
+			}
+
+			// Aggiungo l'errore del bias al peso sinaptico del neurone
+			// dE/dw_ij += dE/dy_j * dy_j/dP_j
+			synapse_t->train->dEdw += delta;
+
+			// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
+			synapse_t++;
 		}
 	}
 }
@@ -573,6 +569,9 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 	// Numero delle epoche dell'addestramento
 	size_t epochs = 0;
 
+	// Cronometro dell'addestramento
+	time_t t_elapsed, t_start = time( NULL );
+
 	// Iteratori
 	size_t i;
 
@@ -630,11 +629,14 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 			}
 		} 
 
+		// Calcolo quanto tempo è passato dall'inizio dell'addestramento
+		t_elapsed = ( time( NULL ) - t_start );
+
 		// Log dell'addestramento ogni N epoche
 		if ( epochs % epochs_between_reports == 0 ) {
 
 			// Passo le informazioni alla funzione di report
-			int flag = this->report_function(	this, epochs, this->net_error, (const T_Precision *) this->output_data,
+			int flag = this->report_function(	this, epochs, t_elapsed, this->net_error, (const T_Precision *) this->output_data,
 												this->layers[this->layers.size() - 1]->size, this->report_function_data );
 
 			// Controllo se è stato inviato un segnale di uscita
@@ -652,7 +654,7 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 	if ( epochs % epochs_between_reports != 0 ) {
 
 		// Passo le informazioni alla funzione di report
-		this->report_function(	this, epochs, this->net_error, (const T_Precision *) this->output_data,
+		this->report_function(	this, epochs, t_elapsed, this->net_error, (const T_Precision *) this->output_data,
 								this->layers[this->layers.size() - 1]->size, this->report_function_data );
 	}
 

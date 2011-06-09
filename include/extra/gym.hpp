@@ -83,7 +83,7 @@ public:
 	static void *static_start_training( void *data );
 
 	// Aggiorna i grafici della rete neurale (statico)
-	static int static_update_plot(	Network *network, size_t epochs, T_Precision max_error,
+	static int static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
 									const T_Precision *outputs, size_t outputs_size, void *data );
 
 	/** FINE METODI STATICI **/
@@ -100,7 +100,7 @@ public:
 	void SaveNeuralNetwork();
 
 	// Aggiorna i grafici della rete neurale
-	int UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
+	int UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
 					const T_Precision *outputs, size_t outputs_size );
 
 	// Funzione per la gestione degli eventi della finestra

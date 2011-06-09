@@ -902,7 +902,7 @@ Gym::StartTraining() {
 }
 
 int
-Gym::UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
+Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
 					const T_Precision *outputs, size_t outputs_size ) {
 
 	// Prendo il controllo sulle FLTK
@@ -980,9 +980,17 @@ Gym::UpdatePlot(	Network *network, size_t epochs, T_Precision max_error,
 	// Aggiorno il riquadro dell'errore massimo
 	this->error_box->value( (double) max_error );
 
+	// Calcolo le ore, i minuti e i secondi del tempo trascorso
+	size_t hours, mins, secs;
+
+	secs	= elapsed_time % 60;
+	mins	= ( elapsed_time / 60 ) % 60;
+	hours	= ( elapsed_time / 3600 );
+
 	// Costruisco il testo del nuovo log di lavoro
 	char str_buffer[200];
-	snprintf( str_buffer, 200, "\n  Epochs #%zu, current error: %.10f", epochs, (double) max_error );
+	snprintf(	str_buffer, 200, "\n  Epochs #%zu, time %zuh%zum%zus, error %.10f",
+				epochs, hours, mins, secs, (double) max_error );
 
 	// Aggiorno il log di lavoro
 	this->log_buffer->append( str_buffer );

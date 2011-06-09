@@ -75,11 +75,18 @@ values_on_string( const std::string &str, std::vector< T_Precision > &vect ) {
 /** INIZIO METODI STATICI **/
 
 int
-Network::training_report(	Network *network, size_t epochs, T_Precision max_error,
+Network::training_report(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
 							const T_Precision *outputs, size_t outputs_size, void *data ) {
 
-	// Stampo il rapporto dell'addestramento 
-	printf( "  Epochs #%zu, current error: %.10f\n", epochs, (double) max_error );
+	// Calcolo le ore, i minuti e i secondi del tempo trascorso
+	size_t hours, mins, secs;
+
+	secs	= elapsed_time % 60;
+	mins	= ( elapsed_time / 60 ) % 60;
+	hours	= ( elapsed_time / 3600 );
+
+	// Stampo il rapporto dell'addestramento
+	printf(	"  Epochs #%zu, time %zuh%zum%zus, error %.10f\n", epochs, hours, mins, secs, (double) max_error );
 
 	return 0;
 }
@@ -241,7 +248,7 @@ Network::Run( const T_Precision *input ) {
 		neuron_i		= this->layers[t + 1]->first_neuron;
 
 		// Calcolo i valori di uscita dello strato corrente
-		// Y_i = T( SUM( w_ji - BIAS_i ) ) oppure Y_i = T( SUM( w_ji ) )
+		// Y_i = T( SUM( w_ji - bias_i ) ) oppure Y_i = T( SUM( w_ji ) )
 		for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
 
 			// Azzero il valore di attivazione del neurone
@@ -257,21 +264,26 @@ Network::Run( const T_Precision *input ) {
 				activation += synapse_t->weight * neuron_j->value;
 			}
 
-			// Aggiungo la soglia del BIAS
+			// Aggiungo la soglia del bias
 			activation += synapse_t->weight;
 
-			// Sposto l'iteratore oltre la sinapsi del BIAS, nella riga contente le sinapsi del neurone successivo
+			// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
 			synapse_t++;
 
 			// Calcolo il valore in uscita del neurone utilizzando una sigmoide
 			neuron_i->value = __SIGMOID__( activation );
-
-			// Se sto processando l'ultimo strato copio i valori delle uscite nel vettore specifico
-			if ( (size_t) ( t + 1 ) == this->layers.size() - 1 ) {
-
-				this->output_data[i] = neuron_i->value;
-			}
 		}
+	}
+
+	// Preparo l'iteratore dei neuroni
+	last_neuron_i	= this->layers[this->layers.size() - 1]->last_neuron;
+	neuron_i		= this->layers[this->layers.size() - 1]->first_neuron;
+
+	// Copio le uscite nel vettore specifico
+	for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
+
+		// Copio l'uscita del neurone
+		this->output_data[i] = neuron_i->value;
 	}
 
 	// Ritorna un puntatore ai valori di uscita
