@@ -34,6 +34,7 @@
 #include <ctime>
 
 #include <serotonina/version.hpp>
+#include <serotonina/types.hpp>
 
 #define _COMMENT_		'#'
 #define _SEPARATOR_		':'
@@ -65,10 +66,6 @@ enum TrainAlgorithm {
 
 // Prototipi
 class Network;
-
-// Precisione dei valori
-//typedef float Precision;
-typedef double T_Precision;
 
 // Segnale di apprendimento
 typedef int (*ReportSignal)( Network *, size_t, time_t, T_Precision, const T_Precision *, size_t, void * );

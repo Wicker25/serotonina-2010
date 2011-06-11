@@ -137,11 +137,11 @@ Network::Network( size_t n_layers, ... ) {
 	#ifdef VERBOSE
 
 		// Log di lavoro
-		printf( "New neural network [%lu", this->layers[0]->size );
+		printf( "New neural network [%lu", (unsigned long) this->layers[0]->size );
 
 		for ( t = 1; t < this->layers.size(); t++ ) {
 
-			printf( ",%lu", (unsigned long)  this->layers[t]->size );
+			printf( ",%lu", (unsigned long) this->layers[t]->size );
 		}
 
 		printf( "].\n" );

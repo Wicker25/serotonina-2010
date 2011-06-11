@@ -4,8 +4,11 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
     * all: Fixed printf format of `size_t`.
            Now the compiler flags are `-Wall -ansi -pedantic -pedantic-errors`.
+           Added `serotonina/types.hpp` header.
 
-    * st_ocr: Added command line function `Gym->CommandLine` (to finish)
+    * st_ocr: Added command line function `Gym->CommandLine` (to finish).
+
+    * CMakeList.txt: Now you can compile Serotonina without dipendencies.
 
 ============= Serotonina 1.0.5 - urgency=low =============
 

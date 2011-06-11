@@ -1,5 +1,5 @@
 /* 
-    Title --- serotonina.hpp
+    Title --- version.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -19,13 +19,11 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_HPP_
-#define _SEROTONINA_HPP_
+#ifndef _SEROTONINA_TYPES_HPP_
+#define _SEROTONINA_TYPES_HPP_
 
-// Includo tutti gli headers della libreria
-#include <serotonina/version.hpp>
-#include <serotonina/types.hpp>
-#include <serotonina/network.hpp>
-#include <serotonina/network-inl.hpp>
+// Precisione dei valori della rete
+//typedef float Precision;
+typedef double T_Precision;
 
 #endif
