@@ -122,14 +122,14 @@ IF (FLTK_FOUND)
 	ELSE (OpenCV_FOUND)
 
 		# Log di lavoro
-		MESSAGE( STATUS "WARNING: Could NOT find dependencies of Face Recognition tool." )
+		MESSAGE( STATUS "WARNING: could NOT find dependencies of Face Recognition tool." )
 
 	ENDIF (OpenCV_FOUND)
 
 ELSE (FLTK_FOUND)
 
 	# Log di lavoro
-	MESSAGE( "Warning: could NOT find dependencies of tools." )
+	MESSAGE( STATUS "WARNING: could NOT find dependencies of tools." )
 
 ENDIF (FLTK_FOUND)
 
