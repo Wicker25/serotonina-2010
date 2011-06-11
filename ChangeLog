@@ -45,3 +45,4 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
     * all: Added this ChangeLog file to the project.
            Added main header file for easy importing `include/serotonina.hpp`.
 
+
