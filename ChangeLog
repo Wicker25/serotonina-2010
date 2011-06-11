@@ -4,7 +4,7 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
 2011-06-10  Wicker25  < wicker25@gmail.com >
 
-	* all: Improved performance!! :P
+	* all: Improved performance!! ;)
 
     * network-train.cpp: Added elapsed time of training.
 

@@ -28,36 +28,6 @@ namespace Serotonina { // Namespace di Serotonina
 
 /** INIZIO METODI STATICI **/
 
-inline void
-Gym::load_training_set_button_callback( Fl_Widget *widget, void *data ) {
-
-	// Ricavo un puntatore alla finestra principale
-	Gym *gym = static_cast< Gym * >( data );
-
-	// Chiama il metodo corrispondente
-	gym->LoadTrainingSet();
-}
-
-inline void
-Gym::load_test_set_button_callback( Fl_Widget *widget, void *data ) {
-
-	// Ricavo un puntatore alla finestra principale
-	Gym *gym = static_cast< Gym * >( data );
-
-	// Chiama il metodo corrispondente
-	gym->LoadTestSet();
-}
-
-inline void
-Gym::save_button_callback( Fl_Widget *widget, void *data ) {
-
-	// Ricavo un puntatore alla finestra principale
-	Gym *gym = static_cast< Gym * >( data );
-
-	// Chiama il metodo corrispondente
-	gym->SaveNeuralNetwork();
-}
-
 inline void *
 Gym::static_start_training( void *data ) {
 
@@ -82,24 +52,6 @@ Gym::static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T
 }
 
 /** FINE METODI STATICI **/
-
-inline void
-Gym::SaveNeuralNetwork() {
-
-	// Controllo se la rete neurale è stata creata
-	if ( this->neural_network != NULL ) {
-
-		// Percorso al file del training set
-		const char *path;
-
-		// Chiedo all'utente di scegliere il file di destinazione
-		if ( ( path = fl_file_chooser( "Salva in un file...", "Neural Network (*.net)", "" ) ) != NULL ) {
-
-			// Salvo la rete neurale in un file
-			this->neural_network->Save( path );
-		}
-	}
-}
 
 } // Chiudo il namespace di Serotonina
 

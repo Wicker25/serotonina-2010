@@ -21,14 +21,14 @@ set( Serotonina_GYM_VERSION_PATCH 1 )
 
 set( Serotonina_OCR_VERSION_MAJOR 1 )
 set( Serotonina_OCR_VERSION_MINOR 0 )
-set( Serotonina_OCR_VERSION_PATCH 0 )
+set( Serotonina_OCR_VERSION_PATCH 1 )
 
 set( Serotonina_FACE_RECOGNITION_VERSION_MAJOR 1 )
 set( Serotonina_FACE_RECOGNITION_VERSION_MINOR 0 )
-set( Serotonina_FACE_RECOGNITION_VERSION_PATCH 0 )
+set( Serotonina_FACE_RECOGNITION_VERSION_PATCH 1 )
 
 # Aggiungo una direttiva al compilatore
-add_definitions( -Wall -ansi )
+add_definitions( -Wall -ansi -pedantic )
 # -pedantic -pedantic-errors
 
 # Imposto le dipendenze necessarie

@@ -48,6 +48,9 @@
 #define _GYM_TITLE_		"Serotonina::Gym - Tool grafico per l'addestramento delle reti neurali"
 #define _GYM_FPS_		30.0
 
+// Linea di comando
+#define _GYM_CMD_TRAINING_SET_	"--training-set"
+
 namespace Serotonina { // Namespace di Serotonina
 
 class Gym : public Fl_Window {
@@ -93,11 +96,20 @@ public:
 	Gym( int width, int height );
 	virtual ~Gym();
 
+	// Interpreta la linea di comando
+	void CommandLine( int argc, char **argv );
+
 	// Avvia l'addestramento della rete neurale
 	void StartTraining();
 
+	// Carica i campioni per l'addestramento della rete
+	void LoadTrainingSet( const char *path );
+
+	// Carica i campioni per il test della rete
+	void LoadTestSet( const char *path );
+
 	// Salva la rete neurale in un file
-	void SaveNeuralNetwork();
+	void SaveNeuralNetwork( const char *path );
 
 	// Aggiorna i grafici della rete neurale
 	int UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
@@ -197,12 +209,6 @@ private:
 
 	// Finestra del log di lavoro
 	Fl_Text_Display *log_display;
-
-	// Carica i campioni per l'addestramento della rete
-	void LoadTrainingSet();
-
-	// Carica i campioni per il test della rete
-	void LoadTestSet();
 };
 
 } // Chiudo il namespace di Serotonina

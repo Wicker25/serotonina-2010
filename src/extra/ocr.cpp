@@ -404,7 +404,7 @@ Ocr::TrainAllNetwork() {
 	for ( ; i < _OCR_CHARACTER_NUM_; i++ ) {
 
 		// Preparo il messaggio della barra del progresso
-		snprintf( buffer, 100, "Studio la lettera %c ... (%zu di %zu)", 'A' + (char) i, i + 1, (size_t) _OCR_CHARACTER_NUM_ );
+		snprintf( buffer, 100, "Studio la lettera %c ... (%lu di %lu)", 'A' + (char) i, i + 1, (size_t) _OCR_CHARACTER_NUM_ );
 
 		// Prendo il controllo sulle FLTK
 		Fl::lock();

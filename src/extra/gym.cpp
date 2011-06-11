@@ -48,6 +48,40 @@ Gym::asynchronous_redraw( void *window ) {
 }
 
 void
+Gym::load_training_set_button_callback( Fl_Widget *widget, void *data ) {
+
+	// Ricavo un puntatore alla finestra principale
+	Gym *gym = static_cast< Gym * >( data );
+
+	// Percorso al file del training set
+	const char *path;
+
+	// Chiedo all'utente di scegliere il file da cui caricare il training set
+	if ( ( path = fl_file_chooser( "Carica un training set...", "Training Set (*.train)\tTest Set (*.test)", "" ) ) != NULL ) {
+
+		// Chiama il metodo corrispondente
+		gym->LoadTrainingSet( path );
+	}
+}
+
+void
+Gym::load_test_set_button_callback( Fl_Widget *widget, void *data ) {
+
+	// Ricavo un puntatore alla finestra principale
+	Gym *gym = static_cast< Gym * >( data );
+
+	// Percorso al file del training set
+	const char *path;
+
+	// Chiedo all'utente di scegliere il file da cui caricare il training set
+	if ( ( path = fl_file_chooser( "Carica un test set...", "Test Set (*.test)\tTraining Set (*.train)", "" ) ) != NULL ) {
+
+		// Chiama il metodo corrispondente
+		gym->LoadTestSet( path );
+	}
+}
+
+void
 Gym::training_button_callback( Fl_Widget *widget, void *data ) {
 
 	// Ricavo un puntatore alla finestra principale
@@ -82,6 +116,23 @@ Gym::training_button_callback( Fl_Widget *widget, void *data ) {
 
 		// Memorizzo la fine del thread
 		gym->thread_id = 0;
+	}
+}
+
+void
+Gym::save_button_callback( Fl_Widget *widget, void *data ) {
+
+	// Ricavo un puntatore alla finestra principale
+	Gym *gym = static_cast< Gym * >( data );
+
+	// Percorso al file del training set
+	const char *path;
+
+	// Chiedo all'utente di scegliere il file di destinazione
+	if ( ( path = fl_file_chooser( "Salva in un file...", "Neural Network (*.net)", "" ) ) != NULL ) {
+
+		// Chiama il metodo corrispondente
+		gym->SaveNeuralNetwork( path );
 	}
 }
 
@@ -363,6 +414,24 @@ Gym::~Gym() {
 		delete this->neural_network;
 }
 
+void
+Gym::CommandLine( int argc, char **argv ) {
+
+	// Iteratore
+	size_t i = 1;
+
+	for ( ; i < (size_t) argc; i += 2 ) {
+
+		if ( strcmp( _GYM_CMD_TRAINING_SET_, argv[i] ) == 0 ) {
+
+			printf( "TRAINING SET: %s\n", argv[i + 1] );
+			//this->LoadTrainingSet( argv[i + 1] );
+		}
+	}
+
+	//exit(0);
+}
+
 int
 Gym::handle( int event ) {
 
@@ -372,108 +441,72 @@ Gym::handle( int event ) {
 		// Pressione di un tasto
 		case FL_KEYDOWN: {
 
-			// Controllo il tasto premuto
-			switch ( Fl::event_key() ) { 
+			// Ricavo l codice del tasto premuto
+			int key = Fl::event_key();
 
-				// Funzione di uscita
-				case FL_Escape: {
+			// Controllo se si vuole visualizzare un altro grafico
+			if ( Fl::event_state() == FL_CTRL && key >= '1' && key <= '9' ) {
 
-					exit(0);
+				// Imposto l'uscita da visualizzare
+				if ( this->output_size > (size_t) ( key - '1' ) ) {
+					this->graph_output = (size_t) ( key - '1' );
+
+					// Aggiorno il grafico dell'addestramento se uno è in corso
+					if ( this->neural_network != NULL )
+						this->UpdatePlot( NULL, 0, 0, 0, NULL, 0 );
 				}
 
-				// Mostra l'uscita #1 nel grafico
-				case '1': {
+			} else {
 
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 1 ) this->graph_output = 0;
-					break;
+				// Controllo il tasto premuto
+				switch ( Fl::event_key() ) { 
+
+					// Funzione di uscita
+					case FL_Escape: {
+
+						exit(0);
+					}
+
+					// Mostra l'uscita successiva nel grafico
+					case FL_Page_Up:
+					case FL_Up:
+					case '+': {
+
+						// Imposto l'uscita mostrata nel grafico
+						if ( this->graph_output + 1 < this->output_size ) {
+
+							// Imposto il grafico da visualizzare
+							this->graph_output++;
+
+							// Aggiorno il grafico dell'addestramento se uno è in corso
+							if ( this->neural_network != NULL )
+								this->UpdatePlot( NULL, 0, 0, 0, NULL, 0 );
+						}
+
+						break;
+					}
+
+					// Mostra l'uscita precedente nel grafico
+					case FL_Page_Down:
+					case FL_Down:
+					case '-': {
+
+						// Imposto l'uscita mostrata nel grafico
+						if ( (float) this->graph_output - 1 > 0 ) {
+
+							// Imposto il grafico da visualizzare
+							this->graph_output--;
+
+							// Aggiorno il grafico dell'addestramento se uno è in corso
+							if ( this->neural_network != NULL )
+								this->UpdatePlot( NULL, 0, 0, 0, NULL, 0 );
+						}
+
+						break;
+					}
+
+					default: break;
 				}
-
-				// Mostra l'uscita #2 nel grafico
-				case '2': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 2 ) this->graph_output = 1;
-					break;
-				}
-
-				// Mostra l'uscita #3 nel grafico
-				case '3': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 3 ) this->graph_output = 2;
-					break;
-				}
-
-				// Mostra l'uscita #4 nel grafico
-				case '4': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 4 ) this->graph_output = 3;
-					break;
-				}
-
-				// Mostra l'uscita #5 nel grafico
-				case '5': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 5 ) this->graph_output = 4;
-					break;
-				}
-
-				// Mostra l'uscita #6 nel grafico
-				case '6': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 6 ) this->graph_output = 5;
-					break;
-				}
-
-				// Mostra l'uscita #7 nel grafico
-				case '7': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 7 ) this->graph_output = 6;
-					break;
-				}
-
-				// Mostra l'uscita #8 nel grafico
-				case '8': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 8 ) this->graph_output = 7;
-					break;
-				}
-
-				// Mostra l'uscita #9 nel grafico
-				case '9': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->output_size >= 9 ) this->graph_output = 8;
-					break;
-				}
-
-				// Mostra l'uscita successiva nel grafico
-				case FL_Page_Up:
-				case FL_Up:
-				case '+': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( this->graph_output + 1 < this->output_size ) this->graph_output++;
-					break;
-				}
-
-				// Mostra l'uscita precedente nel grafico
-				case FL_Page_Down:
-				case FL_Down:
-				case '-': {
-
-					// Imposto l'uscita mostrata nel grafico
-					if ( (float) this->graph_output - 1 > 0 ) this->graph_output--;
-					break;
-				}
-
-				default: break;
 			}
 
 			return 1;
@@ -485,7 +518,7 @@ Gym::handle( int event ) {
 }
 
 void
-Gym::LoadTrainingSet() {
+Gym::LoadTrainingSet( const char *path ) {
 
 	// Termino il thread per l'addestramento
 	if ( this->thread_id )
@@ -494,87 +527,80 @@ Gym::LoadTrainingSet() {
 	// Memorizzo la fine del thread
 	this->thread_id = 0;
 
-	// Percorso al file del training set
-	const char *path;
+	// Salvo il percorso al file del training set
+	this->train_set_path = path;
 
-	// Chiedo all'utente di scegliere il file da cui caricare il training set
-	if ( ( path = fl_file_chooser( "Carica un training set...", "Training Set (*.train)\tTest Set (*.test)", "" ) ) != NULL ) {
+	// Apre uno stream al file dell'addestramento
+	std::ifstream file( path );
 
-		// Salvo il percorso al file del training set
-		this->train_set_path = path;
+	// Controllo se il file è stato aperto correttamente
+	if ( !file.is_open() ) {
 
-		// Apre uno stream al file dell'addestramento
-		std::ifstream file( path );
+		// Communico l'errore all'utente
+		fprintf( stderr, "(W) Couldn't open file '%s'!\n", path );
 
-		// Controllo se il file è stato aperto correttamente
-		if ( !file.is_open() ) {
+		// Termino l'esecuzione del programma
+		exit(1);
+	}
 
-			// Communico l'errore all'utente
-			fprintf( stderr, "(W) Couldn't open file '%s'!\n", path );
+	// Azzero il numero dei campioni del test set
+	this->n_test_samples = 0;
 
-			// Termino l'esecuzione del programma
-			exit(1);
-		}
+	// Rimuovo le vecchie informazioni
+	this->inputs_data.clear();
+	this->outputs_data.clear();
 
-		// Azzero il numero dei campioni del test set
-		this->n_test_samples = 0;
+	// Numero della riga letta
+	size_t n_line = 0;
 
-		// Rimuovo le vecchie informazioni
-		this->inputs_data.clear();
-		this->outputs_data.clear();
+	// Flag di uscita
+	bool end = false;
 
-		// Numero della riga letta
-		size_t n_line = 0;
+	// Buffer contenente la riga letta
+	std::string line;
 
-		// Flag di uscita
-		bool end = false;
+	// Leggo le informazioni sul tipo di addestramento
+	while ( !end && file.good() ) {
 
-		// Buffer contenente la riga letta
-		std::string line;
+		// Leggo la nuova riga
+		std::getline( file, line );
 
-		// Leggo le informazioni sul tipo di addestramento
-		while ( !end && file.good() ) {
+		// Controllo che la linea non sia vuota o un commento
+		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
 
-			// Leggo la nuova riga
-			std::getline( file, line );
+			// Valori estratti
+			std::vector< T_Precision > value;
 
-			// Controllo che la linea non sia vuota o un commento
-			if ( !line.empty() && line.at(0) != _COMMENT_ ) {
+			// Estraggo i valori di ingresso
+			if ( values_on_string( line, value ) != 2 ) {
 
-				// Valori estratti
-				std::vector< T_Precision > value;
-
-				// Estraggo i valori di ingresso
-				if ( values_on_string( line, value ) != 2 ) {
-
-					// E se trovo un errore lo communico all'utente
-					fprintf( stderr, " (W) Syntax error on training file '%s', at line %zu!\n", path, n_line );
-				}
-
-				// Memorizzo le dimensioni della rete
-				this->input_size	= (size_t) value[0];
-				this->output_size	= (size_t) value[1];
-
-				// Imposto il flag di uscita
-				end = true;
+				// E se trovo un errore lo communico all'utente
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path, n_line );
 			}
 
-			// Incremento il contatore della linea
-			n_line++;
+			// Memorizzo le dimensioni della rete
+			this->input_size	= (size_t) value[0];
+			this->output_size	= (size_t) value[1];
+
+			// Imposto il flag di uscita
+			end = true;
 		}
 
-		// Aggiorno il log di lavoro
-		this->log_buffer->append( "\nTraining set caricato con successo." );
-		this->log_display->insert_position( this->log_buffer->length() );
-		this->log_display->show_insert_position();
-
-		// Chiudo lo stream al file
-		file.close();
+		// Incremento il contatore della linea
+		n_line++;
 	}
+
+	// Aggiorno il log di lavoro
+	this->log_buffer->append( "\nTraining set caricato con successo." );
+	this->log_display->insert_position( this->log_buffer->length() );
+	this->log_display->show_insert_position();
+
+	// Chiudo lo stream al file
+	file.close();
 }
 
 void
-Gym::LoadTestSet() {
+Gym::LoadTestSet( const char *path ) {
 
 	// Termino il thread per l'addestramento
 	if ( this->thread_id )
@@ -583,124 +609,117 @@ Gym::LoadTestSet() {
 	// Memorizzo la fine del thread
 	this->thread_id = 0;
 
-	// Percorso al file del training set
-	const char *path;
+	// Apre uno stream al file dell'addestramento
+	std::ifstream file( path );
 
-	// Chiedo all'utente di scegliere il file da cui caricare il training set
-	if ( ( path = fl_file_chooser( "Carica un test set...", "Test Set (*.test)\tTraining Set (*.train)", "" ) ) != NULL ) {
+	// Controllo se il file è stato aperto correttamente
+	if ( !file.is_open() ) {
 
-		// Apre uno stream al file dell'addestramento
-		std::ifstream file( path );
+		// Communico l'errore all'utente
+		fprintf( stderr, "(W) Couldn't open file '%s'!\n", path );
 
-		// Controllo se il file è stato aperto correttamente
-		if ( !file.is_open() ) {
+		// Termino l'esecuzione del programma
+		exit(1);
+	}
 
-			// Communico l'errore all'utente
-			fprintf( stderr, "(W) Couldn't open file '%s'!\n", path );
+	// Imposto l'uscita mostrata nel grafico
+	this->graph_output = 0;
 
-			// Termino l'esecuzione del programma
-			exit(1);
+	// Azzero il numero dei campioni del test set
+	this->n_test_samples = 0;
+
+	// Rimuovo le vecchie informazioni
+	this->inputs_data.clear();
+	this->outputs_data.clear();
+
+	// Numero della riga letta
+	size_t n_line = 0;
+
+	// Flag di uscita
+	bool end = false;
+
+	// Buffer contenente la riga letta
+	std::string line;
+
+	// Leggo le informazioni sul tipo di test set
+	while ( !end && file.good() ) {
+
+		// Leggo la nuova riga
+		std::getline( file, line );
+
+		// Controllo che la linea non sia vuota o un commento
+		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
+
+			// Valori estratti
+			std::vector< T_Precision > value;
+
+			// Estraggo i valori di ingresso
+			if ( values_on_string( line, value ) != 2 ) {
+
+				// E se trovo un errore lo communico all'utente
+				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, n_line );
+			}
+
+			// Controllo che il test set sia compatibile alla rete corrente
+			if ( this->input_size != (size_t) value[0] || this->output_size != (size_t) value[1] ) {
+
+				// Aggiorno il log di lavoro
+				this->log_buffer->append( "\nImpossibile caricare il test set: incompatibile con il training set corrente." );
+				this->log_display->insert_position( this->log_buffer->length() );
+				this->log_display->show_insert_position();
+
+				return;
+			}
+
+			// Imposto il flag di uscita
+			end = true;
 		}
 
-		// Imposto l'uscita mostrata nel grafico
-		this->graph_output = 0;
+		// Incremento il contatore della linea
+		n_line++;
+	}
 
-		// Azzero il numero dei campioni del test set
-		this->n_test_samples = 0;
+	// Leggo i dati per l'addestramento una riga per volta
+	while ( file.good() ) {
 
-		// Rimuovo le vecchie informazioni
-		this->inputs_data.clear();
-		this->outputs_data.clear();
+		// Leggo la nuova riga
+		std::getline( file, line );
 
-		// Numero della riga letta
-		size_t n_line = 0;
+		// Controllo che la linea non sia vuota o un commento
+		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
 
-		// Flag di uscita
-		bool end = false;
+			// Cerco il separatore nella riga
+			int found = line.find_first_of( _SEPARATOR_ );
 
-		// Buffer contenente la riga letta
-		std::string line;
+			// Estraggo i valori di ingresso
+			if ( values_on_string( line.substr( 0, found ), this->inputs_data ) != this->input_size ) {
 
-		// Leggo le informazioni sul tipo di test set
-		while ( !end && file.good() ) {
-
-			// Leggo la nuova riga
-			std::getline( file, line );
-
-			// Controllo che la linea non sia vuota o un commento
-			if ( !line.empty() && line.at(0) != _COMMENT_ ) {
-
-				// Valori estratti
-				std::vector< T_Precision > value;
-
-				// Estraggo i valori di ingresso
-				if ( values_on_string( line, value ) != 2 ) {
-
-					// E se trovo un errore lo communico all'utente
-					fprintf( stderr, " (W) Syntax error on test file '%s', at line %zu!\n", path, n_line );
-				}
-
-				// Controllo che il test set sia compatibile alla rete corrente
-				if ( this->input_size != (size_t) value[0] || this->output_size != (size_t) value[1] ) {
-
-					// Aggiorno il log di lavoro
-					this->log_buffer->append( "\nImpossibile caricare il test set: incompatibile con il training set corrente." );
-					this->log_display->insert_position( this->log_buffer->length() );
-					this->log_display->show_insert_position();
-
-					return;
-				}
-
-				// Imposto il flag di uscita
-				end = true;
+				// E se trovo un errore lo communico all'utente
+				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, n_line );
 			}
+
+			// Estraggo i valori di uscita
+			if ( values_on_string( line.substr( found + 1 ), this->outputs_data ) != this->output_size ) {
+
+				// E se trovo un errore lo communico all'utente
+				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, n_line );
+			}
+
+			// Incremento il numero dei campioni del test set
+			this->n_test_samples++;
 
 			// Incremento il contatore della linea
 			n_line++;
 		}
-
-		// Leggo i dati per l'addestramento una riga per volta
-		while ( file.good() ) {
-
-			// Leggo la nuova riga
-			std::getline( file, line );
-
-			// Controllo che la linea non sia vuota o un commento
-			if ( !line.empty() && line.at(0) != _COMMENT_ ) {
-
-				// Cerco il separatore nella riga
-				int found = line.find_first_of( _SEPARATOR_ );
-
-				// Estraggo i valori di ingresso
-				if ( values_on_string( line.substr( 0, found ), this->inputs_data ) != this->input_size ) {
-
-					// E se trovo un errore lo communico all'utente
-					fprintf( stderr, " (W) Syntax error on test file '%s', at line %zu!\n", path, n_line );
-				}
-
-				// Estraggo i valori di uscita
-				if ( values_on_string( line.substr( found + 1 ), this->outputs_data ) != this->output_size ) {
-
-					// E se trovo un errore lo communico all'utente
-					fprintf( stderr, " (W) Syntax error on test file '%s', at line %zu!\n", path, n_line );
-				}
-
-				// Incremento il numero dei campioni del test set
-				this->n_test_samples++;
-
-				// Incremento il contatore della linea
-				n_line++;
-			}
-		}
-
-		// Chiudo lo stream al file
-		file.close();
-
-		// Aggiorno il log di lavoro
-		this->log_buffer->append( "\nTest set caricato con successo." );
-		this->log_display->insert_position( this->log_buffer->length() );
-		this->log_display->show_insert_position();
 	}
+
+	// Chiudo lo stream al file
+	file.close();
+
+	// Aggiorno il log di lavoro
+	this->log_buffer->append( "\nTest set caricato con successo." );
+	this->log_display->insert_position( this->log_buffer->length() );
+	this->log_display->show_insert_position();
 }
 
 void
@@ -943,8 +962,12 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 		}
 	}
 
-	// Aggiungo l'errore massimo ai dati
-	this->error_data.push_back( (float) max_error );
+	// Controllo se si tratta di un'aggiornamento durante la fase di addestramento
+	if ( network != NULL ) {
+
+		// Aggiungo l'errore massimo ai dati
+		this->error_data.push_back( (float) max_error );
+	}
 
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
@@ -974,33 +997,48 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 	this->error_plot->SetMinValue( 0.0 );
 	this->error_plot->SetMaxValue( 1.0 );
 
-	// Aggiorno il numero delle epoche
-	this->epochs_box->value( (double) epochs );
+	// Controllo se si tratta di un'aggiornamento durante la fase di addestramento
+	if ( network != NULL ) {
 
-	// Aggiorno il riquadro dell'errore massimo
-	this->error_box->value( (double) max_error );
+		// Aggiorno il numero delle epoche
+		this->epochs_box->value( (double) epochs );
 
-	// Calcolo le ore, i minuti e i secondi del tempo trascorso
-	size_t hours, mins, secs;
+		// Aggiorno il riquadro dell'errore massimo
+		this->error_box->value( (double) max_error );
 
-	secs	= elapsed_time % 60;
-	mins	= ( elapsed_time / 60 ) % 60;
-	hours	= ( elapsed_time / 3600 );
+		// Calcolo le ore, i minuti e i secondi del tempo trascorso
+		size_t hours, mins, secs;
 
-	// Costruisco il testo del nuovo log di lavoro
-	char str_buffer[200];
-	snprintf(	str_buffer, 200, "\n  Epochs #%zu, time %zuh%zum%zus, error %.10f",
-				epochs, hours, mins, secs, (double) max_error );
+		secs	= elapsed_time % 60;
+		mins	= ( elapsed_time / 60 ) % 60;
+		hours	= ( elapsed_time / 3600 );
 
-	// Aggiorno il log di lavoro
-	this->log_buffer->append( str_buffer );
-	this->log_display->insert_position( this->log_buffer->length() );
-	this->log_display->show_insert_position();
+		// Costruisco il testo del nuovo log di lavoro
+		char str_buffer[200];
+		snprintf(	str_buffer, 200, "\n  Epochs #%lu, time %luh%lum%lus, error %.10f",
+					epochs, hours, mins, secs, (double) max_error );
+
+		// Aggiorno il log di lavoro
+		this->log_buffer->append( str_buffer );
+		this->log_display->insert_position( this->log_buffer->length() );
+		this->log_display->show_insert_position();
+	}
 
 	// Rilascio il controllo sulle FLTK
 	Fl::unlock();
 
 	return 0;
+}
+
+void
+Gym::SaveNeuralNetwork( const char *path ) {
+
+	// Controllo se la rete neurale è stata creata
+	if ( this->neural_network != NULL ) {
+
+		// Salvo la rete neurale in un file
+		this->neural_network->Save( path );
+	}
 }
 
 } // Chiudo il namespace di Serotonina
@@ -1009,11 +1047,12 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 /* INIZIO FUNZIONE PRINCIPALE */
 
 int
-main( void ) {
+main( int argc, char **argv ) {
 
 	// Creo la finestra principale
 	Serotonina::Gym gym_window( 640, 640 );
 
+	gym_window.CommandLine( argc, argv );
 	gym_window.resizable( gym_window );
 	gym_window.show();
 

@@ -86,7 +86,7 @@ Network::training_report(	Network *network, size_t epochs, time_t elapsed_time, 
 	hours	= ( elapsed_time / 3600 );
 
 	// Stampo il rapporto dell'addestramento
-	printf(	"  Epochs #%zu, time %zuh%zum%zus, error %.10f\n", epochs, hours, mins, secs, (double) max_error );
+	printf(	"  Epochs #%lu, time %luh%lum%lus, error %.10f\n", epochs, hours, mins, secs, (double) max_error );
 
 	return 0;
 }
@@ -136,11 +136,11 @@ Network::Network( size_t n_layers, ... ) {
 	#ifdef VERBOSE
 
 		// Log di lavoro
-		printf( "New neural network [%zu", this->layers[0]->size );
+		printf( "New neural network [%lu", this->layers[0]->size );
 
 		for ( t = 1; t < this->layers.size(); t++ ) {
 
-			printf( ",%zu", this->layers[t]->size );
+			printf( ",%lu", this->layers[t]->size );
 		}
 
 		printf( "].\n" );
@@ -452,11 +452,11 @@ Network::Load( const std::string &path, bool new_ ) {
 				#ifdef VERBOSE
 
 					// Log di lavoro
-					printf( "New neural network [%zu", this->layers[0]->size );
+					printf( "New neural network [%lu", this->layers[0]->size );
 
 					for ( t = 1; t < this->layers.size(); t++ ) {
 
-						printf( ",%zu", this->layers[t]->size );
+						printf( ",%lu", this->layers[t]->size );
 					}
 
 					printf( "].\n" );
@@ -472,7 +472,7 @@ Network::Load( const std::string &path, bool new_ ) {
 			} else {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on training file '%s', at line %zu: Insufficient number of layers!\n", path.c_str(), n_line );
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu: Insufficient number of layers!\n", path.c_str(), n_line );
 			}
 
 			// Incremento il contatore della linea
@@ -517,7 +517,7 @@ Network::Load( const std::string &path, bool new_ ) {
 			} else {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on training file '%s', at line %zu!\n", path.c_str(), n_line );
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), n_line );
 			}
 
 			// Incremento il contatore della linea

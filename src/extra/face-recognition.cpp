@@ -553,7 +553,7 @@ FaceRecognition::draw() {
 	if (	this->photo_counter < _FACE_RECOGNITION_PHOTO_NUMBER_ &&
 			this->timer > _FACE_RECOGNITION_PHOTO_WAIT_ ) {
 
-		printf( "Salvata la foto numero %zu!\n", this->photo_counter + 1 );
+		printf( "Salvata la foto numero %lu!\n", this->photo_counter + 1 );
 
 		// Reimposto il cronometro
 		this->timer = 0;
