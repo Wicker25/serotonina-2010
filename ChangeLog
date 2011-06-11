@@ -6,7 +6,7 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
            Now the compiler flags are `-Wall -ansi -pedantic -pedantic-errors`.
            Added `serotonina/types.hpp` header.
 
-    * st_ocr: Added command line function `Gym->CommandLine` (to finish).
+    * st_ocr: Added `Gym->CommandLine` function (to finish).
 
     * CMakeList.txt: Now you can compile Serotonina without dipendencies.
 
