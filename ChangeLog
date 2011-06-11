@@ -1,5 +1,12 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.0.6 - urgency=low =============
+
+    * all: Fixed printf format of `size_t`.
+           Now the compiler flags are `-Wall -ansi -pedantic -pedantic-errors`.
+
+    * st_ocr: Added command line function `Gym->CommandLine` (to finish)
+
 ============= Serotonina 1.0.5 - urgency=low =============
 
 2011-06-10  Wicker25  < wicker25@gmail.com >

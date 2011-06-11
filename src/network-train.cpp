@@ -559,7 +559,7 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 	#ifdef VERBOSE
 
 		// Log di lavoro
-		printf( "Start training with %lu samples.\n", n_samples );
+		printf( "Start training with %lu samples.\n", (unsigned long) n_samples );
 
 	#endif
 
@@ -711,7 +711,7 @@ Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t 
 			if ( values_on_string( line, info ) != 2 ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), n_line );
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
 			}
 
 			// Controllo se il tipo di addestramento non è adatto alla rete corrente
@@ -745,14 +745,14 @@ Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t 
 			if ( values_on_string( line.substr( 0, found ), inputs ) != this->layers[0]->size ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), n_line );
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
 			}
 
 			// Estraggo i valori di uscita
 			if ( values_on_string( line.substr( found + 1 ), outputs ) != this->layers[this->layers.size() - 1]->size ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), n_line );
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
 			}
 
 			// Incremento il numero dei campioni caricati

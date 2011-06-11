@@ -575,7 +575,7 @@ Gym::LoadTrainingSet( const char *path ) {
 			if ( values_on_string( line, value ) != 2 ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path, n_line );
+				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path, (unsigned long) n_line );
 			}
 
 			// Memorizzo le dimensioni della rete
@@ -657,7 +657,7 @@ Gym::LoadTestSet( const char *path ) {
 			if ( values_on_string( line, value ) != 2 ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, n_line );
+				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, (unsigned long) n_line );
 			}
 
 			// Controllo che il test set sia compatibile alla rete corrente
@@ -695,14 +695,14 @@ Gym::LoadTestSet( const char *path ) {
 			if ( values_on_string( line.substr( 0, found ), this->inputs_data ) != this->input_size ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, n_line );
+				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, (unsigned long) n_line );
 			}
 
 			// Estraggo i valori di uscita
 			if ( values_on_string( line.substr( found + 1 ), this->outputs_data ) != this->output_size ) {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, n_line );
+				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, (unsigned long) n_line );
 			}
 
 			// Incremento il numero dei campioni del test set
@@ -1016,7 +1016,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 		// Costruisco il testo del nuovo log di lavoro
 		char str_buffer[200];
 		snprintf(	str_buffer, 200, "\n  Epochs #%lu, time %luh%lum%lus, error %.10f",
-					epochs, hours, mins, secs, (double) max_error );
+					(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
 
 		// Aggiorno il log di lavoro
 		this->log_buffer->append( str_buffer );
