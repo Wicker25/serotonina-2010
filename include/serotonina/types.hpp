@@ -1,5 +1,5 @@
 /* 
-    Title --- version.hpp
+    Title --- types.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -22,8 +22,12 @@
 #ifndef _SEROTONINA_TYPES_HPP_
 #define _SEROTONINA_TYPES_HPP_
 
+namespace Serotonina { // Namespace di Serotonina
+
 // Precisione dei valori della rete
 //typedef float Precision;
 typedef double T_Precision;
+
+} // Chiudo il namespace di Serotonina
 
 #endif
