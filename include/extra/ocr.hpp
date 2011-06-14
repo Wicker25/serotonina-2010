@@ -7,8 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,8 +48,6 @@
 #define _OCR_TITLE_				"Serotonina::OCR - Riconoscimento di un carattere"
 #define _OCR_FPS_				30.0
 #define _OCR_CHARACTER_NUM_		26
-
-namespace Serotonina { // Namespace di Serotonina
 
 // Struttura di un rettangolo
 struct Rectangle {
@@ -140,7 +137,7 @@ private:
 	Rectangle char_boundary;
 
 	// Rete neurale
-	Network *neural_network[_OCR_CHARACTER_NUM_];
+	Serotonina::Network *neural_network[_OCR_CHARACTER_NUM_];
 
 	// Id del thread dell'addestramento
 	pthread_t thread_id;
@@ -199,7 +196,5 @@ private:
 	// Disegna l'area di delimitazione del carattere
 	void DrawCharBoundary( size_t x, size_t y );
 };
-
-} // Chiudo il namespace di Serotonina
 
 #endif

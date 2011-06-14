@@ -1,14 +1,13 @@
 /* 
     Title --- network-train.cpp
 
-	Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
+    Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
-	This file is part of Serotonina.
+    This file is part of Serotonina.
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +25,28 @@
 #include <serotonina/network-inl.hpp>
 
 namespace Serotonina { // Namespace di Serotonina
+
+/** INIZIO METODI STATICI **/
+
+int
+Network::training_report(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
+							const T_Precision *outputs, size_t outputs_size, void *data ) {
+
+	// Calcolo le ore, i minuti e i secondi del tempo trascorso
+	size_t hours, mins, secs;
+
+	secs	= elapsed_time % 60;
+	mins	= ( elapsed_time / 60 ) % 60;
+	hours	= ( elapsed_time / 3600 );
+
+	// Stampo il rapporto dell'addestramento
+	printf(	"  Epochs #%lu, time %luh%lum%lus, error %.10f\n",
+			(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
+
+	return 0;
+}
+
+/** FINE METODI STATICI **/
 
 /*******************************************************************
  *           FUNZIONI DI ADDESTRAMENTO DELLA RETE NEURALE          *
@@ -45,11 +66,11 @@ Network::ComputeError( const T_Precision *target ) {
 	Synapse *synapse_t;
 
 	// Preparo l'iteratore dei neuroni
-	last_neuron_i	= this->layers[this->layers.size() - 1]->last_neuron;
-	neuron_i		= this->layers[this->layers.size() - 1]->first_neuron;
+	last_neuron_i	= this->layers.back()->last_neuron;
+	neuron_i		= this->layers.back()->first_neuron;
 
 	// Preparo l'iteratore delle sinapsi
-	synapse_t = this->connections[this->layers.size() - 2]->first_synapse;
+	synapse_t = this->layers.back()->first_synapse;
 
 	// Calcolo l'errore dello strato di uscita
 	for ( ; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
@@ -68,18 +89,18 @@ Network::ComputeError( const T_Precision *target ) {
 		// Ciclo per tutti i neuroni del penultimo strato
 		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_t++ ) {
 
-			synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value ) * neuron_j->value;
+			synapse_t->train->dEdw += neuron_i->dEdy * d_sigmoid( neuron_i->value ) * neuron_j->value;
 		}
 
 		// Aggiungo l'errore del bias al peso sinaptico del neurone
 		// dE/dw_ji += dE/dy_i * dy_i/dP_i
-		synapse_t->train->dEdw += neuron_i->dEdy * __D_SIGMOID__( neuron_i->value );
+		synapse_t->train->dEdw += neuron_i->dEdy * d_sigmoid( neuron_i->value );
 
 		// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
 		synapse_t++;
 
 		// Aggiungo il quadrato dell'errore all'errore totale della rete (per il calcolo dell'errore quadratico medio)
-		this->net_error += __POW2__( neuron_i->dEdy );
+		this->net_error += pow2( neuron_i->dEdy );
 	}
 }
 
@@ -105,8 +126,8 @@ Network::BackpropagateError() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo gli iteratori delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
-		synapse_row_t1 = this->connections[t + 1]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
+		synapse_row_t1 = this->layers[t + 2]->first_synapse;
 
 		// Preparo l'iteratore dei neuroni
 		last_neuron_j	= this->layers[t + 1]->last_neuron;
@@ -129,13 +150,13 @@ Network::BackpropagateError() {
 			// dE/dz_k = SUM( dE/dy_j * dy_j/dP_j * dP_j/dz_k )
 
 			// Ciclo per tutti i neuroni dello strato 't + 2'
-			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->connections[t + 1]->row_step ) {
+			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->layers[t + 2]->synapses_per_row ) {
 
-				neuron_j->dEdy += neuron_k->dEdy * __D_SIGMOID__( neuron_k->value ) * synapse_t1->weight;
+				neuron_j->dEdy += neuron_k->dEdy * d_sigmoid( neuron_k->value ) * synapse_t1->weight;
 			}
 
 			// Calcolo il delta per la correzione del peso sinaptico
-			delta = neuron_j->dEdy * __D_SIGMOID__( neuron_j->value );
+			delta = neuron_j->dEdy * d_sigmoid( neuron_j->value );
 
 			// Preparo l'iteratore dei neuroni
 			last_neuron_i	= this->layers[t]->last_neuron;
@@ -172,10 +193,10 @@ Network::CreateTrainData() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
@@ -200,10 +221,10 @@ Network::DeleteTrainData() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
@@ -228,10 +249,10 @@ Network::UpdateWeightsBatch() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
@@ -262,16 +283,16 @@ Network::UpdateWeightsRprop() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = max( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
@@ -280,10 +301,10 @@ Network::UpdateWeightsRprop() {
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = min( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 				// Aggiorno il peso sinaptico
-				synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->weight += - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
 				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
@@ -291,7 +312,7 @@ Network::UpdateWeightsRprop() {
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = max( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
 				synapse_t->train->prev_dEdw = 0.0;
@@ -299,7 +320,7 @@ Network::UpdateWeightsRprop() {
 			} else { // if ( delta_sign == 0.0 )
 
 				// Aggiorno il peso sinaptico
-				synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->weight += - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 				synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
 			}
 
@@ -323,16 +344,16 @@ Network::UpdateWeightsRpropPlus() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = max( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
@@ -341,10 +362,10 @@ Network::UpdateWeightsRpropPlus() {
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = min( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 				// Aggiorno il peso sinaptico
-				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->train->delta_weight = - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
@@ -353,7 +374,7 @@ Network::UpdateWeightsRpropPlus() {
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = max( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Ripristino il vecchio peso sinaptico precedente
 				synapse_t->weight -= synapse_t->train->delta_weight;
@@ -364,7 +385,7 @@ Network::UpdateWeightsRpropPlus() {
 			} else { // if ( delta_sign == 0.0 )
 
 				// Aggiorno il peso sinaptico
-				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->train->delta_weight = - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
@@ -391,15 +412,15 @@ Network::UpdateWeightsRpropMinus() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = max( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
@@ -408,16 +429,16 @@ Network::UpdateWeightsRpropMinus() {
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = min( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = max( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 			}
 
 			// Aggiorno il peso sinaptico
-			synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+			synapse_t->weight += - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 
 			// Memorizzo l'errore del peso sinaptico per il ciclo successivo
 			synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
@@ -442,16 +463,16 @@ Network::UpdateWeightsIRpropPlus() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = max( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
@@ -460,10 +481,10 @@ Network::UpdateWeightsIRpropPlus() {
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = min( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 				// Aggiorno il peso sinaptico
-				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->train->delta_weight = - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
@@ -472,7 +493,7 @@ Network::UpdateWeightsIRpropPlus() {
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = max( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Se l'errore è aumentato, ripristino il vecchio peso sinaptico precedente
 				if ( this->net_error > this->prev_net_error )
@@ -484,7 +505,7 @@ Network::UpdateWeightsIRpropPlus() {
 			} else { // if ( delta_sign == 0.0 )
 
 				// Aggiorno il peso sinaptico
-				synapse_t->train->delta_weight = - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+				synapse_t->train->delta_weight = - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 				synapse_t->weight += synapse_t->train->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo
@@ -511,16 +532,16 @@ Network::UpdateWeightsIRpropMinus() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Imposto un tasso minimo di apprendimento (se fosse zero l'addestramento finirebbe)
-			synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate, 0.0001 );
+			synapse_t->train->learning_rate = max( synapse_t->train->learning_rate, 0.0001 );
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			T_Precision delta_sign = synapse_t->train->prev_dEdw * synapse_t->train->dEdw;
@@ -529,19 +550,19 @@ Network::UpdateWeightsIRpropMinus() {
 			if ( delta_sign > 0.0 ) {
 
 				// Incremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MIN__( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
+				synapse_t->train->learning_rate = min( synapse_t->train->learning_rate * this->increase_factor, 50.0 );
 
 			} else if ( delta_sign < 0.0 ) {
 
 				// Decremento il tasso di apprendimento
-				synapse_t->train->learning_rate = __MAX__( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
+				synapse_t->train->learning_rate = max( synapse_t->train->learning_rate * this->decrease_factor, 0.0 );
 
 				// Azzero l'errore del peso sinaptico
 				synapse_t->train->dEdw = 0.0;
 			}
 
 			// Aggiorno i pesi sinaptici
-			synapse_t->weight += - __SIGN__( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
+			synapse_t->weight += - sign( synapse_t->train->dEdw ) * synapse_t->train->learning_rate;
 
 			// Memorizzo l'errore del peso sinaptico per il ciclo successivo
 			synapse_t->train->prev_dEdw = synapse_t->train->dEdw;
@@ -554,14 +575,7 @@ Network::UpdateWeightsIRpropMinus() {
 
 void
 Network::Train(	const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples,
-				T_Precision target_error, size_t max_epochs, size_t epochs_between_reports ) {
-
-	#ifdef VERBOSE
-
-		// Log di lavoro
-		printf( "Start training with %lu samples.\n", (unsigned long) n_samples );
-
-	#endif
+				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports ) {
 
 	// Creo le strutture per l'addestramento
 	this->CreateTrainData();
@@ -588,10 +602,10 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 		for ( i = 0; i < n_samples; i++ ) {
 
 			// Eseguo la rete neurale
-			this->Run( &input_samples[ i * this->layers[0]->size ] );
+			this->Run( &input_samples[ i * this->layers.front()->n_neurons ] );
 
 			// Calcolo l'errore delle uscite
-			this->ComputeError( &output_samples[ i * this->layers[this->layers.size() - 1]->size ] );
+			this->ComputeError( &output_samples[ i * this->layers.back()->n_neurons ] );
 
 			// Retropropago l'errore nella rete
 			this->BackpropagateError();
@@ -599,10 +613,10 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 		// Calcolo l'errore quadratico medio della rete (MSE)
 		// E(x) = SUM( e^2 ) / n_samples
-		this->net_error /= ( this->layers[this->layers.size() - 1]->size * n_samples );
+		this->net_error /= ( this->layers.back()->n_neurons * n_samples );
 
 		// Controllo se non si è raggiunto l'errore desiderato
-		if ( this->net_error > target_error ) {
+		if ( this->net_error > desired_error ) {
 
 			// Controllo l'algoritmo di apprendimento scelto
 			switch ( this->train_algorithm ) {
@@ -637,7 +651,7 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 			// Passo le informazioni alla funzione di report
 			int flag = this->report_function(	this, epochs, t_elapsed, this->net_error, (const T_Precision *) this->output_data,
-												this->layers[this->layers.size() - 1]->size, this->report_function_data );
+												this->layers.back()->n_neurons, this->report_function_data );
 
 			// Controllo se è stato inviato un segnale di uscita
 			if ( flag ) break;
@@ -647,7 +661,7 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 		epochs++;
 
 	// Se non si è raggiunto l'errore massimo voluto e le epoche sono entro i limiti continuo l'addestramento
-	} while ( this->net_error > target_error && epochs < max_epochs );
+	} while ( this->net_error > desired_error && epochs < max_epochs );
 
 
 	// Report conclusivo
@@ -655,7 +669,7 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 		// Passo le informazioni alla funzione di report
 		this->report_function(	this, epochs, t_elapsed, this->net_error, (const T_Precision *) this->output_data,
-								this->layers[this->layers.size() - 1]->size, this->report_function_data );
+								this->layers.back()->n_neurons, this->report_function_data );
 	}
 
 	// Cancello le strutture per l'addestramento
@@ -663,7 +677,7 @@ Network::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 }
 
 void
-Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t max_epochs, size_t epochs_between_reports ) {
+Network::TrainOnFile( const std::string &path, T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports ) {
 
 	// Apre uno stream al file dell'addestramento
 	std::ifstream file( path.c_str() );
@@ -703,19 +717,19 @@ Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t 
 		std::getline( file, line );
 
 		// Controllo che la linea non sia vuota o un commento
-		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
+		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Vettore contenente i valori estratti
 			std::vector< T_Precision > info;
 
-			if ( values_on_string( line, info ) != 2 ) {
+			if ( values_from_string( line, info ) != 2 ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
 			}
 
 			// Controllo se il tipo di addestramento non è adatto alla rete corrente
-			if ( this->layers[0]->size != (size_t) info[0] || this->layers[this->layers.size() - 1]->size != (size_t) info[1] ) {
+			if ( this->layers.front()->n_neurons != (size_t) info[0] || this->layers.back()->n_neurons != (size_t) info[1] ) {
 
 				// Communico l'errore all'utente
 				fprintf( stderr, " (W) Inadequate training file '%s'!\n", path.c_str() );
@@ -736,20 +750,20 @@ Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t 
 		std::getline( file, line );
 
 		// Controllo che la linea non sia vuota o un commento
-		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
+		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Cerco il separatore nella riga
-			int found = line.find_first_of( _SEPARATOR_ );
+			int found = line.find_first_of( _SEROTONINA_SEPARATOR_ );
 
 			// Estraggo i valori di ingresso
-			if ( values_on_string( line.substr( 0, found ), inputs ) != this->layers[0]->size ) {
+			if ( values_from_string( line.substr( 0, found ), inputs ) != this->layers.front()->n_neurons ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
 			}
 
 			// Estraggo i valori di uscita
-			if ( values_on_string( line.substr( found + 1 ), outputs ) != this->layers[this->layers.size() - 1]->size ) {
+			if ( values_from_string( line.substr( found + 1 ), outputs ) != this->layers.back()->n_neurons ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
@@ -767,7 +781,7 @@ Network::TrainOnFile( const std::string &path, T_Precision target_error, size_t 
 	file.close();
 
 	// Richiama la funzione di addestramento principale usando i campioni del file
-	this->Train( &inputs[0], &outputs[0], n_samples, target_error, max_epochs, epochs_between_reports );
+	this->Train( &inputs[0], &outputs[0], n_samples, desired_error, max_epochs, epochs_between_reports );
 }
 
 } // Chiudo il namespace di Serotonina

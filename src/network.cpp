@@ -1,14 +1,13 @@
 /* 
     Title --- network.cpp
 
-	Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
+    Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
-	This file is part of Serotonina.
+    This file is part of Serotonina.
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,74 +26,6 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
-T_Precision
-get_rand() {
-
-	T_Precision x = (T_Precision) rand();
-	T_Precision y = ( sin(x) * sin(x) );
-
-	return y;
-}
-
-size_t
-values_on_string( const std::string &str, std::vector< T_Precision > &vect ) {
-
-	// Posizione del valore trovato
-	std::string::size_type found = 0;
-
-	// Sottostringa contenente i valori
-	std::string tmp;
-
-	// Numero di elementi inseriti
-	size_t elements = 0;
-
-	// Estraggo i valori numerici da una stringa di testo
-	while ( found != std::string::npos ) {
-
-		// Ricavo la sottostringa contenente il nuovo valore
-		tmp = str.substr( found, str.find_first_of( ' ', found + 1 ) );
-
-		// Controllo che la sottostringa non sia vuota
-		if ( !tmp.empty() && tmp != " " ) {
-
-			// Aggiungo il valore al vettore
-			vect.push_back( (T_Precision) atof( tmp.c_str() ) );
-
-			// Incremento l'indice dell'elemento
-			elements++;
-		}
-
-		// Cerco il prossimo valore
-		found = str.find_first_of( ' ', found + 1 );
-	}
-
-	// Ritorno il numero degli elementi inseriti
-	return elements;
-}
-
-/** INIZIO METODI STATICI **/
-
-int
-Network::training_report(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-							const T_Precision *outputs, size_t outputs_size, void *data ) {
-
-	// Calcolo le ore, i minuti e i secondi del tempo trascorso
-	size_t hours, mins, secs;
-
-	secs	= elapsed_time % 60;
-	mins	= ( elapsed_time / 60 ) % 60;
-	hours	= ( elapsed_time / 3600 );
-
-	// Stampo il rapporto dell'addestramento
-	printf(	"  Epochs #%lu, time %luh%lum%lus, error %.10f\n",
-			(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
-
-	return 0;
-}
-
-/** FINE METODI STATICI **/
-
-
 Network::Network( size_t n_layers, ... ) {
 
 	// Inizializzo il generatore di numeri pseudocasuali
@@ -110,43 +41,36 @@ Network::Network( size_t n_layers, ... ) {
 		exit(0);
 	}
 
+	// Numero dei neuroni dello strato
+	size_t n_neurons;
+
 	// Lista dei parametri della funzione
 	va_list args;
 
 	// Inizio la lettura della lista dei parametri
 	va_start( args, n_layers );
 
-	// Creo gli strati della rete
-	while( n_layers-- > 0 ) {
+	// Ricavo il numero dei neuroni dello strato di ingresso
+	n_neurons = va_arg( args, size_t );
 
-		this->layers.push_back( new Layer( va_arg( args, size_t ) ) );
+	// Creo lo strato di ingresso
+	this->layers.push_back( new Layer( n_neurons, 0 ) );
+
+	// Creo gli strati della rete
+	while( n_layers-- > 1 ) {
+
+		// Ricavo il numero dei neuroni dello strato
+		n_neurons = va_arg( args, size_t );
+
+		// Creo lo strato
+		this->layers.push_back( new Layer( n_neurons, this->layers.back()->n_neurons ) );
 	}   
 
-	// Iteratore
-	size_t t = 0;
-
-	// Creo le connessioni tra gli strati
-	for ( ; t < this->layers.size() - 1; t++ ) {
-
-		this->connections.push_back( new LayerConnections( this->layers[t]->size + 1, this->layers[t + 1]->size ) );
-	}
+	// Inizializzo i pesi sinaptici
+	this->InizializeWeight();
 
 	// Creo il vettore contenente i dati di uscita
-	this->output_data = new T_Precision[this->layers[this->layers.size() - 1]->size];
-
-	#ifdef VERBOSE
-
-		// Log di lavoro
-		printf( "New neural network [%lu", (unsigned long) this->layers[0]->size );
-
-		for ( t = 1; t < this->layers.size(); t++ ) {
-
-			printf( ",%lu", (unsigned long) this->layers[t]->size );
-		}
-
-		printf( "].\n" );
-
-	#endif
+	this->output_data = new T_Precision[this->layers.back()->n_neurons];
 
 	// Termino la lettura della lista dei parametri
 	va_end( args );
@@ -173,15 +97,11 @@ Network::Network( const std::string &path ) {
 Network::~Network() {
 
 	// Iteratore
-	size_t i;
+	size_t i = 0;
 
 	// Elimino gli strati della rete
-	for ( i = 0; i < this->layers.size(); i++ )
+	for ( ; i < this->layers.size(); i++ )
 		delete this->layers[i];
-
-	// Elimino le connessioni tra gli strati
-	for ( i = 0; i < this->connections.size(); i++ )
-		delete this->connections[i];
 
 	// Elimino il vettore contenente i dati di uscita
 	delete this->output_data;
@@ -201,16 +121,16 @@ Network::InizializeWeight() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->connections[t]->last_synapse;
+		end_synapse_t = this->layers[t + 1]->last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Inizializzo il peso sinaptico
-			synapse_t->weight = get_rand();
+			synapse_t->weight = rand0to1< T_Precision >();
 		}
 	}
 }
@@ -230,9 +150,9 @@ Network::Run( const T_Precision *input ) {
 	Synapse *synapse_t;
 
 	// Carico i valori in ingresso
-	for ( i = 0; i < this->layers[0]->size; i++ ) {
+	for ( i = 0; i < this->layers.front()->n_neurons; i++ ) {
 
-		this->layers[0]->neurons[i].value = __BETWEEN__( input[i], 0.0, 1.0 );
+		this->layers.front()->neurons[i].value = between( input[i], 0.0, 1.0 );
 	}
 
 	// Attivazione interna del neurone
@@ -242,7 +162,7 @@ Network::Run( const T_Precision *input ) {
 	for ( t = 0; t < this->layers.size() - 1; t++ ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->connections[t]->first_synapse;
+		synapse_t = this->layers[t + 1]->first_synapse;
 
 		// Preparo l'iteratore dei neuroni
 		last_neuron_i	= this->layers[t + 1]->last_neuron;
@@ -272,13 +192,13 @@ Network::Run( const T_Precision *input ) {
 			synapse_t++;
 
 			// Calcolo il valore in uscita del neurone utilizzando una sigmoide
-			neuron_i->value = __SIGMOID__( activation );
+			neuron_i->value = sigmoid( activation );
 		}
 	}
 
 	// Preparo l'iteratore dei neuroni
-	last_neuron_i	= this->layers[this->layers.size() - 1]->last_neuron;
-	neuron_i		= this->layers[this->layers.size() - 1]->first_neuron;
+	last_neuron_i	= this->layers.back()->last_neuron;
+	neuron_i		= this->layers.back()->first_neuron;
 
 	// Copio le uscite nel vettore specifico
 	for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
@@ -324,7 +244,7 @@ Network::Save( const std::string &path ) {
 	// Inserisco le informazioni generali della rete
 	for ( ; t < this->layers.size(); t++ ) {
 
-		file << this->layers[t]->size << " ";
+		file << this->layers[t]->n_neurons << " ";
 	}
 
 	file << std::endl;
@@ -333,14 +253,14 @@ Network::Save( const std::string &path ) {
 	Synapse *synapse_i, *last_synapse_i;
 
 	// Copio tutte le sinapsi tra gli strati
-	for ( t = 0; t < this->connections.size(); t++ ) {
+	for ( t = 1; t < this->layers.size(); t++ ) {
 
 		// Inserisco l'intestazione dei pesi sinaptici
 		file << std::endl << "# Pesi sinaptici dello strato " << t << std::endl;
 
 		// Preparo l'iteratore delle sinapsi
-		last_synapse_i	= this->connections[t]->last_synapse;
-		synapse_i		= this->connections[t]->first_synapse;
+		last_synapse_i	= this->layers[t]->last_synapse;
+		synapse_i		= this->layers[t]->first_synapse;
 
 		// Inserisco i pesi sinaptici dello strato t
 		for ( ; synapse_i <= last_synapse_i; synapse_i++ ) {
@@ -355,13 +275,6 @@ Network::Save( const std::string &path ) {
 
 	// Chiudo lo stream al file
 	file.close();
-
-	#ifdef VERBOSE
-
-		// Log di lavoro
-		printf( "Neural network saved.\n" );
-
-	#endif
 }
 
 void
@@ -377,19 +290,8 @@ Network::Load( const std::string &path, bool new_ ) {
 		for ( i = 0; i < this->layers.size(); i++ )
 			delete this->layers[i];
 
-		// Elimino le connessioni tra gli strati
-		for ( i = 0; i < this->connections.size(); i++ )
-			delete this->connections[i];
-
 		// Elimino il vettore contenente i dati di uscita
 		delete this->output_data;
-
-		#ifdef VERBOSE
-
-			// Log di lavoro
-			printf( "Old neural network deleted.\n" );
-
-		#endif
 	}
 
 	// Apre uno stream al file sorgente
@@ -399,7 +301,7 @@ Network::Load( const std::string &path, bool new_ ) {
 	if ( !file.is_open() ) {
 
 		// Communico l'errore all'utente
-		fprintf( stderr, "(W) Couldn't open file '%s'!\n", path.c_str() );
+		fprintf( stderr, "(W) Couldn't read from file '%s'!\n", path.c_str() );
 
 		// Termino l'esecuzione del programma
 		exit(1);
@@ -424,45 +326,31 @@ Network::Load( const std::string &path, bool new_ ) {
 		std::getline( file, line );
 
 		// Controllo che la linea non sia vuota o un commento
-		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
+		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
-			// Estraggo i valori di uscita
-			if ( values_on_string( line, values ) >= 2 ) {
+			// Estraggo i valori che descrivono la struttura della rete
+			if ( values_from_string( line, values ) >= 2 ) {
 
 				// Iteratore
-				size_t t = 0;
+				size_t t;
+
+				// Creo lo strato di ingresso
+				this->layers.push_back( new Layer( values[0], 0 ) );
 
 				// Creo gli strati della rete
-				for ( ; t < values.size(); t++ ) {
+				for ( t = 1; t < values.size(); t++ ) {
 
-					this->layers.push_back( new Layer( values[t] ) );
+					this->layers.push_back( new Layer( values[t], values[t - 1] ) );
 				}
 
-				// Creo le connessioni tra gli strati
-				for ( t = 0; t < this->layers.size() - 1; t++ ) {
-
-					this->connections.push_back( new LayerConnections( this->layers[t]->size + 1, this->layers[t + 1]->size ) );
-				}
+				// Inizializzo i pesi sinaptici
+				this->InizializeWeight();
 
 				// Creo il vettore contenente i dati di uscita
-				this->output_data = new T_Precision[this->layers[this->layers.size() - 1]->size];
+				this->output_data = new T_Precision[this->layers.back()->n_neurons];
 
 				// Imposto la funzione di report dell'addestramento
 				this->report_function = &Network::training_report;
-
-				#ifdef VERBOSE
-
-					// Log di lavoro
-					printf( "New neural network [%lu", (unsigned long) this->layers[0]->size );
-
-					for ( t = 1; t < this->layers.size(); t++ ) {
-
-						printf( ",%lu", (unsigned long) this->layers[t]->size );
-					}
-
-					printf( "].\n" );
-
-				#endif
 
 				// Pulisco il vettore dei valori
 				values.clear();
@@ -483,26 +371,26 @@ Network::Load( const std::string &path, bool new_ ) {
 	}
 
 	// Iteratori
-	size_t i, t = 0;
+	size_t i, t = 1;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_i, *last_synapse_i;
 
 	// Leggo le sinapsi di tutti gli strati
-	while ( t < this->connections.size() && file.good() ) {
+	while ( t < this->layers.size() && file.good() ) {
 
 		// Leggo la nuova riga
 		std::getline( file, line );
 
 		// Controllo che la linea non sia vuota o un commento
-		if ( !line.empty() && line.at(0) != _COMMENT_ ) {
+		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Estraggo i valori di uscita
-			if ( values_on_string( line, values ) == this->connections[t]->size ) {
+			if ( values_from_string( line, values ) == this->layers[t]->n_synapses ) {
 
 				// Preparo l'iteratore delle sinapsi
-				last_synapse_i	= this->connections[t]->last_synapse;
-				synapse_i		= this->connections[t]->first_synapse;
+				synapse_i		= this->layers[t]->first_synapse;
+				last_synapse_i	= this->layers[t]->last_synapse;
 
 				// Copio i pesi sinaptici dello strato t
 				for ( i = 0; synapse_i <= last_synapse_i; i++, synapse_i++ ) {
@@ -542,13 +430,6 @@ Network::Load( const std::string &path, bool new_ ) {
 
 	// Imposto i fattori di incremento e decremento del RPROP
 	this->SetRpropFactor( 1.2, 0.5 );
-
-	#ifdef VERBOSE
-
-		// Log di lavoro
-		printf( "Neural network loaded.\n" );
-
-	#endif
 }
 
 } // Chiudo il namespace di Serotonina

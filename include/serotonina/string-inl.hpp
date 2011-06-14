@@ -1,5 +1,5 @@
 /* 
-    Title --- color.cpp
+    Title --- string.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,11 +18,8 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_COLOR_CPP_
-#define _SEROTONINA_COLOR_CPP_
-
-#include "serotonina/extra/color.hpp"
-#include "serotonina/extra/color-inl.hpp"
+#ifndef _SEROTONINA_STRING_INL_HPP_
+#define _SEROTONINA_STRING_INL_HPP_
 
 namespace Serotonina { // Namespace di Serotonina
 

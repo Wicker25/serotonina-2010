@@ -1,5 +1,5 @@
 /* 
-    Title --- color.cpp
+    Title --- string.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,14 +18,18 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_COLOR_CPP_
-#define _SEROTONINA_COLOR_CPP_
+#ifndef _SEROTONINA_STRING_HPP_
+#define _SEROTONINA_STRING_HPP_
 
-#include "serotonina/extra/color.hpp"
-#include "serotonina/extra/color-inl.hpp"
+#include <iostream>
+#include <cstdlib>
+
+#include <serotonina/types.hpp>
 
 namespace Serotonina { // Namespace di Serotonina
 
+// Estrae i valori numerici da una stringa di testo
+size_t values_from_string( const std::string &str, std::vector< T_Precision > &vect );
 
 } // Chiudo il namespace di Serotonina
 

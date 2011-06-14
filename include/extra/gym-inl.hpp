@@ -7,8 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,8 +22,6 @@
 #define _SEROTONINA_GYM_INL_HPP_
 
 #include "extra/gym.hpp"
-
-namespace Serotonina { // Namespace di Serotonina
 
 /** INIZIO METODI STATICI **/
 
@@ -41,8 +38,8 @@ Gym::static_start_training( void *data ) {
 }
 
 inline int
-Gym::static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-							const T_Precision *outputs, size_t outputs_size, void *data ) {
+Gym::static_update_plot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
+							const Serotonina::T_Precision *outputs, size_t outputs_size, void *data ) {
 
 	// Ricavo un puntatore alla finestra principale
 	Gym *gym = static_cast< Gym * >( data );
@@ -52,7 +49,5 @@ Gym::static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T
 }
 
 /** FINE METODI STATICI **/
-
-} // Chiudo il namespace di Serotonina
 
 #endif

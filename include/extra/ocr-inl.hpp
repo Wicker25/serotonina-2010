@@ -7,8 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,8 +22,6 @@
 #define _SEROTONINA_OCR_INL_HPP_
 
 #include "extra/ocr.hpp"
-
-namespace Serotonina { // Namespace di Serotonina
 
 inline void
 Ocr::add_char_button_callback( Fl_Widget *widget, void *data ) {
@@ -47,7 +44,5 @@ Ocr::static_start_training( void *data ) {
 
 	return NULL;
 }
-
-} // Chiudo il namespace di Serotonina
 
 #endif

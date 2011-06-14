@@ -25,7 +25,7 @@
 
 #include <serotonina.hpp>
 
-int main( int argc, char **argv ) {
+int main( void ) {
 
 	// Creo la rete neurale
 	Serotonina::Network network( 3, 3, 10, 6 );

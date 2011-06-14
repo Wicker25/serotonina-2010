@@ -25,7 +25,7 @@
 
 #include <serotonina.hpp>
 
-int main( int argc, char **argv ) {
+int main( void ) {
 
 	// Carico la neurale da un file
 	Serotonina::Network network( "train/xor.net" );

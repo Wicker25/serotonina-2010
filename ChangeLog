@@ -1,6 +1,18 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.0.7 - urgency=medium =============
+
+2011-06-14  Wicker25  < wicker25@gmail.com >
+
+    * all: Split `network.cpp` into `types.hpp`, `macros.hpp`, `string.hpp`, `neuron.hpp`, `synapse.hpp`, and `layer.hpp`.
+           Merged `LayerConnections` to `Layer` structure.
+           Removed Serotonina's namespace from `st_gym`, `st_ocr`, and `st_face_recognition` examples.
+
+    * network.cpp: Moved `Network->training_report` to `network-train.cpp`. 
+
 ============= Serotonina 1.0.6 - urgency=low =============
+
+2011-06-12  Wicker25  < wicker25@gmail.com >
 
     * all: Fixed printf format of `size_t`.
            Now the compiler flags are `-Wall -ansi -pedantic -pedantic-errors`.

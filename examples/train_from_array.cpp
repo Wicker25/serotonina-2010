@@ -25,7 +25,7 @@
 
 #include <serotonina.hpp>
 
-int main( int argc, char **argv ) {
+int main( void ) {
 
 	const Serotonina::T_Precision inputs[] =	{
 												0, 0,

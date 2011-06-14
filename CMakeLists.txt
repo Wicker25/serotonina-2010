@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto le versioni degli strumenti
 set( Serotonina_VERSION_MAJOR 1 )
 set( Serotonina_VERSION_MINOR 0 )
-set( Serotonina_VERSION_PATCH 6 )
+set( Serotonina_VERSION_PATCH 7 )
 
 set( Serotonina_PLOT_VERSION_MAJOR 1 )
 set( Serotonina_PLOT_VERSION_MINOR 0 )
@@ -29,7 +29,6 @@ set( Serotonina_FACE_RECOGNITION_VERSION_PATCH 1 )
 
 # Aggiungo una direttiva al compilatore
 add_definitions( -Wall -ansi -pedantic -pedantic-errors )
-# -pedantic -pedantic-errors
 
 # Imposto le dipendenze necessarie
 find_package( FLTK )
@@ -75,7 +74,10 @@ set( Serotonina_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src )
 set( Serotonina_BINARY_DIR ${CMAKE_BINARY_DIR}/bin )
 
 # Libreria Serotonina
-add_library( serotonina SHARED ${Serotonina_SOURCE_DIR}/network.cpp ${Serotonina_SOURCE_DIR}/network-train.cpp )
+add_library( serotonina SHARED	${Serotonina_SOURCE_DIR}/string.cpp
+								${Serotonina_SOURCE_DIR}/network.cpp
+								${Serotonina_SOURCE_DIR}/network-train.cpp )
+
 target_link_libraries( serotonina m )
 
 # Controllo se sono state trovate le FLTK

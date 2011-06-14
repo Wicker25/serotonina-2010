@@ -7,8 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,8 +48,6 @@
 #define _FACE_RECOGNITION_FPS_				30.0
 #define _FACE_RECOGNITION_PHOTO_NUMBER_		15
 #define _FACE_RECOGNITION_PHOTO_WAIT_		0.4
-
-namespace Serotonina { // Namespace di Serotonina
 
 class FaceRecognition : public Fl_Gl_Window {
 
@@ -122,7 +119,7 @@ private:
 	GLuint texture_id;
 
 	// Rete neurale
-	Network *neural_network;
+	Serotonina::Network *neural_network;
 
 	// Cronometro dell'applicazione
 	float timer;
@@ -157,7 +154,5 @@ private:
 	// Disegna la luminosità del volto
 	void DrawFace( size_t x, size_t y );
 };
-
-} // Chiudo il namespace di Serotonina
 
 #endif

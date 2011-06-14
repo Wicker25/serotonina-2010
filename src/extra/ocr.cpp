@@ -1,14 +1,13 @@
 /* 
     Title --- ocr.cpp
 
-	Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
+    Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
-	This file is part of Serotonina.
+    This file is part of Serotonina.
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,8 +27,6 @@
 #include "extra/color-inl.hpp"
 
 #include "extra/ocr-inl.hpp"
-
-namespace Serotonina { // Namespace di Serotonina
 
 /** INIZIO METODI STATICI **/
 
@@ -102,8 +99,11 @@ Ocr::Ocr( int width, int height ) : Fl_Gl_Window( width, height, _OCR_TITLE_ ) {
 		// Preparo il percorso al file della rete neurale
 		path[15] = 'a' + i;
 
+		// Log di lavoro
+		printf( "Ricordo la lettera %c ...\n", 'A' + (char) i );
+
 		// Carico la rete neurale dal file
-		this->neural_network[i] = new Network( path );
+		this->neural_network[i] = new Serotonina::Network( path );
 	}
 
 	// Avvio la funzione per l'aggiornamento asincrono della finestra
@@ -126,9 +126,6 @@ Ocr::Ocr( int width, int height ) : Fl_Gl_Window( width, height, _OCR_TITLE_ ) {
 
 	// Creo le voci del menù di scelta
 	for ( i = 0; i < _OCR_CHARACTER_NUM_; i++ ) {
-
-		// Log di lavoro
-		printf( "Ricordo la lettera %c ...\n", 'A' + (char) i );
 
 		// Creo la stringa della voce
 		snprintf( buffer, 3, "%c", 'A' + (char) i );
@@ -634,7 +631,7 @@ void
 Ocr::RecognitionCharacter() {
 
 	// Alloco la memoriza necessaria a contenere gli input della rete
-	T_Precision *input = new T_Precision[CHARACTER_SIZE];
+	Serotonina::T_Precision *input = new Serotonina::T_Precision[CHARACTER_SIZE];
 
 	// Iteratore
 	size_t i = 0;
@@ -642,14 +639,14 @@ Ocr::RecognitionCharacter() {
 	// Preparo l'input della rete
 	for ( ; i < CHARACTER_SIZE; i++ ) {
 
-		input[i] = ( 1.0 - (T_Precision) this->character_data[i] / 255.0 );
+		input[i] = ( 1.0 - (Serotonina::T_Precision) this->character_data[i] / 255.0 );
 	}
 
 	// Annullo il riconoscimento precedente
 	this->precision_character = 0;
 
 	// Precisione del riscontro
-	T_Precision new_check, check = 0.50;
+	Serotonina::T_Precision new_check, check = 0.50;
 
 	// Analizzo il carattere
 	for ( i = 0; i < _OCR_CHARACTER_NUM_; i++ ) {
@@ -983,8 +980,6 @@ Ocr::draw() {
 	Fl_Gl_Window::draw();
 }
 
-} // Chiudo il namespace di Serotonina
-
 
 /* INIZIO FUNZIONE PRINCIPALE */
 
@@ -992,7 +987,7 @@ int
 main( void ) {
 
 	// Creo la finestra principale
-	Serotonina::Ocr ocr_window( 430, 360 );
+	Ocr ocr_window( 430, 360 );
 
 	//ocr_window.resizable( ocr_window );
 	ocr_window.show();

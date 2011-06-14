@@ -1,14 +1,13 @@
 /* 
     Title --- face-recognition.cpp
 
-	Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
+    Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
-	This file is part of Serotonina.
+    This file is part of Serotonina.
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,8 +27,6 @@
 #include "extra/color-inl.hpp"
 
 #include "extra/face-recognition-inl.hpp"
-
-namespace Serotonina { // Namespace di Serotonina
 
 /** INIZIO METODI STATICI **/
 
@@ -59,7 +56,7 @@ FaceRecognition::FaceRecognition( int width, int height ) : Fl_Gl_Window( width,
 	this->photo_counter = -1;
 
 	// Creo la rete neurale dal file
-	this->neural_network = new Network( "data/face/face.net" );
+	this->neural_network = new Serotonina::Network( "data/face/face.net" );
 
 	// Inizializzo la periferica video
 	this->capture = cvCaptureFromCAM( -1 );
@@ -221,7 +218,7 @@ void
 FaceRecognition::FindFace() {
 
 	// Alloco la memoriza necessaria a contenere gli input della rete
-	T_Precision *input = new T_Precision[FACE_SIZE];
+	Serotonina::T_Precision *input = new Serotonina::T_Precision[FACE_SIZE];
 
 	// Iteratore
 	size_t i = 0;
@@ -229,11 +226,11 @@ FaceRecognition::FindFace() {
 	// Preparo l'input della rete
 	for ( ; i < FACE_SIZE; i++ ) {
 
-		input[i] = (T_Precision) this->face_data[i] / 255.0;
+		input[i] = (Serotonina::T_Precision) this->face_data[i] / 255.0;
 	}
 
 	// Precisione del riconoscimento
-	T_Precision check;
+	Serotonina::T_Precision check;
 
 	// Analizzo il volto
 	if ( ( check = this->neural_network->Run( input )[0] ) > 0.80 ) {
@@ -585,8 +582,6 @@ FaceRecognition::draw() {
 	Fl_Gl_Window::draw();
 }
 
-} // Chiudo il namespace di Serotonina
-
 
 /* INIZIO FUNZIONE PRINCIPALE */
 
@@ -594,7 +589,7 @@ int
 main( void ) {
 
 	// Creo la finestra principale
-	Serotonina::FaceRecognition face_recognition_window( 480, 320 );
+	FaceRecognition face_recognition_window( 480, 320 );
 
 	//face_recognition_window.resizable( face_recognition_window );
 	face_recognition_window.show();

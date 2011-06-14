@@ -7,8 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,6 +24,14 @@
 // Includo tutti gli headers della libreria
 #include <serotonina/version.hpp>
 #include <serotonina/types.hpp>
+#include <serotonina/macros.hpp>
+#include <serotonina/string.hpp>
+#include <serotonina/string-inl.hpp>
+
+#include <serotonina/neuron.hpp>
+#include <serotonina/synapse.hpp>
+#include <serotonina/layer.hpp>
+
 #include <serotonina/network.hpp>
 #include <serotonina/network-inl.hpp>
 

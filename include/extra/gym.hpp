@@ -7,8 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,8 +50,6 @@
 // Linea di comando
 #define _GYM_CMD_TRAINING_SET_	"--training-set"
 
-namespace Serotonina { // Namespace di Serotonina
-
 class Gym : public Fl_Window {
 
 	/* STRUMENTO GRAFICO PER L'ADDESTRAMENTO DELLE RETI NEURALI */
@@ -86,8 +83,8 @@ public:
 	static void *static_start_training( void *data );
 
 	// Aggiorna i grafici della rete neurale (statico)
-	static int static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-									const T_Precision *outputs, size_t outputs_size, void *data );
+	static int static_update_plot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
+									const Serotonina::T_Precision *outputs, size_t outputs_size, void *data );
 
 	/** FINE METODI STATICI **/
 
@@ -112,8 +109,8 @@ public:
 	void SaveNeuralNetwork( const char *path );
 
 	// Aggiorna i grafici della rete neurale
-	int UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-					const T_Precision *outputs, size_t outputs_size );
+	int UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
+					const Serotonina::T_Precision *outputs, size_t outputs_size );
 
 	// Funzione per la gestione degli eventi della finestra
 	virtual int handle( int event );
@@ -121,7 +118,7 @@ public:
 private:
 
 	// Rete neurale
-	Network *neural_network;
+	Serotonina::Network *neural_network;
 
 	// Id del thread dell'addestramento
 	pthread_t thread_id;
@@ -137,13 +134,13 @@ private:
 	size_t output_size;
 
 	// Ingressi del training set
-	std::vector< T_Precision > inputs_data;
+	std::vector< Serotonina::T_Precision > inputs_data;
 
 	// Uscite del training set
-	std::vector< T_Precision > outputs_data;
+	std::vector< Serotonina::T_Precision > outputs_data;
 
 	// Dati sull'errore massimo
-	std::vector< T_Precision > error_data;
+	std::vector< Serotonina::T_Precision > error_data;
 
 	// Uscita mostrata nel grafico
 	size_t graph_output;
@@ -210,7 +207,5 @@ private:
 	// Finestra del log di lavoro
 	Fl_Text_Display *log_display;
 };
-
-} // Chiudo il namespace di Serotonina
 
 #endif

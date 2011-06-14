@@ -1,14 +1,13 @@
 /* 
     Title --- plot.cpp
 
-	Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
+    Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
-	This file is part of Serotonina.
+    This file is part of Serotonina.
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation, either version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,8 +27,6 @@
 #include "extra/color-inl.hpp"
 
 #include "extra/plot-inl.hpp"
-
-namespace Serotonina { // Namespace di Serotonina
 
 Plot::Plot( int x, int y, int width, int height ) : Fl_Gl_Window( x, y, width, height ) {
 
@@ -344,7 +341,5 @@ Plot::draw() {
 	// Richiamo la funzione originale
 	Fl_Gl_Window::draw();
 }
-
-} // Chiudo il namespace di Serotonina
 
 #endif
