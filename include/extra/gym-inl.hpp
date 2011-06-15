@@ -38,8 +38,8 @@ Gym::static_start_training( void *data ) {
 }
 
 inline int
-Gym::static_update_plot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
-							const Serotonina::T_Precision *outputs, size_t outputs_size, void *data ) {
+Gym::static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
+							const T_Precision *outputs, size_t outputs_size, void *data ) {
 
 	// Ricavo un puntatore alla finestra principale
 	Gym *gym = static_cast< Gym * >( data );

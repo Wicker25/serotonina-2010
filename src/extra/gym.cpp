@@ -126,7 +126,7 @@ Gym::save_button_callback( Fl_Widget *widget, void *data ) {
 	const char *path;
 
 	// Chiedo all'utente di scegliere il file di destinazione
-	if ( ( path = fl_file_chooser( "Salva in un file...", "Neural Serotonina::Network (*.net)", "" ) ) != NULL ) {
+	if ( ( path = fl_file_chooser( "Salva in un file...", "Neural Network (*.net)", "" ) ) != NULL ) {
 
 		// Chiama il metodo corrispondente
 		gym->SaveNeuralNetwork( path );
@@ -176,7 +176,7 @@ Gym::set_training_algorithm_button_callback( Fl_Widget *widget, void *data ) {
 	switch ( train_algorithm ) {
 
 		// BATCH
-		case Serotonina::TRAIN_BATCH: {
+		case TRAIN_BATCH: {
 
 			// Abilito/disabilito i widget con i parametri apprendimento
 			gym->learning_rate_input->activate();
@@ -188,15 +188,15 @@ Gym::set_training_algorithm_button_callback( Fl_Widget *widget, void *data ) {
 		}
 
 		// RPROP
-		case Serotonina::TRAIN_RPROP:
+		case TRAIN_RPROP:
 		// RPROP+
-		case Serotonina::TRAIN_RPROP_PLUS:
+		case TRAIN_RPROP_PLUS:
 		// RPROP-
-		case Serotonina::TRAIN_RPROP_MINUS:
+		case TRAIN_RPROP_MINUS:
 		// IRPROP+
-		case Serotonina::TRAIN_IRPROP_PLUS:
+		case TRAIN_IRPROP_PLUS:
 		// IRPROP-
-		case Serotonina::TRAIN_IRPROP_MINUS: {
+		case TRAIN_IRPROP_MINUS: {
 
 			// Abilito/disabilito i widget con i parametri apprendimento
 			gym->learning_rate_input->deactivate();
@@ -566,10 +566,10 @@ Gym::LoadTrainingSet( const char *path ) {
 		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Valori estratti
-			std::vector< Serotonina::T_Precision > value;
+			std::vector< T_Precision > value;
 
 			// Estraggo i valori di ingresso
-			if ( Serotonina::values_from_string( line, value ) != 2 ) {
+			if ( values_from_string( line, value ) != 2 ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path, (unsigned long) n_line );
@@ -648,10 +648,10 @@ Gym::LoadTestSet( const char *path ) {
 		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Valori estratti
-			std::vector< Serotonina::T_Precision > value;
+			std::vector< T_Precision > value;
 
 			// Estraggo i valori di ingresso
-			if ( Serotonina::values_from_string( line, value ) != 2 ) {
+			if ( values_from_string( line, value ) != 2 ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, (unsigned long) n_line );
@@ -689,14 +689,14 @@ Gym::LoadTestSet( const char *path ) {
 			int found = line.find_first_of( _SEROTONINA_SEPARATOR_ );
 
 			// Estraggo i valori di ingresso
-			if ( Serotonina::values_from_string( line.substr( 0, found ), this->inputs_data ) != this->input_size ) {
+			if ( values_from_string( line.substr( 0, found ), this->inputs_data ) != this->input_size ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, (unsigned long) n_line );
 			}
 
 			// Estraggo i valori di uscita
-			if ( Serotonina::values_from_string( line.substr( found + 1 ), this->outputs_data ) != this->output_size ) {
+			if ( values_from_string( line.substr( found + 1 ), this->outputs_data ) != this->output_size ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on test file '%s', at line %lu!\n", path, (unsigned long) n_line );
@@ -757,125 +757,23 @@ Gym::StartTraining() {
 
 	// Creo la nuova rete neurale
 	if ( n_layers == 2 )
-		this->neural_network = new Serotonina::Network( 2, this->input_size, this->output_size );
+		this->neural_network = new Network( 2, this->input_size, this->output_size );
 
 	else if ( n_layers == 3 )
-		this->neural_network = new Serotonina::Network( 3, this->input_size, hidden_neurons_0, this->output_size );
+		this->neural_network = new Network( 3, this->input_size, hidden_neurons_0, this->output_size );
 
 	else if ( n_layers == 4 )
-		this->neural_network = new Serotonina::Network( 4, this->input_size, hidden_neurons_0, hidden_neurons_1, this->output_size );
+		this->neural_network = new Network( 4, this->input_size, hidden_neurons_0, hidden_neurons_1, this->output_size );
 
 	else if ( n_layers == 5 )
-		this->neural_network = new Serotonina::Network( 5, this->input_size, hidden_neurons_0, hidden_neurons_1, hidden_neurons_2, this->output_size );
+		this->neural_network = new Network( 5, this->input_size, hidden_neurons_0, hidden_neurons_1, hidden_neurons_2, this->output_size );
 
 
 	// Ricavo l'algoritmo di addestramento
 	const size_t train_algorithm = this->train_algorithm_input->value();
 
-	// Imposto l'algoritmo di addestramento della rete neurale
-	this->neural_network->SetTrainingAlgorithm( (Serotonina::TrainAlgorithm) train_algorithm );
-
-	// Imposto la funzione di report dell'addestramento
-	this->neural_network->SetReportSignal( &Gym::static_update_plot, (void *) this );
-
-	// Controllo l'algoritmo di addestramento della rete neurale
-	switch ( train_algorithm ) {
-
-		// BATCH
-		case Serotonina::TRAIN_BATCH: {
-
-			// Ricavo il tasso di apprendimento
-			const Serotonina::T_Precision eps = (Serotonina::T_Precision) this->learning_rate_input->value();
-
-			// Ricavo il momentum
-			const Serotonina::T_Precision momentum = (Serotonina::T_Precision) this->momentum_input->value();
-
-			// Imposto il tasso di apprendimento e il momentum
-			this->neural_network->SetTrainingParameters( eps, momentum );
-
-			break;
-		}
-
-		// RPROP
-		case Serotonina::TRAIN_RPROP: {
-
-			// Ricavo il fatto di incremento
-			const Serotonina::T_Precision increase_factor = (Serotonina::T_Precision) this->increase_factor_input->value();
-
-			// Ricavo il fatto di decremento
-			const Serotonina::T_Precision decrease_factor = (Serotonina::T_Precision) this->decrease_factor_input->value();
-
-			// Imposto i fattori di incremento e decremento del RPROP+
-			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
-
-			break;
-		}
-
-		// RPROP+
-		case Serotonina::TRAIN_RPROP_PLUS: {
-
-			// Ricavo il fatto di incremento
-			const Serotonina::T_Precision increase_factor = (Serotonina::T_Precision) this->increase_factor_input->value();
-
-			// Ricavo il fatto di decremento
-			const Serotonina::T_Precision decrease_factor = (Serotonina::T_Precision) this->decrease_factor_input->value();
-
-			// Imposto i fattori di incremento e decremento del RPROP+
-			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
-
-			break;
-		}
-
-		// RPROP-
-		case Serotonina::TRAIN_RPROP_MINUS: {
-
-			// Ricavo il fatto di incremento
-			const Serotonina::T_Precision increase_factor = (Serotonina::T_Precision) this->increase_factor_input->value();
-
-			// Ricavo il fatto di decremento
-			const Serotonina::T_Precision decrease_factor = (Serotonina::T_Precision) this->decrease_factor_input->value();
-
-			// Imposto i fattori di incremento e decremento del RPROP-
-			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
-
-			break;
-		}
-
-		// IRPROP+
-		case Serotonina::TRAIN_IRPROP_PLUS: {
-
-			// Ricavo il fatto di incremento
-			const Serotonina::T_Precision increase_factor = (Serotonina::T_Precision) this->increase_factor_input->value();
-
-			// Ricavo il fatto di decremento
-			const Serotonina::T_Precision decrease_factor = (Serotonina::T_Precision) this->decrease_factor_input->value();
-
-			// Imposto i fattori di incremento e decremento del RPROP+
-			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
-
-			break;
-		}
-
-		// IRPROP-
-		case Serotonina::TRAIN_IRPROP_MINUS: {
-
-			// Ricavo il fatto di incremento
-			const Serotonina::T_Precision increase_factor = (Serotonina::T_Precision) this->increase_factor_input->value();
-
-			// Ricavo il fatto di decremento
-			const Serotonina::T_Precision decrease_factor = (Serotonina::T_Precision) this->decrease_factor_input->value();
-
-			// Imposto i fattori di incremento e decremento del RPROP-
-			this->neural_network->SetRpropFactor( increase_factor, decrease_factor );
-
-			break;
-		}
-
-		default: break;
-	}
-
 	// Ricavo l'errore desiderato
-	const Serotonina::T_Precision desired_error = (Serotonina::T_Precision) this->desired_error_input->value();
+	const T_Precision desired_error = (T_Precision) this->desired_error_input->value();
 
 	// Ricavo le epoche massime
 	const size_t max_epochs = (size_t) this->max_epochs_input->value();
@@ -883,11 +781,144 @@ Gym::StartTraining() {
 	// Ricavo la frequenza di report
 	const size_t report_frequency = (size_t) this->report_frequency_input->value();
 
+	// Creo l'addestratore della rete neurale
+	Trainer trainer( this->neural_network );
+
+	// Controllo l'algoritmo di addestramento della rete neurale
+	switch ( train_algorithm ) {
+
+		// BATCH
+		case TRAIN_BATCH: {
+
+			// Ricavo il tasso di apprendimento
+			const T_Precision eps = (T_Precision) this->learning_rate_input->value();
+
+			// Ricavo il momentum
+			const T_Precision momentum = (T_Precision) this->momentum_input->value();
+
+			// Imposto i parametri dell'apprendimento
+			trainer.SetParameters( eps, momentum );
+
+			// Imposto la funzione di report dell'addestramento
+			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
+
+			// Addestro la rete neurale
+			trainer.TrainOnFile< Algorithms::Batch >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+
+			break;
+		}
+
+		// RPROP
+		case TRAIN_RPROP: {
+
+			// Ricavo il fatto di incremento
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
+
+			// Ricavo il fatto di decremento
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
+
+			// Imposto i parametri dell'apprendimento
+			trainer.SetParameters( decrease_factor, increase_factor );
+
+			// Imposto la funzione di report dell'addestramento
+			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
+
+			// Addestro la rete neurale
+			trainer.TrainOnFile< Algorithms::Rprop >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+
+			break;
+		}
+
+		// RPROP+
+		case TRAIN_RPROP_PLUS: {
+
+			// Ricavo il fatto di incremento
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
+
+			// Ricavo il fatto di decremento
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
+
+			// Imposto i parametri dell'apprendimento
+			trainer.SetParameters( decrease_factor, increase_factor );
+
+			// Imposto la funzione di report dell'addestramento
+			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
+
+			// Addestro la rete neurale
+			trainer.TrainOnFile< Algorithms::RpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+
+			break;
+		}
+
+		// RPROP-
+		case TRAIN_RPROP_MINUS: {
+
+			// Ricavo il fatto di incremento
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
+
+			// Ricavo il fatto di decremento
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
+
+			// Imposto i parametri dell'apprendimento
+			trainer.SetParameters( decrease_factor, increase_factor );
+
+			// Imposto la funzione di report dell'addestramento
+			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
+
+			// Addestro la rete neurale
+			trainer.TrainOnFile< Algorithms::RpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+
+			break;
+		}
+
+		// IRPROP+
+		case TRAIN_IRPROP_PLUS: {
+
+			// Ricavo il fatto di incremento
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
+
+			// Ricavo il fatto di decremento
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
+
+			// Imposto i parametri dell'apprendimento
+			trainer.SetParameters( decrease_factor, increase_factor );
+
+			// Imposto la funzione di report dell'addestramento
+			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
+
+			// Addestro la rete neurale
+			trainer.TrainOnFile< Algorithms::IRpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+
+			break;
+		}
+
+		// IRPROP-
+		case TRAIN_IRPROP_MINUS: {
+
+			// Ricavo il fatto di incremento
+			const T_Precision increase_factor = (T_Precision) this->increase_factor_input->value();
+
+			// Ricavo il fatto di decremento
+			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
+
+			// Imposto i parametri dell'apprendimento
+			trainer.SetParameters( decrease_factor, increase_factor );
+
+			// Imposto la funzione di report dell'addestramento
+			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
+
+			// Addestro la rete neurale
+			trainer.TrainOnFile< Algorithms::IRpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+
+			break;
+		}
+
+		default: break;
+	}
+
 	// Imposto il passo dell'asse delle ascisse del grafico dell'errore
 	this->error_plot->SetXRulerStep( (float) report_frequency );
 
-	// Addestro la rete neurale
-	this->neural_network->TrainOnFile( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
@@ -918,8 +949,8 @@ Gym::StartTraining() {
 }
 
 int
-Gym::UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
-					const Serotonina::T_Precision *outputs, size_t outputs_size ) {
+Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
+					const T_Precision *outputs, size_t outputs_size ) {
 
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
@@ -941,16 +972,16 @@ Gym::UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_tim
 	for ( ; i < this->n_test_samples; i++ ) {
 
 		// Ingressi del campione
-		std::vector< Serotonina::T_Precision > inputs_sample;
+		std::vector< T_Precision > inputs_sample;
 
 		// Preparo il vettore con gli ingressi del campione
 		for ( j = 0; j < this->input_size; j++ ) {
 
-			inputs_sample.push_back( (Serotonina::T_Precision) this->inputs_data[ i * this->input_size + j ] );
+			inputs_sample.push_back( (T_Precision) this->inputs_data[ i * this->input_size + j ] );
 		}
 
 		// Eseguo la rete neurale con gli ingressi dell'esempio
-		const Serotonina::T_Precision *out = this->neural_network->Run( &inputs_sample[0] );
+		const T_Precision *out = this->neural_network->Run( &inputs_sample[0] );
 
 		// Memorizzo le uscite della rete
 		for ( j = 0; j < this->output_size; j++ ) {
@@ -970,13 +1001,13 @@ Gym::UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_tim
 	Fl::lock();
 
 	// Uscite desiderate e della rete del campione
-	std::vector< Serotonina::T_Precision > desired, net;
+	std::vector< T_Precision > desired, net;
 
 	// Preparo i vettori con le uscite del campione
 	for ( j = 0; j < this->n_test_samples; j++ ) {
 
-		desired.push_back( (Serotonina::T_Precision) this->outputs_data[ this->graph_output + j * this->output_size ] );
-		net.push_back( (Serotonina::T_Precision) net_data[ this->graph_output + j * this->output_size ] );
+		desired.push_back( (T_Precision) this->outputs_data[ this->graph_output + j * this->output_size ] );
+		net.push_back( (T_Precision) net_data[ this->graph_output + j * this->output_size ] );
 	}
 
 	// Aggiungo i dati al grafico delle uscite

@@ -1,5 +1,16 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.1.0 - urgency=medium =============
+
+2011-06-15  Wicker25  < wicker25@gmail.com >
+
+    * all: Deleted `network-train.cpp` and created `Trainer` class to training neural network.
+           Now Serotonina is extensible!
+           Updated all examples to version 1.1.0 .
+
+    * network.hpp: Added `Network->MakeStructures`.
+                   Added new `Network` constructors.
+
 ============= Serotonina 1.0.7 - urgency=medium =============
 
 2011-06-14  Wicker25  < wicker25@gmail.com >

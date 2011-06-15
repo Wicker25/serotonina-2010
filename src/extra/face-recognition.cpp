@@ -56,7 +56,7 @@ FaceRecognition::FaceRecognition( int width, int height ) : Fl_Gl_Window( width,
 	this->photo_counter = -1;
 
 	// Creo la rete neurale dal file
-	this->neural_network = new Serotonina::Network( "data/face/face.net" );
+	this->neural_network = new Network( "data/face/face.net" );
 
 	// Inizializzo la periferica video
 	this->capture = cvCaptureFromCAM( -1 );
@@ -218,7 +218,7 @@ void
 FaceRecognition::FindFace() {
 
 	// Alloco la memoriza necessaria a contenere gli input della rete
-	Serotonina::T_Precision *input = new Serotonina::T_Precision[FACE_SIZE];
+	T_Precision *input = new T_Precision[FACE_SIZE];
 
 	// Iteratore
 	size_t i = 0;
@@ -226,11 +226,11 @@ FaceRecognition::FindFace() {
 	// Preparo l'input della rete
 	for ( ; i < FACE_SIZE; i++ ) {
 
-		input[i] = (Serotonina::T_Precision) this->face_data[i] / 255.0;
+		input[i] = (T_Precision) this->face_data[i] / 255.0;
 	}
 
 	// Precisione del riconoscimento
-	Serotonina::T_Precision check;
+	T_Precision check;
 
 	// Analizzo il volto
 	if ( ( check = this->neural_network->Run( input )[0] ) > 0.80 ) {

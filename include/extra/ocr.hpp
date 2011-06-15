@@ -49,6 +49,9 @@
 #define _OCR_FPS_				30.0
 #define _OCR_CHARACTER_NUM_		26
 
+// Uso il namespace di serotonina;
+using namespace Serotonina;
+
 // Struttura di un rettangolo
 struct Rectangle {
 

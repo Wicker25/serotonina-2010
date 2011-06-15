@@ -31,18 +31,8 @@ Network::Network( size_t n_layers, ... ) {
 	// Inizializzo il generatore di numeri pseudocasuali
 	srand( (size_t) time( NULL ) );
 
-	// Controllo siano stati scelti un minimo di due strati
-	if ( n_layers < 2 ) {
-
-		// Communico l'errore all'utente
-		fprintf( stderr, "(W) Insufficient number of layers!\n" );
-		
-		// Termino
-		exit(0);
-	}
-
-	// Numero dei neuroni dello strato
-	size_t n_neurons;
+	// Struttura degli strati
+	std::vector< size_t > layers_struct;
 
 	// Lista dei parametri della funzione
 	va_list args;
@@ -50,48 +40,45 @@ Network::Network( size_t n_layers, ... ) {
 	// Inizio la lettura della lista dei parametri
 	va_start( args, n_layers );
 
-	// Ricavo il numero dei neuroni dello strato di ingresso
-	n_neurons = va_arg( args, size_t );
+	// Memorizzo la struttura degli strati in un vettore
+	while( n_layers-- > 0 ) {
 
-	// Creo lo strato di ingresso
-	this->layers.push_back( new Layer( n_neurons, 0 ) );
-
-	// Creo gli strati della rete
-	while( n_layers-- > 1 ) {
-
-		// Ricavo il numero dei neuroni dello strato
-		n_neurons = va_arg( args, size_t );
-
-		// Creo lo strato
-		this->layers.push_back( new Layer( n_neurons, this->layers.back()->n_neurons ) );
+		// Aggiungo lo strato al vettore
+		layers_struct.push_back( va_arg( args, size_t ) );
 	}   
-
-	// Inizializzo i pesi sinaptici
-	this->InizializeWeight();
-
-	// Creo il vettore contenente i dati di uscita
-	this->output_data = new T_Precision[this->layers.back()->n_neurons];
 
 	// Termino la lettura della lista dei parametri
 	va_end( args );
 
-	// Imposto la funzione di report dell'addestramento
-	this->report_function = &Network::training_report;
+	// Costruisco le strutture della nuova rete neurale
+	this->MakeStructures( layers_struct.size(), layers_struct.data() );
+}
 
-	// Imposto l'algoritmo di addestramento predefinito
-	this->SetTrainingAlgorithm( TRAIN_IRPROP_MINUS );
+Network::Network( size_t n_layers, const size_t *layers_struct ) {
 
-	// Imposto il tasso di apprendimento e il momentum
-	this->SetTrainingParameters( 0.5, 0.8 );
+	// Inizializzo il generatore di numeri pseudocasuali
+	srand( (size_t) time( NULL ) );
 
-	// Imposto i fattori di incremento e decremento del RPROP
-	this->SetRpropFactor( 1.2, 0.5 );
+	// Costruisco le strutture della nuova rete neurale
+	this->MakeStructures( n_layers, layers_struct );
+}
+
+Network::Network( const std::vector< size_t > &layers_struct ) {
+
+	// Inizializzo il generatore di numeri pseudocasuali
+	srand( (size_t) time( NULL ) );
+
+	// Costruisco le strutture della nuova rete neurale
+	this->MakeStructures( layers_struct.size(), layers_struct.data() );
 }
 
 Network::Network( const std::string &path ) {
 
+	// Inizializzo il generatore di numeri pseudocasuali
+	srand( (size_t) time( NULL ) );
+
 	// Carico la rete neurale dal file
-	this->Load( path, true );
+	this->Load( path );
 }
 
 Network::~Network() {
@@ -108,31 +95,33 @@ Network::~Network() {
 }
 
 void
-Network::InizializeWeight() {
+Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 
-	// Iteratori
-	short int t = ( this->layers.size() - 1 ) - 1;
+	// Controllo che siano stati scelti almeno tre strati
+	if ( n_layers < 2 ) {
 
-	// Iteratori delle sinapsi
-	Synapse *synapse_t;
-	Synapse *end_synapse_t;
+		// Communico l'errore all'utente
+		fprintf( stderr, "(W) Insufficient number of layers!\n" );
 
-	// Aggiorno tutti i pesi sinaptici della rete usando la Regola Delta con il Momentum
-	for ( ; t >= 0; t-- ) {
-
-		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->layers[t + 1]->first_synapse;
-
-		// Ricavo la sinapsi finale
-		end_synapse_t = this->layers[t + 1]->last_synapse;
-
-		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
-
-			// Inizializzo il peso sinaptico
-			synapse_t->weight = rand0to1< T_Precision >();
-		}
+		// Termino
+		exit(0);
 	}
+
+	// Creo lo strato di ingresso
+	this->layers.push_back( new Layer( layers_struct[0], 0 ) );
+
+	// Iteratore
+	size_t i = 1;
+
+	// Creo gli strati della rete
+	for ( ; i < n_layers; i++ ) {
+
+		// Creo lo strato
+		this->layers.push_back( new Layer( layers_struct[i], layers_struct[i - 1] ) );
+	}   
+
+	// Creo il vettore contenente i dati di uscita
+	this->output_data = new T_Precision[this->layers.back()->n_neurons];
 }
 
 const T_Precision *
@@ -278,10 +267,10 @@ Network::Save( const std::string &path ) {
 }
 
 void
-Network::Load( const std::string &path, bool new_ ) {
+Network::Load( const std::string &path ) {
 
-	// Controllo se la rete era già stata creata precedentemente
-	if ( !new_ ) {
+	// Controllo se esiste già una rete neurale
+	if ( !this->layers.empty() ) {
 
 		// Iteratore
 		size_t i;
@@ -308,7 +297,7 @@ Network::Load( const std::string &path, bool new_ ) {
 	}
 
 	// Vettore con i valori estratti dalla riga
-	std::vector< T_Precision > values;
+	std::vector< size_t > layers_struct;
 
 	// Flag di uscita
 	bool end = false;
@@ -329,31 +318,10 @@ Network::Load( const std::string &path, bool new_ ) {
 		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Estraggo i valori che descrivono la struttura della rete
-			if ( values_from_string( line, values ) >= 2 ) {
+			if ( values_from_string< size_t >( line, layers_struct ) >= 2 ) {
 
-				// Iteratore
-				size_t t;
-
-				// Creo lo strato di ingresso
-				this->layers.push_back( new Layer( values[0], 0 ) );
-
-				// Creo gli strati della rete
-				for ( t = 1; t < values.size(); t++ ) {
-
-					this->layers.push_back( new Layer( values[t], values[t - 1] ) );
-				}
-
-				// Inizializzo i pesi sinaptici
-				this->InizializeWeight();
-
-				// Creo il vettore contenente i dati di uscita
-				this->output_data = new T_Precision[this->layers.back()->n_neurons];
-
-				// Imposto la funzione di report dell'addestramento
-				this->report_function = &Network::training_report;
-
-				// Pulisco il vettore dei valori
-				values.clear();
+				// Costruisco le strutture della nuova rete neurale
+				this->MakeStructures( layers_struct.size(), layers_struct.data() );
 
 				// Imposto il flag di uscita
 				end = true;
@@ -369,6 +337,10 @@ Network::Load( const std::string &path, bool new_ ) {
 			n_line++;
 		}
 	}
+
+
+	// Vettore con i valori estratti dalla riga
+	std::vector< T_Precision > values;
 
 	// Iteratori
 	size_t i, t = 1;
@@ -418,18 +390,6 @@ Network::Load( const std::string &path, bool new_ ) {
 
 	// Chiudo lo stream al file
 	file.close();
-
-	// Imposto la funzione di report dell'addestramento
-	this->report_function = &Network::training_report;
-
-	// Imposto l'algoritmo di addestramento predefinito
-	this->SetTrainingAlgorithm( TRAIN_IRPROP_MINUS );
-
-	// Imposto il tasso di apprendimento e il momentum
-	this->SetTrainingParameters( 0.5, 0.8 );
-
-	// Imposto i fattori di incremento e decremento del RPROP
-	this->SetRpropFactor( 1.2, 0.5 );
 }
 
 } // Chiudo il namespace di Serotonina

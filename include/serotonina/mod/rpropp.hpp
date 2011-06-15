@@ -1,5 +1,5 @@
 /* 
-    Title --- string.hpp
+    Title --- rpropp.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,11 +18,22 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_STRING_INL_HPP_
-#define _SEROTONINA_STRING_INL_HPP_
+#ifndef _SEROTONINA_RPROPP_HPP_
+#define _SEROTONINA_RPROPP_HPP_
+
+#include <iostream>
+
+#include <serotonina/trainer.hpp>
+#include <serotonina/trainer-inl.hpp>
 
 namespace Serotonina { // Namespace di Serotonina
 
+namespace Algorithms { // Namespace degli algoritmi
+
+void RpropPlus(	Network *network, const std::vector< T_Precision > &train_params,
+				T_Precision net_error, T_Precision prev_net_error );
+
+} // Chiudo il namespace degli algoritmi
 
 } // Chiudo il namespace di Serotonina
 

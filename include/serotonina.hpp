@@ -22,11 +22,11 @@
 #define _SEROTONINA_HPP_
 
 // Includo tutti gli headers della libreria
+
 #include <serotonina/version.hpp>
 #include <serotonina/types.hpp>
 #include <serotonina/macros.hpp>
 #include <serotonina/string.hpp>
-#include <serotonina/string-inl.hpp>
 
 #include <serotonina/neuron.hpp>
 #include <serotonina/synapse.hpp>
@@ -34,5 +34,17 @@
 
 #include <serotonina/network.hpp>
 #include <serotonina/network-inl.hpp>
+
+#include <serotonina/trainer.hpp>
+#include <serotonina/trainer-inl.hpp>
+
+// Includo i moduli per l'addestramento
+
+#include <serotonina/mod/batch.hpp>
+#include <serotonina/mod/rprop.hpp>
+#include <serotonina/mod/rpropp.hpp>
+#include <serotonina/mod/rpropm.hpp>
+#include <serotonina/mod/irpropp.hpp>
+#include <serotonina/mod/irpropm.hpp>
 
 #endif

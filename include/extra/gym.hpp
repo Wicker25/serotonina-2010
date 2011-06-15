@@ -50,6 +50,20 @@
 // Linea di comando
 #define _GYM_CMD_TRAINING_SET_	"--training-set"
 
+// Uso il namespace di serotonina;
+using namespace Serotonina;
+
+// Algoritmi di apprendimento
+enum TrainAlgorithm {
+
+	TRAIN_BATCH,
+	TRAIN_RPROP,
+	TRAIN_RPROP_PLUS,
+	TRAIN_RPROP_MINUS,
+	TRAIN_IRPROP_PLUS,
+	TRAIN_IRPROP_MINUS
+};
+
 class Gym : public Fl_Window {
 
 	/* STRUMENTO GRAFICO PER L'ADDESTRAMENTO DELLE RETI NEURALI */

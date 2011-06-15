@@ -49,6 +49,9 @@
 #define _FACE_RECOGNITION_PHOTO_NUMBER_		15
 #define _FACE_RECOGNITION_PHOTO_WAIT_		0.4
 
+// Uso il namespace di serotonina;
+using namespace Serotonina;
+
 class FaceRecognition : public Fl_Gl_Window {
 
 	/* STRUMENTO GRAFICO PER IL RICONOSCIMENTO DI UN VOLTO */

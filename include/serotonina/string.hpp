@@ -28,8 +28,41 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
-// Estrae i valori numerici da una stringa di testo
-size_t values_from_string( const std::string &str, std::vector< T_Precision > &vect );
+template < typename T > size_t
+values_from_string( const std::string &str, std::vector< T > &vect ) {
+
+	// Posizione del valore trovato
+	std::string::size_type found = 0;
+
+	// Sottostringa contenente i valori
+	std::string tmp;
+
+	// Numero di elementi inseriti
+	size_t elements = 0;
+
+	// Estraggo i valori numerici da una stringa di testo
+	while ( found != std::string::npos ) {
+
+		// Ricavo la sottostringa contenente il nuovo valore
+		tmp = str.substr( found, str.find_first_of( ' ', found + 1 ) );
+
+		// Controllo che la sottostringa non sia vuota
+		if ( !tmp.empty() && tmp != " " ) {
+
+			// Aggiungo il valore al vettore
+			vect.push_back( (T) atof( tmp.c_str() ) );
+
+			// Incremento l'indice dell'elemento
+			elements++;
+		}
+
+		// Cerco il prossimo valore
+		found = str.find_first_of( ' ', found + 1 );
+	}
+
+	// Ritorno il numero degli elementi inseriti
+	return elements;
+}
 
 } // Chiudo il namespace di Serotonina
 

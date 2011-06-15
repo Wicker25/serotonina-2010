@@ -8,8 +8,8 @@ cmake_minimum_required( VERSION 2.6 )
 
 # Imposto le versioni degli strumenti
 set( Serotonina_VERSION_MAJOR 1 )
-set( Serotonina_VERSION_MINOR 0 )
-set( Serotonina_VERSION_PATCH 7 )
+set( Serotonina_VERSION_MINOR 1 )
+set( Serotonina_VERSION_PATCH 0 )
 
 set( Serotonina_PLOT_VERSION_MAJOR 1 )
 set( Serotonina_PLOT_VERSION_MINOR 0 )
@@ -74,14 +74,19 @@ set( Serotonina_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src )
 set( Serotonina_BINARY_DIR ${CMAKE_BINARY_DIR}/bin )
 
 # Libreria Serotonina
-add_library( serotonina SHARED	${Serotonina_SOURCE_DIR}/string.cpp
-								${Serotonina_SOURCE_DIR}/network.cpp
-								${Serotonina_SOURCE_DIR}/network-train.cpp )
+add_library( serotonina SHARED	${Serotonina_SOURCE_DIR}/network.cpp
+								${Serotonina_SOURCE_DIR}/trainer.cpp
+								${Serotonina_SOURCE_DIR}/mod/batch.cpp
+								${Serotonina_SOURCE_DIR}/mod/rprop.cpp
+								${Serotonina_SOURCE_DIR}/mod/rpropp.cpp
+								${Serotonina_SOURCE_DIR}/mod/rpropm.cpp
+								${Serotonina_SOURCE_DIR}/mod/irpropp.cpp
+								${Serotonina_SOURCE_DIR}/mod/irpropm.cpp )
 
 target_link_libraries( serotonina m )
 
 # Controllo se sono state trovate le FLTK
-IF (FLTK_FOUND)
+IF ( FLTK_FOUND )
 
 	# Libreria per i grafici di Serotonina
 	add_library( serotonina_plot STATIC ${Serotonina_SOURCE_DIR}/extra/plot.cpp )
@@ -109,7 +114,7 @@ IF (FLTK_FOUND)
 	target_link_libraries( st_ocr ${OPENGL_LIBRARIES} )
 
 	# Controllo se sono state trovate le OpenCV
-	IF (OpenCV_FOUND)
+	IF ( OpenCV_FOUND )
 
 		# Strumento Face recognition per il riconoscimento di un volto attraverso la webcam
 		add_executable( st_face_recognition ${Serotonina_SOURCE_DIR}/extra/face-recognition.cpp )
@@ -121,19 +126,19 @@ IF (FLTK_FOUND)
 		target_link_libraries( st_face_recognition ${OPENGL_LIBRARIES} )
 		target_link_libraries( st_face_recognition ${OpenCV_LIBS} )
 
-	ELSE (OpenCV_FOUND)
+	ELSE ( OpenCV_FOUND )
 
 		# Log di lavoro
 		MESSAGE( STATUS "WARNING: could NOT find dependencies of Face Recognition tool." )
 
-	ENDIF (OpenCV_FOUND)
+	ENDIF ( OpenCV_FOUND )
 
-ELSE (FLTK_FOUND)
+ELSE ( FLTK_FOUND )
 
 	# Log di lavoro
 	MESSAGE( STATUS "WARNING: could NOT find dependencies of tools." )
 
-ENDIF (FLTK_FOUND)
+ENDIF ( FLTK_FOUND )
 
 # Installatore della libreria
 install_targets( /lib serotonina )

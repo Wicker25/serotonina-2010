@@ -103,7 +103,7 @@ Ocr::Ocr( int width, int height ) : Fl_Gl_Window( width, height, _OCR_TITLE_ ) {
 		printf( "Ricordo la lettera %c ...\n", 'A' + (char) i );
 
 		// Carico la rete neurale dal file
-		this->neural_network[i] = new Serotonina::Network( path );
+		this->neural_network[i] = new Network( path );
 	}
 
 	// Avvio la funzione per l'aggiornamento asincrono della finestra
@@ -348,23 +348,27 @@ Ocr::TrainNetwork( int choice ) {
 	// Chiudo il file di addestramento
 	out.close();
 
+	// Creo l'addestratore della rete neurale
+	Trainer trainer( this->neural_network[choice], false );
+
 	do {
 
 		// Controllo se non si è raggiunto l'errore desiderato
-		if ( this->neural_network[choice]->GetError() > 0.00001 ) {
+		if ( trainer.GetError() > 0.00001 ) {
 
 			// Log di lavoro
 			printf( "Riprovo a studiare la lettera '%c'...\n", 'A' + (char) choice );
 
 			// Reinizializzo i pesi sinaptici prima del nuovo addestramento
-			this->neural_network[choice]->InizializeWeight();
+			trainer.InitWeights();
 		}
 
 		// Addestro la rete neurale
-		this->neural_network[choice]->TrainOnFile( "data/character/train/character.train", 0.00001, 200, 1 );
+		trainer.SetParameters( 0.5, 1.2 );
+		trainer.TrainOnFile< Algorithms::Rprop >( "data/character/train/character.train", 0.00001, 200, 1 );
 
 	// Ciclo finché non raggiungo l'errore desiderato
-	} while ( this->neural_network[choice]->GetError() > 0.00001 );
+	} while ( trainer.GetError() > 0.00001 );
 
 	// Costruisco il percorso di destinazione
 	snprintf( path, 100, "data/character/%c.net", 'a' + (char) choice );
@@ -631,7 +635,7 @@ void
 Ocr::RecognitionCharacter() {
 
 	// Alloco la memoriza necessaria a contenere gli input della rete
-	Serotonina::T_Precision *input = new Serotonina::T_Precision[CHARACTER_SIZE];
+	T_Precision *input = new T_Precision[CHARACTER_SIZE];
 
 	// Iteratore
 	size_t i = 0;
@@ -639,14 +643,14 @@ Ocr::RecognitionCharacter() {
 	// Preparo l'input della rete
 	for ( ; i < CHARACTER_SIZE; i++ ) {
 
-		input[i] = ( 1.0 - (Serotonina::T_Precision) this->character_data[i] / 255.0 );
+		input[i] = ( 1.0 - (T_Precision) this->character_data[i] / 255.0 );
 	}
 
 	// Annullo il riconoscimento precedente
 	this->precision_character = 0;
 
 	// Precisione del riscontro
-	Serotonina::T_Precision new_check, check = 0.50;
+	T_Precision new_check, check = 0.50;
 
 	// Analizzo il carattere
 	for ( i = 0; i < _OCR_CHARACTER_NUM_; i++ ) {
@@ -979,7 +983,6 @@ Ocr::draw() {
 	// Richiamo la funzione originale
 	Fl_Gl_Window::draw();
 }
-
 
 /* INIZIO FUNZIONE PRINCIPALE */
 
