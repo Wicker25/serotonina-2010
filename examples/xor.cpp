@@ -7,7 +7,7 @@
 
     Serotonina is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License.
+    the Free Software Foundation version 3 of the License.
 
     Serotonina is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,8 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
+
+    To compile: g++ `pkg-config --libs --cflags serotonina` xor.cpp -o xor
 */
 
 #include <iostream>
@@ -32,7 +34,7 @@ int main( void ) {
 	Serotonina::Network network( 3, 2, 5, 1 );
 
 	// Creo l'addestratore della rete neurale
-	Trainer trainer( &network );
+	Trainer trainer( network );
 
 	// Addestro la rete neurale con il metodo Batch
 	trainer.SetParameters( 0.5, 0.8 );
