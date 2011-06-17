@@ -44,16 +44,12 @@ namespace Serotonina { // Namespace di Serotonina
 
 // Prototipi
 class Network;
-class Trainer;
 
 class Network {
 
 	/* RETE NEURALE */
 
 public:
-
-	// Permetto alla classe Trainer di accedere ai membri privati
-	friend class Trainer;
 
 	// Metodi costruttore e distruttore
 	Network( size_t n_layers, ... );
@@ -63,7 +59,11 @@ public:
 	virtual ~Network();
 
 	// Esegue la rete neurale
-	const T_Precision *Run( const T_Precision *input );
+	const std::vector< T_Precision > &Run( const T_Precision *input );
+	const std::vector< T_Precision > &Run( const std::vector< T_Precision > &input );
+
+	// Ritorna le uscite della rete
+	const std::vector< T_Precision > &GetOutputs() const;
 
 	// Ritorna gli strati della rete
 	std::vector< Layer * > &GetLayers();
@@ -83,7 +83,7 @@ private:
 	std::vector< Layer * > layers;
 
 	// Dati di uscita
-	T_Precision *output_data;
+	std::vector< T_Precision > output_data;
 
 	// Costruisce le strutture della nuova rete neurale
 	void MakeStructures( size_t n_layers, const size_t *layers_struct );

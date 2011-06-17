@@ -39,6 +39,17 @@
 #include <FL/fl_draw.H>
 #include <FL/gl.h>
 
+#if defined(WIN32)
+	#include <gl/gl.h>
+	#include <gl/glext.h>
+#elif defined(__APPLE__) || defined(MACOSX)
+	#include <OpenGL/gl.h>
+	#include <OpenGL/glext.h>
+#else
+	#include <GL/gl.h>
+	#include <GL/glext.h>
+#endif
+
 #include <serotonina.hpp>
 
 #include "extra/version.hpp"

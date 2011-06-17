@@ -38,14 +38,14 @@ Gym::static_start_training( void *data ) {
 }
 
 inline int
-Gym::static_update_plot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-							const T_Precision *outputs, size_t outputs_size, void *data ) {
+Gym::static_update_plot(	Network &network, size_t epochs, time_t elapsed_time, T_Precision max_error,
+							const std::vector< T_Precision > &outputs, size_t outputs_size, void *data ) {
 
 	// Ricavo un puntatore alla finestra principale
 	Gym *gym = static_cast< Gym * >( data );
 
 	// Avvio la funzione di aggiornamento del grafico
-	return gym->UpdatePlot( network, epochs, elapsed_time, max_error, outputs, outputs_size );
+	return gym->UpdatePlot( &network, epochs, elapsed_time, max_error, &outputs[0], outputs_size );
 }
 
 /** FINE METODI STATICI **/

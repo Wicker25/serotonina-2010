@@ -1,5 +1,17 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.1.2 - urgency=medium =============
+
+2011-06-17  Wicker25  < wicker25@gmail.com >
+
+    * all: Now training algorithms are classes: `train-algorithm.hpp`.
+           Updated all examples to version 1.1.2 .
+
+    * trainer.hpp: `Trainer->Train` and `Trainer->TrainOnFile` are again template functions. -_-"
+
+    * network.hpp: Now `Network` uses `std::vector`.
+                   Added `Network->GetOutputs()`.
+
 ============= Serotonina 1.1.1 - urgency=medium =============
 
 2011-06-17  Wicker25  < wicker25@gmail.com >

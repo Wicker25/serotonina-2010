@@ -25,6 +25,20 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+inline const std::vector< T_Precision > &
+Network::Run( const std::vector< T_Precision > &input ) {
+
+	// Richiamo la funzione principale
+	return Run( &input[0] );
+}
+
+inline const std::vector< T_Precision > &
+Network::GetOutputs() const {
+
+	// Ritorno le uscite della rete
+	return this->output_data;
+}
+
 inline std::vector< Layer * > &
 Network::GetLayers() {
 

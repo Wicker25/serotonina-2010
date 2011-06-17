@@ -1,5 +1,5 @@
 /* 
-    Title --- serotonina.hpp
+    Title --- train-algorithm.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,10 +18,17 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_HPP_
-#define _SEROTONINA_HPP_
+#ifndef _SEROTONINA_TRAIN_ALGORITHM_HPP_
+#define _SEROTONINA_TRAIN_ALGORITHM_HPP_
 
-// Includo tutti gli headers della libreria
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
+
+#include <vector>
+#include <ctime>
 
 #include <serotonina/version.hpp>
 #include <serotonina/types.hpp>
@@ -35,19 +42,28 @@
 #include <serotonina/network.hpp>
 #include <serotonina/network-inl.hpp>
 
-#include <serotonina/trainer.hpp>
-#include <serotonina/trainer-inl.hpp>
+namespace Serotonina { // Namespace di Serotonina
 
-#include <serotonina/train-algorithm.hpp>
-#include <serotonina/train-algorithm.hpp>
+// Prototipi
+class Trainer;
 
-// Includo i moduli per l'addestramento
+class TrainAlgorithm {
 
-#include <serotonina/mod/batch.hpp>
-#include <serotonina/mod/rprop.hpp>
-#include <serotonina/mod/rpropp.hpp>
-#include <serotonina/mod/rpropm.hpp>
-#include <serotonina/mod/irpropp.hpp>
-#include <serotonina/mod/irpropm.hpp>
+	/* ALGORITMO DI ADDESTRAMENTO DELLA RETE NEURALE */
+
+public:
+
+	// Descrizione dell'algoritmo
+	static const char *description;
+
+	// Verifica la correttezza dei parametri
+	static bool CheckParams( const std::vector< T_Precision > &train_params );
+
+	// Esegue la correzione dei pesi
+	static void UpdateWeights(	Network &network, const std::vector< T_Precision > &train_params,
+								T_Precision net_error, T_Precision prev_net_error );
+};
+
+} // Chiudo il namespace di Serotonina
 
 #endif

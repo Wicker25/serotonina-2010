@@ -31,6 +31,7 @@ Only for demos:
  + OpenGL development libraries
  + FLTK development libraries                         <http://www.fltk.org/>
  + OpenCV development libraries (only libhighgui)     <http://opencv.willowgarage.com/>
+ + pthread                                            <http://sourceware.org/pthreads-win32/>
 
 Serotonina has no dependencies.
 

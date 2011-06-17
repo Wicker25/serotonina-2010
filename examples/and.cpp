@@ -38,11 +38,10 @@ int main( void ) {
 
 	// Addestro la rete neurale con il metodo Batch
 	trainer.SetParameters( 0.5, 0.8 );
-	trainer.TrainOnFile( Algorithms::Batch, "train/and.train", 0.000001, 100000, 5000 );
+	trainer.TrainOnFile< Algorithms::Batch >( "train/and.train", 0.000001, 100000, 5000 );
 
-	// Ingressi ed uscite della rete neurale
+	// Ingressi della rete neurale
 	Serotonina::T_Precision in[2];
-	const Serotonina::T_Precision *out;
 
 	// Iteratori
 	size_t i, j = 0;
@@ -57,7 +56,7 @@ int main( void ) {
 			in[1] = (T_Precision) i;
 
 			// Calcolo l'uscita della rete neurale
-			out = network.Run( in );
+			const std::vector< Serotonina::T_Precision > &out = network.Run( in );
 
 			// Stampo i risultati
 			std::cout.setf( std::ios::fixed, std::ios::floatfield );

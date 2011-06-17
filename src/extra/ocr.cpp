@@ -50,7 +50,7 @@ Ocr::train_button_callback( Fl_Widget *widget, void *data ) {
 	Ocr *ocr = static_cast< Ocr * >( data );
 
 	// Controllo se l'addestramento è già stato avviato
-	if ( ocr->thread_id == 0 ) { 
+	if ( !ocr->training_flag ) { 
 
 		// Modifico l'etichetta del pulsante
 		widget->label( "Interrompi" );
@@ -61,11 +61,11 @@ Ocr::train_button_callback( Fl_Widget *widget, void *data ) {
 	} else {
 
 		// Termino il thread per l'addestramento
-		if ( ocr->thread_id )
+		if ( ocr->training_flag )
 			pthread_cancel( ocr->thread_id );
 
 		// Memorizzo la fine del thread
-		ocr->thread_id = 0;
+		ocr->training_flag = false;
 
 		// Modifico l'etichetta del pulsante
 		widget->label( "Addestra le reti" );
@@ -78,7 +78,7 @@ Ocr::train_button_callback( Fl_Widget *widget, void *data ) {
 Ocr::Ocr( int width, int height ) : Fl_Gl_Window( width, height, _OCR_TITLE_ ) {
 
 	// Inizializzo le strutture
-	this->thread_id				= 0;
+	this->training_flag			= false;
 	this->precision_character	= 0.0;
 
 	// Pulisco la tavola da disegno
@@ -365,7 +365,7 @@ Ocr::TrainNetwork( int choice ) {
 
 		// Addestro la rete neurale
 		trainer.SetParameters( 0.5, 1.2 );
-		trainer.TrainOnFile( Algorithms::Rprop, "data/character/train/character.train", 0.00001, 200, 1 );
+		trainer.TrainOnFile< Algorithms::Rprop>( "data/character/train/character.train", 0.00001, 200, 1 );
 
 	// Ciclo finché non raggiungo l'errore desiderato
 	} while ( trainer.GetError() > 0.00001 );
@@ -430,7 +430,7 @@ Ocr::TrainAllNetwork() {
 	}
 
 	// Memorizzo la fine del thread
-	this->thread_id = 0;
+	this->training_flag = false;
 
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
@@ -513,7 +513,7 @@ void
 Ocr::FindCharacter() {
 
 	// Ricavo l'area di delimitazione del carattere
-	Rectangle &rect = this->char_boundary;
+	Rect &rect = this->char_boundary;
 
 	// Inizializzo l'area di delimitazione del carattere
 	rect.left	= ARTBOARD_W - 1;
@@ -547,7 +547,7 @@ void
 Ocr::GetCharacter() {
 
 	// Ricavo l'area di delimitazione del carattere
-	Rectangle &rect = this->char_boundary;
+	Rect &rect = this->char_boundary;
 
 	// Allargo l'area di delimitazione del 5%
 	rect.left	-= rect.left * 0.05;
@@ -696,7 +696,7 @@ Ocr::handle( int event ) {
 				case 'C': {
 
 					// Controllo che sia non in corso l'addestramento
-					if ( this->thread_id == 0 ) { 
+					if ( !this->training_flag ) { 
 
 						// Pulisco la tavola da disegno
 						this->ClearArtboard();
@@ -729,7 +729,7 @@ Ocr::handle( int event ) {
 		case FL_DRAG: {
 
 			// Controllo che non sia in corso l'addestramento
-			if ( this->thread_id == 0 ) { 
+			if ( !this->training_flag ) { 
 
 				// Ricavo le coordinate all'interno della tavola da disegno
 				int pencil_x = ( Fl::event_x() - 20 ) / ARTBOARD_SCALE;
@@ -824,7 +824,7 @@ Ocr::DrawCharBoundary( size_t x, size_t y ) {
 	glTranslatef( (GLfloat) x, (GLfloat) y, 0.0 );
 
 	// Ricavo l'area di delimitazione del carattere
-	Rectangle &rect = this->char_boundary;
+	Rect &rect = this->char_boundary;
 
 	// Imposto il colore
 	glColor4ub( 255u, 0u, 0u, 20u );
@@ -930,7 +930,7 @@ Ocr::draw() {
 	glClear( GL_COLOR_BUFFER_BIT );
 
 	// Controllo che non sia in corso l'addestramento
-	if ( this->thread_id == 0 ) { 
+	if ( !this->training_flag ) { 
 
 		// Delimito l'area del carattere
 		this->FindCharacter();

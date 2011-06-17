@@ -23,15 +23,29 @@
 
 #include <iostream>
 
-#include <serotonina/trainer.hpp>
-#include <serotonina/trainer-inl.hpp>
+#include <serotonina/train-algorithm.hpp>
+#include <serotonina/train-algorithm-inl.hpp>
 
 namespace Serotonina { // Namespace di Serotonina
 
 namespace Algorithms { // Namespace degli algoritmi
 
-void Batch(	Network &network, const std::vector< T_Precision > &train_params,
-			T_Precision net_error, T_Precision prev_net_error );
+class Batch : public TrainAlgorithm {
+
+	/* ALGORITMO BATCH */
+
+public:
+
+	// Descrizione dell'algoritmo
+	static const char *description;
+
+	// Verifica la correttezza dei parametri
+	static bool CheckParams( const std::vector< T_Precision > &train_params );
+
+	// Esegue la correzione dei pesi
+	static void UpdateWeights(	Network &network, const std::vector< T_Precision > &train_params,
+								T_Precision net_error, T_Precision prev_net_error );
+};
 
 } // Chiudo il namespace degli algoritmi
 

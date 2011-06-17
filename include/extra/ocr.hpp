@@ -53,7 +53,7 @@
 using namespace Serotonina;
 
 // Struttura di un rettangolo
-struct Rectangle {
+struct Rect {
 
 	int left;
 	int top;
@@ -137,13 +137,16 @@ private:
 	uint8_t character_data[ CHARACTER_W * CHARACTER_H ];
 
 	// Area di delimitazione del carattere
-	Rectangle char_boundary;
+	Rect char_boundary;
 
 	// Rete neurale
 	Serotonina::Network *neural_network[_OCR_CHARACTER_NUM_];
 
 	// Id del thread dell'addestramento
 	pthread_t thread_id;
+
+	// Flag di controllo dell'addestramento
+	bool training_flag;
 
 	// Flag per controllare se il carattere è già stato estratto
 	bool character_exist;

@@ -89,9 +89,6 @@ Network::~Network() {
 	// Elimino gli strati della rete
 	for ( ; i < this->layers.size(); i++ )
 		delete this->layers[i];
-
-	// Elimino il vettore contenente i dati di uscita
-	delete this->output_data;
 }
 
 void
@@ -121,10 +118,10 @@ Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 	}   
 
 	// Creo il vettore contenente i dati di uscita
-	this->output_data = new T_Precision[this->layers.back()->n_neurons];
+	this->output_data.resize( this->layers.back()->n_neurons );
 }
 
-const T_Precision *
+const std::vector< T_Precision > &
 Network::Run( const T_Precision *input ) {
 
 	// Iteratore
@@ -197,7 +194,7 @@ Network::Run( const T_Precision *input ) {
 	}
 
 	// Ritorna un puntatore ai valori di uscita
-	return (const T_Precision *) this->output_data;
+	return this->output_data;
 }
 
 /*******************************************************************
@@ -278,9 +275,6 @@ Network::Load( const std::string &path ) {
 		// Elimino gli strati della rete
 		for ( i = 0; i < this->layers.size(); i++ )
 			delete this->layers[i];
-
-		// Elimino il vettore contenente i dati di uscita
-		delete this->output_data;
 	}
 
 	// Apre uno stream al file sorgente

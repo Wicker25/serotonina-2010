@@ -1,5 +1,5 @@
 /* 
-    Title --- rpropp.hpp
+    Title --- train-algorithm.cpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,36 +18,14 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_RPROPP_HPP_
-#define _SEROTONINA_RPROPP_HPP_
-
-#include <iostream>
+#ifndef _SEROTONINA_TRAIN_ALGORITHM_CPP_
+#define _SEROTONINA_TRAIN_ALGORITHM_CPP_
 
 #include <serotonina/train-algorithm.hpp>
 #include <serotonina/train-algorithm-inl.hpp>
 
 namespace Serotonina { // Namespace di Serotonina
 
-namespace Algorithms { // Namespace degli algoritmi
-
-class RpropPlus : public TrainAlgorithm {
-
-	/* ALGORITMO RPROP+ */
-
-public:
-
-	// Descrizione dell'algoritmo
-	static const char *description;
-
-	// Verifica la correttezza dei parametri
-	static bool CheckParams( const std::vector< T_Precision > &train_params );
-
-	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, const std::vector< T_Precision > &train_params,
-								T_Precision net_error, T_Precision prev_net_error );
-};
-
-} // Chiudo il namespace degli algoritmi
 
 } // Chiudo il namespace di Serotonina
 

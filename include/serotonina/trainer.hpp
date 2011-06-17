@@ -42,14 +42,13 @@
 #include <serotonina/network.hpp>
 #include <serotonina/network-inl.hpp>
 
+#include <serotonina/train-algorithm.hpp>
+#include <serotonina/train-algorithm-inl.hpp>
+
 namespace Serotonina { // Namespace di Serotonina
 
-// Funzione di addestramento
-typedef void (T_TrainFun)(	Network &network, const std::vector< T_Precision > &train_params,
-							T_Precision net_error, T_Precision prev_net_error );
-
 // Funzione di report dell'apprendimento
-typedef int (T_ReportFun)( Network *, size_t, time_t, T_Precision, const T_Precision *, size_t, void * );
+typedef int (T_ReportFun)( Network &network, size_t, time_t, T_Precision, const std::vector< T_Precision > &, size_t, void * );
 
 class Trainer {
 
@@ -60,8 +59,8 @@ public:
 	/** INIZIO METODI STATICI **/
 
 	// Stampa i rapporti dell'addestramento 
-	static int training_report(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-								const T_Precision *outputs, size_t outputs_size, void *data );
+	static int training_report(	Network &network, size_t epochs, time_t elapsed_time, T_Precision max_error,
+								const std::vector< T_Precision > &outputs, size_t outputs_size, void *data );
 
 	/** FINE METODI STATICI **/
 
@@ -90,14 +89,17 @@ public:
 	void SetReportFun( T_ReportFun &fun, void *data );
 
 	// Addestra la rete neurale usando degli esempi
-	void Train( T_TrainFun &train_fun, const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
+	template < class train_algorithm >
+	void Train( const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports );
 
-	void Train( T_TrainFun &train_fun, const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples, 
+	template < class train_algorithm >
+	void Train( const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples, 
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports );
 
+	template < class train_algorithm >
 	// Addestra la rete neurale usando degli esempi da un file
-	void TrainOnFile(	T_TrainFun &train_fun, const std::string &training_file, T_Precision desired_error,
+	void TrainOnFile(	const std::string &training_file, T_Precision desired_error,
 						size_t max_epochs, size_t epochs_between_reports );
 
 	// Ritorna l'errore della rete

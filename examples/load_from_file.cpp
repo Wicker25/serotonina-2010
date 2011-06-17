@@ -33,9 +33,8 @@ int main( void ) {
 	// Carico la neurale da un file
 	Serotonina::Network network( "train/xor.net" );
 
-	// Avvio la rete neurale
+	// Ingressi della rete neurale
 	Serotonina::T_Precision in[2];
-	const Serotonina::T_Precision *out;
 
 	// Iteratori
 	size_t i, j = 0;
@@ -50,7 +49,7 @@ int main( void ) {
 			in[1] = (T_Precision) i;
 
 			// Calcolo l'uscita della rete neurale
-			out = network.Run( in );
+			const std::vector< Serotonina::T_Precision > &out = network.Run( in );
 
 			// Stampo i risultati
 			std::cout.setf( std::ios::fixed, std::ios::floatfield );

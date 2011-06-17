@@ -38,7 +38,7 @@ int main( void ) {
 
 	// Addestro la rete neurale con il metodo Batch
 	trainer.SetParameters( 0.5, 1.2 );
-	trainer.TrainOnFile( Algorithms::Rprop, "train/face.train", 0.0001, 100000, 1 );
+	trainer.TrainOnFile< Algorithms::Rprop >( "train/face.train", 0.0001, 100000, 1 );
 
 	// Salvo la rete in un file
 	network.Save( "train/face.net" );

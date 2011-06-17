@@ -9,11 +9,11 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto le versioni degli strumenti
 set( Serotonina_VERSION_MAJOR 1 )
 set( Serotonina_VERSION_MINOR 1 )
-set( Serotonina_VERSION_PATCH 1 )
+set( Serotonina_VERSION_PATCH 2 )
 
-set( Serotonina_PLOT_VERSION_MAJOR 1 )
-set( Serotonina_PLOT_VERSION_MINOR 0 )
-set( Serotonina_PLOT_VERSION_PATCH 0 )
+set( serotonina_plot_VERSION_MAJOR 1 )
+set( serotonina_plot_VERSION_MINOR 0 )
+set( serotonina_plot_VERSION_PATCH 0 )
 
 set( Serotonina_GYM_VERSION_MAJOR 1 )
 set( Serotonina_GYM_VERSION_MINOR 0 )
@@ -35,12 +35,16 @@ find_package( FLTK )
 find_package( OpenGL )
 find_package( OpenCV )
 #find_package( OpenCV COMPONENTS highgui )
+find_package( Threads )
 
 # Percorso degli headers
 include_directories(
 
-	"${CMAKE_SOURCE_DIR}/include"
-	"${CMAKE_BINARY_DIR}/include"
+	${CMAKE_SOURCE_DIR}/include
+	${CMAKE_BINARY_DIR}/include
+	${FLTK_INCLUDE_DIR}
+	${OPENGL_INCLUDE_DIR}
+	${OpenCV_INCLUDE_DIRS}
 )
 
 # Imposto i file di configurazione generati automaticamente
@@ -76,6 +80,7 @@ set( Serotonina_BINARY_DIR ${CMAKE_BINARY_DIR}/bin )
 # Libreria Serotonina
 add_library( serotonina SHARED	${Serotonina_SOURCE_DIR}/network.cpp
 								${Serotonina_SOURCE_DIR}/trainer.cpp
+								${Serotonina_SOURCE_DIR}/train-algorithm.cpp
 								${Serotonina_SOURCE_DIR}/mod/batch.cpp
 								${Serotonina_SOURCE_DIR}/mod/rprop.cpp
 								${Serotonina_SOURCE_DIR}/mod/rpropp.cpp
@@ -91,6 +96,9 @@ IF ( FLTK_FOUND )
 	# Libreria per i grafici di Serotonina
 	add_library( serotonina_plot STATIC ${Serotonina_SOURCE_DIR}/extra/plot.cpp )
 
+	target_link_libraries( serotonina_plot ${FLTK_LIBRARIES} )
+	target_link_libraries( serotonina_plot ${OPENGL_LIBRARIES} )
+
 	# Strumento Gym per l'addestramento delle reti neurali
 	add_executable( st_gym ${Serotonina_SOURCE_DIR}/extra/gym.cpp )
 
@@ -99,7 +107,7 @@ IF ( FLTK_FOUND )
 
 	target_link_libraries( st_gym serotonina )
 	target_link_libraries( st_gym serotonina_plot )
-	target_link_libraries( st_gym pthread )
+	target_link_libraries( st_gym ${CMAKE_THREAD_LIBS_INIT} )
 	target_link_libraries( st_gym ${FLTK_LIBRARIES} )
 	target_link_libraries( st_gym ${OPENGL_LIBRARIES} )
 
@@ -109,7 +117,7 @@ IF ( FLTK_FOUND )
 	add_dependencies( st_ocr serotonina )
 
 	target_link_libraries( st_ocr serotonina )
-	target_link_libraries( st_ocr pthread )
+	target_link_libraries( st_ocr ${CMAKE_THREAD_LIBS_INIT} )
 	target_link_libraries( st_ocr ${FLTK_LIBRARIES} )
 	target_link_libraries( st_ocr ${OPENGL_LIBRARIES} )
 

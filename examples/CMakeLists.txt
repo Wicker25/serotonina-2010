@@ -9,6 +9,12 @@ add_definitions( -Wall -ansi -pedantic -pedantic-errors )
 # Imposto le dipendenze necessarie
 find_package( Serotonina )
 
+# Percorso degli headers
+include_directories(
+
+	${SEROTONINA_INCLUDE_DIR}
+)
+
 # Controllo se è stata trovata la libreria di Serotonina
 IF ( SEROTONINA_FOUND )
 

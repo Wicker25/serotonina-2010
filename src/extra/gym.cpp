@@ -85,7 +85,7 @@ Gym::training_button_callback( Fl_Widget *widget, void *data ) {
 	Gym *gym = static_cast< Gym * >( data );
 
 	// Controllo se l'addestramento è già stato avviato
-	if ( gym->thread_id == 0 ) { 
+	if ( !gym->training_flag ) { 
 
 		// Controllo sia stato scelto un training file un test set con almeno un dato di verifica
 		if ( gym->n_test_samples && !gym->train_set_path.empty() ) {
@@ -103,7 +103,7 @@ Gym::training_button_callback( Fl_Widget *widget, void *data ) {
 		widget->label( "Addestra" );
 
 		// Termino il thread per l'addestramento
-		if ( gym->thread_id )
+		if ( gym->training_flag )
 			pthread_cancel( gym->thread_id );
 
 		// Aggiorno il log di lavoro
@@ -112,7 +112,7 @@ Gym::training_button_callback( Fl_Widget *widget, void *data ) {
 		gym->log_display->show_insert_position();
 
 		// Memorizzo la fine del thread
-		gym->thread_id = 0;
+		gym->training_flag = false;
 	}
 }
 
@@ -218,7 +218,7 @@ Gym::Gym( int width, int height ) : Fl_Window( width, height, _GYM_TITLE_ ) {
 
 	// Inizializzo le strutture
 	this->neural_network	= NULL;
-	this->thread_id			= 0;
+	this->training_flag		= false;
 
 	// Imposto l'uscita mostrata nel grafico
 	this->graph_output = 0;
@@ -403,7 +403,7 @@ Gym::Gym( int width, int height ) : Fl_Window( width, height, _GYM_TITLE_ ) {
 Gym::~Gym() {
 
 	// Termino il thread per l'addestramento
-	if ( this->thread_id )
+	if ( this->training_flag )
 		pthread_cancel( this->thread_id );
 
 	// Distruggo la rete neurale
@@ -518,11 +518,11 @@ void
 Gym::LoadTrainingSet( const char *path ) {
 
 	// Termino il thread per l'addestramento
-	if ( this->thread_id )
+	if ( this->training_flag )
 		pthread_cancel( this->thread_id );
 
 	// Memorizzo la fine del thread
-	this->thread_id = 0;
+	this->training_flag = false;
 
 	// Salvo il percorso al file del training set
 	this->train_set_path = path;
@@ -600,11 +600,11 @@ void
 Gym::LoadTestSet( const char *path ) {
 
 	// Termino il thread per l'addestramento
-	if ( this->thread_id )
+	if ( this->training_flag )
 		pthread_cancel( this->thread_id );
 
 	// Memorizzo la fine del thread
-	this->thread_id = 0;
+	this->training_flag = false;
 
 	// Apre uno stream al file dell'addestramento
 	std::ifstream file( path );
@@ -803,7 +803,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile( Algorithms::Batch, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile< Algorithms::Batch >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -824,7 +824,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile( Algorithms::Rprop, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile< Algorithms::Rprop >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -845,7 +845,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile( Algorithms::RpropPlus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile< Algorithms::RpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -866,7 +866,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile( Algorithms::RpropMinus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile< Algorithms::RpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -887,7 +887,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile( Algorithms::IRpropPlus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile< Algorithms::IRpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -908,7 +908,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile( Algorithms::IRpropMinus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile< Algorithms::IRpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -937,7 +937,7 @@ Gym::StartTraining() {
 	this->training_button->label( "Addestra" );
 
 	// Memorizzo la fine del thread
-	this->thread_id = 0;
+	this->training_flag = false;
 
 	// Aggiorno il log di lavoro
 	this->log_buffer->append( "\nAddestramento terminato con successo." );
@@ -981,7 +981,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 		}
 
 		// Eseguo la rete neurale con gli ingressi dell'esempio
-		const T_Precision *out = this->neural_network->Run( &inputs_sample[0] );
+		const std::vector< T_Precision > out = this->neural_network->Run( &inputs_sample[0] );
 
 		// Memorizzo le uscite della rete
 		for ( j = 0; j < this->output_size; j++ ) {

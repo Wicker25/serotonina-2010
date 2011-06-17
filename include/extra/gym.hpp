@@ -97,8 +97,8 @@ public:
 	static void *static_start_training( void *data );
 
 	// Aggiorna i grafici della rete neurale (statico)
-	static int static_update_plot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
-									const Serotonina::T_Precision *outputs, size_t outputs_size, void *data );
+	static int static_update_plot(	Serotonina::Network &network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
+									const std::vector< T_Precision > &outputs, size_t outputs_size, void *data );
 
 	/** FINE METODI STATICI **/
 
@@ -136,6 +136,9 @@ private:
 
 	// Id del thread dell'addestramento
 	pthread_t thread_id;
+
+	// Flag di controllo dell'addestramento
+	bool training_flag;
 
 	// Percorso al training set
 	std::string train_set_path;

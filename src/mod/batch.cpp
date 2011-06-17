@@ -27,9 +27,38 @@ namespace Serotonina { // Namespace di Serotonina
 
 namespace Algorithms { // Namespace degli algoritmi
 
+// Imposto la descrizione dell'algoritmo
+const char *Batch::description = "Batch";
+
+bool
+Batch::CheckParams( const std::vector< T_Precision > &train_params ) {
+
+	// Flag di controllo
+	bool valid = false;
+
+	// Verifico la correttezza dei parametri dell'addestramento
+	if ( train_params.size() >= 2 ) {
+
+		if ( train_params[0] > 0.0 && train_params[0] < 1.0 ) {
+
+			if ( train_params[1] >= 0.0 && train_params[1] < 1.0 ) {
+
+				// Imposto il flag di controllo
+				valid = true;
+
+			// Communico l'errore all'utente
+			} else std::cout << "- The momentum must be between 0.0 and 1.0 ." << std::endl;
+
+		// Communico l'errore all'utente
+		} else std::cout << "- The learning rate must be a positive number less than 1 ." << std::endl;
+	}
+
+	return valid;
+}
+
 void
-Batch(	Network &network, const std::vector< T_Precision > &train_params,
-		T_Precision net_error, T_Precision prev_net_error ) {
+Batch::UpdateWeights(	Network &network, const std::vector< T_Precision > &train_params,
+						T_Precision net_error, T_Precision prev_net_error ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
