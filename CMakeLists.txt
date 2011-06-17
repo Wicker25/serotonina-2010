@@ -90,63 +90,67 @@ add_library( serotonina SHARED	${Serotonina_SOURCE_DIR}/network.cpp
 
 target_link_libraries( serotonina m )
 
-# Controllo se sono state trovate le FLTK
-IF ( FLTK_FOUND )
+# Controllo se il sistema operativo è UNIX
+IF ( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
 
-	# Libreria per i grafici di Serotonina
-	add_library( serotonina_plot STATIC ${Serotonina_SOURCE_DIR}/extra/plot.cpp )
+	# Controllo se sono state trovate le FLTK
+	IF ( FLTK_FOUND )
 
-	target_link_libraries( serotonina_plot ${FLTK_LIBRARIES} )
-	target_link_libraries( serotonina_plot ${OPENGL_LIBRARIES} )
+		# Libreria per i grafici di Serotonina
+		add_library( serotonina_plot STATIC ${Serotonina_SOURCE_DIR}/extra/plot.cpp )
 
-	# Strumento Gym per l'addestramento delle reti neurali
-	add_executable( st_gym ${Serotonina_SOURCE_DIR}/extra/gym.cpp )
+		target_link_libraries( serotonina_plot ${FLTK_LIBRARIES} )
+		target_link_libraries( serotonina_plot ${OPENGL_LIBRARIES} )
 
-	add_dependencies( st_gym serotonina )
-	add_dependencies( st_gym serotonina_plot )
+		# Strumento Gym per l'addestramento delle reti neurali
+		add_executable( st_gym ${Serotonina_SOURCE_DIR}/extra/gym.cpp )
 
-	target_link_libraries( st_gym serotonina )
-	target_link_libraries( st_gym serotonina_plot )
-	target_link_libraries( st_gym ${CMAKE_THREAD_LIBS_INIT} )
-	target_link_libraries( st_gym ${FLTK_LIBRARIES} )
-	target_link_libraries( st_gym ${OPENGL_LIBRARIES} )
+		add_dependencies( st_gym serotonina )
+		add_dependencies( st_gym serotonina_plot )
 
-	# Strumento OCR per il riconoscimento di caratteri manoscritti
-	add_executable( st_ocr ${Serotonina_SOURCE_DIR}/extra/ocr.cpp )
+		target_link_libraries( st_gym serotonina )
+		target_link_libraries( st_gym serotonina_plot )
+		target_link_libraries( st_gym ${CMAKE_THREAD_LIBS_INIT} )
+		target_link_libraries( st_gym ${FLTK_LIBRARIES} )
+		target_link_libraries( st_gym ${OPENGL_LIBRARIES} )
 
-	add_dependencies( st_ocr serotonina )
+		# Strumento OCR per il riconoscimento di caratteri manoscritti
+		add_executable( st_ocr ${Serotonina_SOURCE_DIR}/extra/ocr.cpp )
 
-	target_link_libraries( st_ocr serotonina )
-	target_link_libraries( st_ocr ${CMAKE_THREAD_LIBS_INIT} )
-	target_link_libraries( st_ocr ${FLTK_LIBRARIES} )
-	target_link_libraries( st_ocr ${OPENGL_LIBRARIES} )
+		add_dependencies( st_ocr serotonina )
 
-	# Controllo se sono state trovate le OpenCV
-	IF ( OpenCV_FOUND )
+		target_link_libraries( st_ocr serotonina )
+		target_link_libraries( st_ocr ${CMAKE_THREAD_LIBS_INIT} )
+		target_link_libraries( st_ocr ${FLTK_LIBRARIES} )
+		target_link_libraries( st_ocr ${OPENGL_LIBRARIES} )
 
-		# Strumento Face recognition per il riconoscimento di un volto attraverso la webcam
-		add_executable( st_face_recognition ${Serotonina_SOURCE_DIR}/extra/face-recognition.cpp )
+		# Controllo se sono state trovate le OpenCV
+		IF ( OpenCV_FOUND )
 
-		add_dependencies( st_face_recognition serotonina )
+			# Strumento Face recognition per il riconoscimento di un volto attraverso la webcam
+			add_executable( st_face_recognition ${Serotonina_SOURCE_DIR}/extra/face-recognition.cpp )
 
-		target_link_libraries( st_face_recognition serotonina )
-		target_link_libraries( st_face_recognition ${FLTK_LIBRARIES} )
-		target_link_libraries( st_face_recognition ${OPENGL_LIBRARIES} )
-		target_link_libraries( st_face_recognition ${OpenCV_LIBS} )
+			add_dependencies( st_face_recognition serotonina )
 
-	ELSE ( OpenCV_FOUND )
+			target_link_libraries( st_face_recognition serotonina )
+			target_link_libraries( st_face_recognition ${FLTK_LIBRARIES} )
+			target_link_libraries( st_face_recognition ${OPENGL_LIBRARIES} )
+			target_link_libraries( st_face_recognition ${OpenCV_LIBS} )
 
-		# Log di lavoro
-		MESSAGE( STATUS "WARNING: could NOT find dependencies of Face Recognition tool." )
+		ELSE ( OpenCV_FOUND )
 
-	ENDIF ( OpenCV_FOUND )
+			# Log di lavoro
+			MESSAGE( STATUS "WARNING: could NOT find dependencies of Face Recognition tool." )
 
-ELSE ( FLTK_FOUND )
+		ENDIF ( OpenCV_FOUND )
 
-	MESSAGE( STATUS "WARNING: Could NOT find dependencies of tools." )
+	ELSE ( FLTK_FOUND )
 
-ENDIF ( FLTK_FOUND )
+		MESSAGE( STATUS "WARNING: Could NOT find dependencies of tools." )
 
+	ENDIF ( FLTK_FOUND )
+
+ENDIF ( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
 
 # Installatore della libreria
 install_targets( /lib serotonina )
