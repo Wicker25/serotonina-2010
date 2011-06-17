@@ -21,12 +21,12 @@
 #ifndef _SEROTONINA_PLOT_CPP_
 #define _SEROTONINA_PLOT_CPP_
 
-#include "extra/plot.hpp"
+#include "plot.hpp"
 
-#include "extra/color.hpp"
-#include "extra/color-inl.hpp"
+#include "color.hpp"
+#include "color-inl.hpp"
 
-#include "extra/plot-inl.hpp"
+#include "plot-inl.hpp"
 
 Plot::Plot( int x, int y, int width, int height ) : Fl_Gl_Window( x, y, width, height ) {
 

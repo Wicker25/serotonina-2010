@@ -1,5 +1,5 @@
 /* 
-    Title --- face-recognition-inl.hpp
+    Title --- color.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,10 +18,36 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_FACE_RECOGNITION_INL_HPP_
-#define _SEROTONINA_FACE_RECOGNITION_INL_HPP_
+#ifndef _SEROTONINA_COLOR_HPP_
+#define _SEROTONINA_COLOR_HPP_
 
-#include "extra/face-recognition.hpp"
+#include <iostream>
+#include <cstdio>
+#include <stdint.h>
 
+#include "version.hpp"
+
+// Struttura di un colore RGB
+struct ColorRGBub {
+
+	uint8_t red;	// Rosso
+	uint8_t green;	// Verde
+	uint8_t blue;	// Blue
+
+	// Metodi costruttore
+	ColorRGBub() {
+
+		red		= 0;
+		green	= 0;
+		blue	= 0;
+	}
+
+	ColorRGBub( uint8_t red_, uint8_t green_, uint8_t blue_ ) {
+
+		red		= red_;
+		green	= green_;
+		blue	= blue_;
+	}
+};
 
 #endif

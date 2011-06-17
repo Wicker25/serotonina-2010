@@ -1,5 +1,5 @@
 /* 
-    Title --- gym-inl.hpp
+    Title --- ocr-inl.hpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -18,36 +18,31 @@
     along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SEROTONINA_GYM_INL_HPP_
-#define _SEROTONINA_GYM_INL_HPP_
+#ifndef _SEROTONINA_OCR_INL_HPP_
+#define _SEROTONINA_OCR_INL_HPP_
 
-#include "extra/gym.hpp"
+#include "ocr.hpp"
 
-/** INIZIO METODI STATICI **/
-
-inline void *
-Gym::static_start_training( void *data ) {
+inline void
+Ocr::add_char_button_callback( Fl_Widget *widget, void *data ) {
 
 	// Ricavo un puntatore alla finestra principale
-	Gym *gym = static_cast< Gym * >( data );
+	Ocr *ocr = static_cast< Ocr * >( data );
 
 	// Chiama il metodo corrispondente
-	gym->StartTraining();
+	ocr->AddCharacterData();
+}
+
+inline void *
+Ocr::static_start_training( void *data ) {
+
+	// Ricavo un puntatore alla finestra principale
+	Ocr *ocr = static_cast< Ocr * >( data );
+
+	// Chiama il metodo corrispondente
+	ocr->TrainAllNetwork();
 
 	return NULL;
 }
-
-inline int
-Gym::static_update_plot(	Network &network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-							const std::vector< T_Precision > &outputs, size_t outputs_size, void *data ) {
-
-	// Ricavo un puntatore alla finestra principale
-	Gym *gym = static_cast< Gym * >( data );
-
-	// Avvio la funzione di aggiornamento del grafico
-	return gym->UpdatePlot( &network, epochs, elapsed_time, max_error, &outputs[0], outputs_size );
-}
-
-/** FINE METODI STATICI **/
 
 #endif

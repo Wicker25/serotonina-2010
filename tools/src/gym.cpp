@@ -21,12 +21,12 @@
 #ifndef _SEROTONINA_GYM_CPP_
 #define _SEROTONINA_GYM_CPP_
 
-#include "extra/gym.hpp"
+#include "gym.hpp"
 
-#include "extra/plot.hpp"
-#include "extra/plot-inl.hpp"
+#include "plot.hpp"
+#include "plot-inl.hpp"
 
-#include "extra/gym-inl.hpp"
+#include "gym-inl.hpp"
 
 /** INIZIO METODI STATICI **/
 

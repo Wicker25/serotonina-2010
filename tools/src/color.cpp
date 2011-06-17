@@ -21,8 +21,8 @@
 #ifndef _SEROTONINA_COLOR_CPP_
 #define _SEROTONINA_COLOR_CPP_
 
-#include "serotonina/extra/color.hpp"
-#include "serotonina/extra/color-inl.hpp"
+#include "color.hpp"
+#include "color-inl.hpp"
 
 namespace Serotonina { // Namespace di Serotonina
 

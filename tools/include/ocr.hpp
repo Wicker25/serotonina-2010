@@ -43,7 +43,7 @@
 
 #include <serotonina.hpp>
 
-#include "extra/color.hpp"
+#include "color.hpp"
 
 #define _OCR_TITLE_				"Serotonina::OCR - Riconoscimento di un carattere"
 #define _OCR_FPS_				30.0

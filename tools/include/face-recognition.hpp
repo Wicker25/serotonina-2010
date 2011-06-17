@@ -52,8 +52,8 @@
 
 #include <serotonina.hpp>
 
-#include "extra/version.hpp"
-#include "extra/color.hpp"
+#include "version.hpp"
+#include "color.hpp"
 
 #define _FACE_RECOGNITION_TITLE_			"Serotonina::FaceRecognition - Riconoscimento di un volto"
 #define _FACE_RECOGNITION_FPS_				30.0

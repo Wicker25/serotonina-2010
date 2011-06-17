@@ -21,12 +21,12 @@
 #ifndef _SEROTONINA_OCR_CPP_
 #define _SEROTONINA_OCR_CPP_
 
-#include "extra/ocr.hpp"
+#include "ocr.hpp"
 
-#include "extra/color.hpp"
-#include "extra/color-inl.hpp"
+#include "color.hpp"
+#include "color-inl.hpp"
 
-#include "extra/ocr-inl.hpp"
+#include "ocr-inl.hpp"
 
 /** INIZIO METODI STATICI **/
 

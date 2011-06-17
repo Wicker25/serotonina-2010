@@ -40,9 +40,9 @@
 
 #include <serotonina.hpp>
 
-#include "extra/version.hpp"
-#include "extra/plot.hpp"
-#include "extra/plot-inl.hpp"
+#include "version.hpp"
+#include "plot.hpp"
+#include "plot-inl.hpp"
 
 #define _GYM_TITLE_		"Serotonina::Gym - Tool grafico per l'addestramento delle reti neurali"
 #define _GYM_FPS_		30.0

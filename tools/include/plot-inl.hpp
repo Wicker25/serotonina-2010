@@ -21,7 +21,7 @@
 #ifndef _SEROTONINA_PLOT_INL_HPP_
 #define _SEROTONINA_PLOT_INL_HPP_
 
-#include "extra/plot.hpp"
+#include "plot.hpp"
 
 inline void
 Plot::SetMargins( float left, float top, float right, float bottom ) {

@@ -34,8 +34,8 @@
 #include <FL/fl_draw.H>
 #include <FL/gl.h>
 
-#include "extra/version.hpp"
-#include "extra/color.hpp"
+#include "version.hpp"
+#include "color.hpp"
 
 // Struttura di un insieme di dati del grafico
 struct PlotData {

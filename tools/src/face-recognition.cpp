@@ -21,12 +21,12 @@
 #ifndef _SEROTONINA_FACE_RECOGNITION_CPP_
 #define _SEROTONINA_FACE_RECOGNITION_CPP_
 
-#include "extra/face-recognition.hpp"
+#include "face-recognition.hpp"
 
-#include "extra/color.hpp"
-#include "extra/color-inl.hpp"
+#include "color.hpp"
+#include "color-inl.hpp"
 
-#include "extra/face-recognition-inl.hpp"
+#include "face-recognition-inl.hpp"
 
 /** INIZIO METODI STATICI **/
 

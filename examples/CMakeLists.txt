@@ -6,14 +6,8 @@ cmake_minimum_required( VERSION 2.6 )
 # Aggiungo una direttiva al compilatore
 add_definitions( -Wall -ansi -pedantic -pedantic-errors )
 
-# Imposto le dipendenze necessarie
+# Imposto le dipendenze necessarie per gli esempi e gli strumenti
 find_package( Serotonina )
-
-# Percorso degli headers
-include_directories(
-
-	${SEROTONINA_INCLUDE_DIR}
-)
 
 # Controllo se è stata trovata la libreria di Serotonina
 IF ( SEROTONINA_FOUND )
@@ -27,6 +21,9 @@ IF ( SEROTONINA_FOUND )
 
 	add_executable( load_from_file ${CMAKE_SOURCE_DIR}/load_from_file.cpp )
 	target_link_libraries( load_from_file ${SEROTONINA_LIBRARY} )
+
+	add_executable( create_train_algorithm ${CMAKE_SOURCE_DIR}/create_train_algorithm.cpp )
+	target_link_libraries( create_train_algorithm ${SEROTONINA_LIBRARY} )
 
 	add_executable( and ${CMAKE_SOURCE_DIR}/and.cpp )
 	target_link_libraries( and ${SEROTONINA_LIBRARY} )
