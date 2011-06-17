@@ -65,9 +65,11 @@ public:
 	// Esegue la rete neurale
 	const T_Precision *Run( const T_Precision *input );
 
-	// Ritorna la struttura della rete
-	std::vector< Layer * > &GetData();
+	// Ritorna gli strati della rete
+	std::vector< Layer * > &GetLayers();
 
+	// Ritorna uno strato specifico della rete
+	Layer &GetLayer( size_t n );
 
 	// Salva la rete neurale in un file
 	void Save( const std::string &path );
@@ -75,11 +77,10 @@ public:
 	// Carica la rete neurale da un file
 	void Load( const std::string &path );
 
-
-	// Strati della rete FIXME FIXME FIXME
-	std::vector< Layer * > layers;
-
 private:
+
+	// Strati della rete
+	std::vector< Layer * > layers;
 
 	// Dati di uscita
 	T_Precision *output_data;

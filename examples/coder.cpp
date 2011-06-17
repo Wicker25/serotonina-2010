@@ -38,7 +38,7 @@ int main( void ) {
 
 	// Addestro la rete neurale con il metodo Batch
 	trainer.SetParameters( 0.5, 0.8 );
-	trainer.TrainOnFile< Algorithms::Batch >( "train/coder.train", 0.000001, 100000, 5000 );
+	trainer.TrainOnFile( Algorithms::Batch, "train/coder.train", 0.000001, 100000, 5000 );
 
 	// Eseguo la rete neurale
 	Serotonina::T_Precision in[3] = { 0, 1, 1 };

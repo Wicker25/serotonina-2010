@@ -61,8 +61,7 @@ int main( void ) {
 	std::cout << "Training with array :" << std::endl;
 
 	// Addestro la rete neurale usando gli esempi
-	trainer.Train< Algorithms::Batch >( inputs0, outputs0, 4, 0.000001, 100000, 5000 );
-
+	trainer.Train( Algorithms::Batch, inputs0, outputs0, 4, 0.000001, 100000, 5000 );
 
 	// Esempi di ingresso
 	std::vector< T_Precision> inputs1;
@@ -91,14 +90,14 @@ int main( void ) {
 	std::cout << "\nTraining with std::vector :" << std::endl;
 
 	// Addestro la rete neurale usando gli esempi
-	trainer.Train< Algorithms::Batch >( inputs1, outputs1, 0.000001, 100000, 5000 );
+	trainer.Train( Algorithms::Batch, inputs1, outputs1, 0.000001, 100000, 5000 );
 
 
 	// Log di lavoro
 	std::cout << "\nTraining with file.train :" << std::endl;
 
 	// Addestro la rete neurale usando un file
-	trainer.TrainOnFile< Algorithms::Batch >( "train/xor.train", 0.000001, 100000, 5000 );
+	trainer.TrainOnFile( Algorithms::Batch, "train/xor.train", 0.000001, 100000, 5000 );
 
 
 	// Log di lavoro

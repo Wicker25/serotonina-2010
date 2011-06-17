@@ -26,10 +26,17 @@
 namespace Serotonina { // Namespace di Serotonina
 
 inline std::vector< Layer * > &
-Network::GetData() {
+Network::GetLayers() {
 
-	// Ritorno la struttura della rete
+	// Ritorno gli strati della rete
 	return this->layers;
+}
+
+inline Layer &
+Network::GetLayer( size_t n ) {
+
+	// Ritorno uno strato specifico della rete
+	return *this->layers[n];
 }
 
 } // Chiudo il namespace di Serotonina

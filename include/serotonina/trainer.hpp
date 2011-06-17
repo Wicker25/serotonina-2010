@@ -45,7 +45,7 @@
 namespace Serotonina { // Namespace di Serotonina
 
 // Funzione di addestramento
-typedef void (T_TrainFun)(	Network *network, const std::vector< T_Precision > &train_params,
+typedef void (T_TrainFun)(	Network &network, const std::vector< T_Precision > &train_params,
 							T_Precision net_error, T_Precision prev_net_error );
 
 // Funzione di report dell'apprendimento
@@ -90,17 +90,14 @@ public:
 	void SetReportFun( T_ReportFun &fun, void *data );
 
 	// Addestra la rete neurale usando degli esempi
-	template < T_TrainFun train_fun >
-	void Train( const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
+	void Train( T_TrainFun &train_fun, const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports );
 
-	template < T_TrainFun train_fun >
-	void Train( const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples, 
+	void Train( T_TrainFun &train_fun, const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples, 
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports );
 
 	// Addestra la rete neurale usando degli esempi da un file
-	template < T_TrainFun train_fun >
-	void TrainOnFile(	const std::string &training_file, T_Precision desired_error,
+	void TrainOnFile(	T_TrainFun &train_fun, const std::string &training_file, T_Precision desired_error,
 						size_t max_epochs, size_t epochs_between_reports );
 
 	// Ritorna l'errore della rete

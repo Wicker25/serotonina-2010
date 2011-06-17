@@ -28,24 +28,24 @@ namespace Serotonina { // Namespace di Serotonina
 namespace Algorithms { // Namespace degli algoritmi
 
 void
-Batch(	Network *network, const std::vector< T_Precision > &train_params,
+Batch(	Network &network, const std::vector< T_Precision > &train_params,
 		T_Precision net_error, T_Precision prev_net_error ) {
 
 	// Iteratori
-	short int t = ( network->layers.size() - 1 ) - 1;
+	short int t = ( network.GetLayers().size() - 1 );
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
 	Synapse *end_synapse_t;
 
 	// Aggiorno tutti i pesi sinaptici della rete usando la Regola Delta con il Momentum
-	for ( ; t >= 0; t-- ) {
+	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network->layers[t + 1]->first_synapse;
+		synapse_t = network.GetLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network->layers[t + 1]->last_synapse;
+		end_synapse_t = network.GetLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {

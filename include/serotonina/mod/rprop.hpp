@@ -30,7 +30,7 @@ namespace Serotonina { // Namespace di Serotonina
 
 namespace Algorithms { // Namespace degli algoritmi
 
-void Rprop(	Network *network, const std::vector< T_Precision > &train_params,
+void Rprop(	Network &network, const std::vector< T_Precision > &train_params,
 			T_Precision net_error, T_Precision prev_net_error );
 
 } // Chiudo il namespace degli algoritmi

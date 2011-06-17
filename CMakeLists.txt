@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto le versioni degli strumenti
 set( Serotonina_VERSION_MAJOR 1 )
 set( Serotonina_VERSION_MINOR 1 )
-set( Serotonina_VERSION_PATCH 0 )
+set( Serotonina_VERSION_PATCH 1 )
 
 set( Serotonina_PLOT_VERSION_MAJOR 1 )
 set( Serotonina_PLOT_VERSION_MINOR 0 )
@@ -135,10 +135,10 @@ IF ( FLTK_FOUND )
 
 ELSE ( FLTK_FOUND )
 
-	# Log di lavoro
-	MESSAGE( STATUS "WARNING: could NOT find dependencies of tools." )
+	MESSAGE( STATUS "WARNING: Could NOT find dependencies of tools." )
 
 ENDIF ( FLTK_FOUND )
+
 
 # Installatore della libreria
 install_targets( /lib serotonina )
@@ -156,6 +156,10 @@ install( DIRECTORY ${CMAKE_SOURCE_DIR}/include/serotonina
 # Installatore delle informazioni per pkg-config
 install( FILES ${CMAKE_SOURCE_DIR}/pkgconfig/serotonina.pc
 		 DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig )
+
+# Installatore delle informazioni per CMake
+install( FILES ${CMAKE_SOURCE_DIR}/cmake/FindSerotonina.cmake
+		 DESTINATION ${CMAKE_ROOT}/Modules/ )
 
 # Memorizzo le cartelle di destinazione
 file( WRITE "${CMAKE_SOURCE_DIR}/install_directory.txt"

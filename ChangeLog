@@ -1,5 +1,18 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.1.1 - urgency=medium =============
+
+2011-06-17  Wicker25  < wicker25@gmail.com >
+
+    * all: Updated `CMakeLists.txt`
+           Added `CMakeLists.txt` to compile examples.
+           Added `FindSerotonina.cmake`.
+           Updated all examples to version 1.1.1 .
+
+    * trainer.hpp: Now `Trainer->Train` and `Trainer->TrainOnFile` are non-template functions.
+
+    * network.hpp: Fixed data hiding of `Network` class.
+
 ============= Serotonina 1.1.0 - urgency=medium =============
 
 2011-06-15  Wicker25  < wicker25@gmail.com >

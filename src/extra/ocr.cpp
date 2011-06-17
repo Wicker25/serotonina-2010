@@ -365,7 +365,7 @@ Ocr::TrainNetwork( int choice ) {
 
 		// Addestro la rete neurale
 		trainer.SetParameters( 0.5, 1.2 );
-		trainer.TrainOnFile< Algorithms::Rprop >( "data/character/train/character.train", 0.00001, 200, 1 );
+		trainer.TrainOnFile( Algorithms::Rprop, "data/character/train/character.train", 0.00001, 200, 1 );
 
 	// Ciclo finché non raggiungo l'errore desiderato
 	} while ( trainer.GetError() > 0.00001 );

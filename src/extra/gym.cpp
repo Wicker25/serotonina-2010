@@ -803,7 +803,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::Batch >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile( Algorithms::Batch, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -824,7 +824,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::Rprop >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile( Algorithms::Rprop, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -845,7 +845,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::RpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile( Algorithms::RpropPlus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -866,7 +866,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::RpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile( Algorithms::RpropMinus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -887,7 +887,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::IRpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile( Algorithms::IRpropPlus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -908,7 +908,7 @@ Gym::StartTraining() {
 			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::IRpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.TrainOnFile( Algorithms::IRpropMinus, this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
