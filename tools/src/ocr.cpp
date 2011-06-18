@@ -52,11 +52,14 @@ Ocr::train_button_callback( Fl_Widget *widget, void *data ) {
 	// Controllo se l'addestramento è già stato avviato
 	if ( !ocr->training_flag ) { 
 
-		// Modifico l'etichetta del pulsante
-		widget->label( "Interrompi" );
+		// Memorizzo l'inizio del thread
+		ocr->training_flag = true;
 
 		// Avvio il thread per l'addestramento della rete
 		pthread_create( &ocr->thread_id, NULL, Ocr::static_start_training, data );
+
+		// Modifico l'etichetta del pulsante
+		widget->label( "Interrompi" );
 
 	} else {
 

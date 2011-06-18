@@ -90,29 +90,32 @@ Gym::training_button_callback( Fl_Widget *widget, void *data ) {
 		// Controllo sia stato scelto un training file un test set con almeno un dato di verifica
 		if ( gym->n_test_samples && !gym->train_set_path.empty() ) {
 
-			// Modifico l'etichetta del pulsante
-			widget->label( "Interrompi" );
+			// Memorizzo l'inizio del thread
+			gym->training_flag = true;
 
 			// Avvio il thread per l'addestramento della rete
 			pthread_create( &gym->thread_id, NULL, Gym::static_start_training, data );
+
+			// Modifico l'etichetta del pulsante
+			widget->label( "Interrompi" );
 		}
 
 	} else {
 
-		// Modifico l'etichetta del pulsante
-		widget->label( "Addestra" );
-
 		// Termino il thread per l'addestramento
 		if ( gym->training_flag )
 			pthread_cancel( gym->thread_id );
+
+		// Memorizzo la fine del thread
+		gym->training_flag = false;
 
 		// Aggiorno il log di lavoro
 		gym->log_buffer->append( "\nAddestramento interrotto." );
 		gym->log_display->insert_position( gym->log_buffer->length() );
 		gym->log_display->show_insert_position();
 
-		// Memorizzo la fine del thread
-		gym->training_flag = false;
+		// Modifico l'etichetta del pulsante
+		widget->label( "Addestra" );
 	}
 }
 
@@ -784,6 +787,10 @@ Gym::StartTraining() {
 	// Creo l'addestratore della rete neurale
 	Trainer trainer( this->neural_network );
 
+	// Imposto la funzione di report dell'addestramento
+	trainer.SetReportFun( Gym::static_update_plot );
+	trainer.SetReportFunData( (void *) this );
+
 	// Controllo l'algoritmo di addestramento della rete neurale
 	switch ( train_algorithm ) {
 
@@ -798,9 +805,6 @@ Gym::StartTraining() {
 
 			// Imposto i parametri dell'apprendimento
 			trainer.SetParameters( eps, momentum );
-
-			// Imposto la funzione di report dell'addestramento
-			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
 			trainer.TrainOnFile< Algorithms::Batch >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
@@ -820,9 +824,6 @@ Gym::StartTraining() {
 			// Imposto i parametri dell'apprendimento
 			trainer.SetParameters( decrease_factor, increase_factor );
 
-			// Imposto la funzione di report dell'addestramento
-			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
-
 			// Addestro la rete neurale
 			trainer.TrainOnFile< Algorithms::Rprop >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
@@ -840,9 +841,6 @@ Gym::StartTraining() {
 
 			// Imposto i parametri dell'apprendimento
 			trainer.SetParameters( decrease_factor, increase_factor );
-
-			// Imposto la funzione di report dell'addestramento
-			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
 			trainer.TrainOnFile< Algorithms::RpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
@@ -862,9 +860,6 @@ Gym::StartTraining() {
 			// Imposto i parametri dell'apprendimento
 			trainer.SetParameters( decrease_factor, increase_factor );
 
-			// Imposto la funzione di report dell'addestramento
-			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
-
 			// Addestro la rete neurale
 			trainer.TrainOnFile< Algorithms::RpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
@@ -882,9 +877,6 @@ Gym::StartTraining() {
 
 			// Imposto i parametri dell'apprendimento
 			trainer.SetParameters( decrease_factor, increase_factor );
-
-			// Imposto la funzione di report dell'addestramento
-			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
 
 			// Addestro la rete neurale
 			trainer.TrainOnFile< Algorithms::IRpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
@@ -904,9 +896,6 @@ Gym::StartTraining() {
 			// Imposto i parametri dell'apprendimento
 			trainer.SetParameters( decrease_factor, increase_factor );
 
-			// Imposto la funzione di report dell'addestramento
-			trainer.SetReportFun( Gym::static_update_plot, (void *) this );
-
 			// Addestro la rete neurale
 			trainer.TrainOnFile< Algorithms::IRpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
@@ -916,22 +905,15 @@ Gym::StartTraining() {
 		default: break;
 	}
 
-	// Imposto il passo dell'asse delle ascisse del grafico dell'errore
-	this->error_plot->SetXRulerStep( (float) report_frequency );
-
-
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
+
+	// Imposto il passo dell'asse delle ascisse del grafico dell'errore
+	this->error_plot->SetXRulerStep( (float) report_frequency );
 
 	// Modifico il colore della casella dell'errore massimo
 	this->error_box->color( FL_GREEN );
 	this->error_box->redraw();
-
-	// Rilascio il controllo sulle FLTK
-	Fl::unlock();
-
-	// Prendo il controllo sulle FLTK
-	Fl::lock();
 
 	// Modifico l'etichetta del pulsante
 	this->training_button->label( "Addestra" );
@@ -990,15 +972,16 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 		}
 	}
 
+
+	// Prendo il controllo sulle FLTK
+	Fl::lock();
+
 	// Controllo se si tratta di un'aggiornamento durante la fase di addestramento
 	if ( network != NULL ) {
 
 		// Aggiungo l'errore massimo ai dati
 		this->error_data.push_back( (float) max_error );
 	}
-
-	// Prendo il controllo sulle FLTK
-	Fl::lock();
 
 	// Uscite desiderate e della rete del campione
 	std::vector< T_Precision > desired, net;
