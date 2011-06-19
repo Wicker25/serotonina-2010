@@ -40,7 +40,7 @@ Trainer::training_report(	Network &network, size_t epochs, time_t elapsed_time, 
 	hours	= ( elapsed_time / 3600 );
 
 	// Stampo il rapporto dell'addestramento
-	printf(	" - Epochs #%lu, time %luh%lum%lus, error %.10f\n",
+	printf(	" - Epoch #%lu, time %luh%lum%lus, error %.10f\n",
 			(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
 
 	return 0;
@@ -211,8 +211,8 @@ Trainer::BackpropagateError() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo gli iteratori delle sinapsi
-		synapse_t = this->network->GetLayer(t + 1).first_synapse;
-		synapse_row_t1 = this->network->GetLayer(t + 2).first_synapse;
+		synapse_t		= this->network->GetLayer(t + 1).first_synapse;
+		synapse_row_t1	= this->network->GetLayer(t + 2).first_synapse;
 
 		// Preparo l'iteratore dei neuroni
 		last_neuron_j	= this->network->GetLayer(t + 1).last_neuron;

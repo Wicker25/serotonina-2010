@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto la versione della libreria
 set( SEROTONINA_VERSION_MAJOR 1 )
 set( SEROTONINA_VERSION_MINOR 1 )
-set( SEROTONINA_VERSION_PATCH 3 )
+set( SEROTONINA_VERSION_PATCH 4 )
 
 # Aggiungo una direttiva al compilatore
 add_definitions( -Wall -ansi -pedantic -pedantic-errors )

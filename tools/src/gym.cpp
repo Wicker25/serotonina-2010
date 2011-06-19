@@ -1026,7 +1026,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 
 		// Costruisco il testo del nuovo log di lavoro
 		char str_buffer[200];
-		snprintf(	str_buffer, 200, "\n  Epochs #%lu, time %luh%lum%lus, error %.10f",
+		snprintf(	str_buffer, 200, "\n  Epoch #%lu, time %luh%lum%lus, error %.10f",
 					(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
 
 		// Aggiorno il log di lavoro

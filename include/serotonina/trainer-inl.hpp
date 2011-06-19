@@ -122,7 +122,7 @@ inline const T_Precision
 Trainer::GetParameter( size_t n ) const {
 
 	// Ritorno un parametro dell'addestramento
-	return this->train_params[n];
+	return this->train_params.at(n);
 }
 
 inline void
@@ -223,7 +223,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 				train_algorithm::UpdateWeights( *this->network, this->train_params, this->net_error, this->prev_net_error );
 
 				// Log dell'addestramento ogni N epoche
-				if ( epochs % epochs_between_reports == 0 ) {
+				if ( epochs_between_reports && epochs % epochs_between_reports == 0 ) {
 
 					// Calcolo quanto tempo è passato dall'inizio dell'addestramento
 					t_elapsed = ( time( NULL ) - t_start );
@@ -243,7 +243,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 
 		// Report conclusivo
-		if ( epochs % epochs_between_reports != 0 ) {
+		if ( epochs_between_reports && epochs % epochs_between_reports != 0 ) {
 
 			// Calcolo quanto tempo è passato dall'inizio dell'addestramento
 			t_elapsed = ( time( NULL ) - t_start );

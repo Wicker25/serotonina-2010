@@ -121,11 +121,23 @@ Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 	this->output_data.resize( this->layers.back()->n_neurons );
 }
 
-const std::vector< T_Precision > &
-Network::Run( const T_Precision *input ) {
+void
+Network::SetInputs( const T_Precision *input ) {
 
 	// Iteratore
-	size_t i;
+	size_t i = 0;
+
+	// Imposto gli ingressi della rete neurale
+	for ( ; i < this->layers.front()->n_neurons; i++ ) {
+
+		this->layers.front()->neurons[i].value = between( input[i], 0.0, 1.0 );
+	}
+}
+
+const std::vector< T_Precision > &
+Network::Run() {
+
+	// Iteratore
 	short unsigned int t;
 
 	// Iteratori dei neuroni
@@ -135,50 +147,41 @@ Network::Run( const T_Precision *input ) {
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
 
-	// Carico i valori in ingresso
-	for ( i = 0; i < this->layers.front()->n_neurons; i++ ) {
-
-		this->layers.front()->neurons[i].value = between( input[i], 0.0, 1.0 );
-	}
-
-	// Attivazione interna del neurone
-	T_Precision activation;
-
 	// Calcolo i valori di uscita di ogni strato della rete
-	for ( t = 0; t < this->layers.size() - 1; t++ ) {
+	for ( t = 1; t < this->layers.size(); t++ ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->layers[t + 1]->first_synapse;
+		synapse_t = this->layers[t]->first_synapse;
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_i	= this->layers[t + 1]->last_neuron;
-		neuron_i		= this->layers[t + 1]->first_neuron;
+		last_neuron_i	= this->layers[t]->last_neuron;
+		neuron_i		= this->layers[t]->first_neuron;
 
 		// Calcolo i valori di uscita dello strato corrente
 		// Y_i = T( SUM( w_ji - bias_i ) ) oppure Y_i = T( SUM( w_ji ) )
-		for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
+		for ( ; neuron_i <= last_neuron_i; neuron_i++ ) {
 
 			// Azzero il valore di attivazione del neurone
-			activation = 0;
+			neuron_i->value = 0;
 
 			// Preparo l'iteratore dei neuroni
-			last_neuron_j	= this->layers[t]->last_neuron;
-			neuron_j		= this->layers[t]->first_neuron;
+			last_neuron_j	= this->layers[t - 1]->last_neuron;
+			neuron_j		= this->layers[t - 1]->first_neuron;
 
 			// Imposto il valore di attivazione come la somma pesata di tutti i neuroni in ingresso
 			for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_t++ ) {
 
-				activation += synapse_t->weight * neuron_j->value;
+				neuron_i->value += synapse_t->weight * neuron_j->value;
 			}
 
 			// Aggiungo la soglia del bias
-			activation += synapse_t->weight;
+			neuron_i->value += synapse_t->weight;
 
 			// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
 			synapse_t++;
 
 			// Calcolo il valore in uscita del neurone utilizzando una sigmoide
-			neuron_i->value = sigmoid( activation );
+			neuron_i->value = sigmoid( neuron_i->value );
 		}
 	}
 
@@ -186,15 +189,18 @@ Network::Run( const T_Precision *input ) {
 	last_neuron_i	= this->layers.back()->last_neuron;
 	neuron_i		= this->layers.back()->first_neuron;
 
+	// Iteratore
+	size_t i = 0;
+
 	// Copio le uscite nel vettore specifico
-	for ( i = 0; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
+	for ( ; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
 
 		// Copio l'uscita del neurone
 		this->output_data[i] = neuron_i->value;
 	}
 
 	// Ritorna un puntatore ai valori di uscita
-	return this->output_data;
+	return this->GetOutputs();
 }
 
 /*******************************************************************

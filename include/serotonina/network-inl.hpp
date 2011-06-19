@@ -25,11 +25,31 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+inline void
+Network::SetInputs( const std::vector< T_Precision > &input ) {
+
+	// Richiamo la funzione principale
+	this->SetInputs( &input[0] );
+}
+
+inline const std::vector< T_Precision > &
+Network::Run( const T_Precision *input ) {
+
+	// Imposto gli ingressi della rete neurale
+	this->SetInputs( input );
+
+	// Richiamo la funzione principale
+	return this->Run();
+}
+
 inline const std::vector< T_Precision > &
 Network::Run( const std::vector< T_Precision > &input ) {
 
+	// Imposto gli ingressi della rete neurale
+	this->SetInputs( input );
+
 	// Richiamo la funzione principale
-	return Run( &input[0] );
+	return this->Run();
 }
 
 inline const std::vector< T_Precision > &
@@ -43,7 +63,7 @@ inline const T_Precision
 Network::GetOutput( size_t n ) const {
 
 	// Ritorno un uscita della rete
-	return this->output_data[n];
+	return this->output_data.at(n);
 }
 
 inline std::vector< Layer * > &
@@ -57,7 +77,7 @@ inline Layer &
 Network::GetLayer( size_t n ) {
 
 	// Ritorno uno strato specifico della rete
-	return *this->layers[n];
+	return *this->layers.at(n);
 }
 
 } // Chiudo il namespace di Serotonina

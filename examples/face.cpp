@@ -36,9 +36,9 @@ int main( void ) {
 	// Creo l'addestratore della rete neurale
 	Trainer trainer( network );
 
-	// Addestro la rete neurale con il metodo Batch
+	// Addestro la rete neurale con il metodo IRprop-
 	trainer.SetParameters( 0.5, 1.2 );
-	trainer.TrainOnFile< Algorithms::Rprop >( "train/face.train", 0.0001, 100000, 1 );
+	trainer.TrainOnFile< Algorithms::IRpropMinus >( "train/face.train", 0.0001, 100000, 1 );
 
 	// Salvo la rete in un file
 	network.Save( "train/face.net" );

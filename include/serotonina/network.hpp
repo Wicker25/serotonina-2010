@@ -55,7 +55,12 @@ public:
 	Network( const std::string &path );
 	virtual ~Network();
 
+	// Imposta gli ingressi della rete
+	void SetInputs( const T_Precision *input );
+	void SetInputs( const std::vector< T_Precision > &input );
+
 	// Esegue la rete neurale
+	const std::vector< T_Precision > &Run();
 	const std::vector< T_Precision > &Run( const T_Precision *input );
 	const std::vector< T_Precision > &Run( const std::vector< T_Precision > &input );
 
