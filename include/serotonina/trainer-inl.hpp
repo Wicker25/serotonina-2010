@@ -55,8 +55,10 @@ Trainer::SetParameters( T_Precision p0, T_Precision p1 ) {
 	// Cancello i parametri esistenti
 	this->train_params.clear();
 
+	// Richiamo la funzione inferiore
+	this->SetParameters( p0 );
+
 	// Memorizzo i parametri dell'addestramento
-	this->train_params.push_back( p0 );
 	this->train_params.push_back( p1 );
 }
 
@@ -66,10 +68,37 @@ Trainer::SetParameters( T_Precision p0, T_Precision p1, T_Precision p2 ) {
 	// Cancello i parametri esistenti
 	this->train_params.clear();
 
+	// Richiamo la funzione inferiore
+	this->SetParameters( p0, p1 );
+
 	// Memorizzo i parametri dell'addestramento
-	this->train_params.push_back( p0 );
-	this->train_params.push_back( p1 );
 	this->train_params.push_back( p2 );
+}
+
+inline void
+Trainer::SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3 ) {
+
+	// Cancello i parametri esistenti
+	this->train_params.clear();
+
+	// Richiamo la funzione inferiore
+	this->SetParameters( p0, p1, p2 );
+
+	// Memorizzo i parametri dell'addestramento
+	this->train_params.push_back( p3 );
+}
+
+inline void
+Trainer::SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3, T_Precision p4 ) {
+
+	// Cancello i parametri esistenti
+	this->train_params.clear();
+
+	// Richiamo la funzione inferiore
+	this->SetParameters( p0, p1, p2, p3 );
+
+	// Memorizzo i parametri dell'addestramento
+	this->train_params.push_back( p4 );
 }
 
 inline void
@@ -82,14 +111,46 @@ Trainer::SetParameters( const std::vector< T_Precision > &params ) {
 	copy( params.begin(), params.end(), this->train_params.begin() );
 }
 
+inline const std::vector< T_Precision > &
+Trainer::GetParameters() const {
+
+	// Ritorno i parametri dell'addestramento
+	return this->train_params;
+}
+
+inline const T_Precision
+Trainer::GetParameter( size_t n ) const {
+
+	// Ritorno un parametro dell'addestramento
+	return this->train_params[n];
+}
+
 inline void
-Trainer::SetReportFun( T_ReportFun &fun, void *data ) {
+Trainer::SetReportFun( T_ReportFun &fun ) {
 
 	// Imposto la funzione di report dell'addestramento
 	this->report_fun = &fun;
+}
+
+inline T_ReportFun *
+Trainer::GetReportFun() const {
+
+	// Ritorno la funzione di report dell'addestramento
+	return this->report_fun;
+}
+
+inline void
+Trainer::SetReportFunData( void *data ) {
 
 	// Imposto il parametro ausiliario della funzione di report
 	this->report_fun_data = data;
+}
+
+inline void *
+Trainer::GetReportFunData() const {
+
+	// Ritorno il parametro ausiliario della funzione di report
+	return this->report_fun_data;
 }
 
 template < class train_algorithm >
@@ -115,7 +176,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 	if ( train_algorithm::CheckParams( this->train_params ) ) {
 
 		// Creo le strutture per l'addestramento
-		this->CreateTrainData();
+		train_algorithm::AllocData( *this->network );
 
 		// Flag di uscita forzata dall'addestramento
 		int interrupt_flag = 0;
@@ -193,7 +254,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 		}
 
 		// Cancello le strutture per l'addestramento
-		this->DeleteTrainData();
+		train_algorithm::DeallocData( *this->network );
 
 		// Controllo il modo in cui è terminato l'addestramento
 		if ( interrupt_flag ) {

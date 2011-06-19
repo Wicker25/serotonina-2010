@@ -36,15 +36,27 @@ class Batch : public TrainAlgorithm {
 
 public:
 
+	// Struttura contenente i dati per l'addestramento
+	struct TrainingData {
+
+		T_Precision delta_weight;	// Correzione del peso della connessione
+	};
+
 	// Descrizione dell'algoritmo
 	static const char *description;
 
 	// Verifica la correttezza dei parametri
-	static bool CheckParams( const std::vector< T_Precision > &train_params );
+	static bool CheckParams( std::vector< T_Precision > &train_params );
+
+	// Inizializza le strutture per l'addestramento
+	static void AllocData( Network &network );
 
 	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, const std::vector< T_Precision > &train_params,
+	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision prev_net_error );
+
+	// Deinizializza le strutture per l'addestramento
+	static void DeallocData( Network &network );
 };
 
 } // Chiudo il namespace degli algoritmi

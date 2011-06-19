@@ -83,10 +83,24 @@ public:
 	void SetParameters( T_Precision p0 );
 	void SetParameters( T_Precision p0, T_Precision p1 );
 	void SetParameters( T_Precision p0, T_Precision p1, T_Precision p2 );
+	void SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3 );
+	void SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3, T_Precision p4 );
 	void SetParameters( const std::vector< T_Precision > &params );
 
+	// Ritorna i parametri dell'addestramento
+	const std::vector< T_Precision > &GetParameters() const;
+	// Ritorna un parametro dell'addestramento
+	const T_Precision GetParameter( size_t n ) const;
+
 	// Imposta la funzione di report dell'addestramento
-	void SetReportFun( T_ReportFun &fun, void *data );
+	void SetReportFun( T_ReportFun &fun );
+	// Ritorna la funzione di report dell'addestramento
+	T_ReportFun *GetReportFun() const;
+
+	// Imposta il parametro ausiliario della funzione di report
+	void SetReportFunData( void *data );
+	// Ritorna il parametro ausiliario della funzione di report
+	void *GetReportFunData() const;
 
 	// Addestra la rete neurale usando degli esempi
 	template < class train_algorithm >
@@ -121,13 +135,6 @@ protected:
 
 	// Parametro ausiliario della funzione di report
 	void *report_fun_data;
-
-
-	// Crea le strutture per l'addestramento
-	void CreateTrainData();
-
-	// Cancella le strutture per l'addestramento
-	void DeleteTrainData();
 
 	// Calcola l'errore delle uscite
 	void ComputeError( const T_Precision *target );

@@ -57,11 +57,17 @@ public:
 	static const char *description;
 
 	// Verifica la correttezza dei parametri
-	static bool CheckParams( const std::vector< T_Precision > &train_params );
+	static bool CheckParams( std::vector< T_Precision > &train_params );
+
+	// Inizializza le strutture per l'addestramento
+	static void InitTraining( Network &network );
 
 	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, const std::vector< T_Precision > &train_params,
+	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision prev_net_error );
+
+	// Deinizializza le strutture per l'addestramento
+	static void EndTraining( Network &network );
 };
 
 } // Chiudo il namespace di Serotonina

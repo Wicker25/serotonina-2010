@@ -1,5 +1,17 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.1.3 - urgency=low =============
+
+2011-06-18  Wicker25  < wicker25@gmail.com >
+
+    * synapse.hpp: Removed `TrainData`.
+
+    * trainer.hpp: Removed `Trainer->CreateTrainData` and `Trainer->DeleteTrainData`.
+
+    * train-algorithm.cpp: Added `TrainAlgorithm->AllocData` and `TrainAlgorithm->DellocData`.
+
+    * network.hpp, trainer.hpp: Added generic methods.
+
 ============= Serotonina 1.1.2 - urgency=medium =============
 
 2011-06-17  Wicker25  < wicker25@gmail.com >

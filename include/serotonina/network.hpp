@@ -42,9 +42,6 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
-// Prototipi
-class Network;
-
 class Network {
 
 	/* RETE NEURALE */
@@ -64,10 +61,11 @@ public:
 
 	// Ritorna le uscite della rete
 	const std::vector< T_Precision > &GetOutputs() const;
+	// Ritorna un uscita della rete
+	const T_Precision GetOutput( size_t n ) const;
 
 	// Ritorna gli strati della rete
 	std::vector< Layer * > &GetLayers();
-
 	// Ritorna uno strato specifico della rete
 	Layer &GetLayer( size_t n );
 

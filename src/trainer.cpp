@@ -138,62 +138,6 @@ Trainer::InitWeights() {
 }
 
 void
-Trainer::CreateTrainData() {
-
-	// Iteratori
-	short int t = ( this->network->GetLayers().size() - 1 );
-
-	// Iteratori delle sinapsi
-	Synapse *synapse_t;
-	Synapse *end_synapse_t;
-
-	// Creo le strutture necessarie all'addestramento
-	for ( ; t > 0; t-- ) {
-
-		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->network->GetLayer(t).first_synapse;
-
-		// Ricavo la sinapsi finale
-		end_synapse_t = this->network->GetLayer(t).last_synapse;
-
-		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
-
-			// Creo la struttura per l'addestramento
-			synapse_t->train = new TrainData;
-		}
-	}
-}
-
-void
-Trainer::DeleteTrainData() {
-
-	// Iteratori
-	short int t = ( this->network->GetLayers().size() - 1 );
-
-	// Iteratori delle sinapsi
-	Synapse *synapse_t;
-	Synapse *end_synapse_t;
-
-	// Cancello le strutture necessarie all'addestramento
-	for ( ; t > 0; t-- ) {
-
-		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->network->GetLayer(t).first_synapse;
-
-		// Ricavo la sinapsi finale
-		end_synapse_t = this->network->GetLayer(t).last_synapse;
-
-		// Ciclo per tutti i pesi sinaptici tra i due strati
-		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
-
-			// Cancello la struttura per l'addestramento
-			delete synapse_t->train;
-		}
-	}
-}
-
-void
 Trainer::ComputeError( const T_Precision *target ) {
 
 	// Iteratore
@@ -221,8 +165,8 @@ Trainer::ComputeError( const T_Precision *target ) {
 		neuron_i->dEdy = - ( target[i] - neuron_i->value );
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_j	= this->network->GetLayers()[this->network->GetLayers().size() - 2]->last_neuron;
-		neuron_j		= this->network->GetLayers()[this->network->GetLayers().size() - 2]->first_neuron;
+		last_neuron_j	= this->network->GetLayer( this->network->GetLayers().size() - 2 ).last_neuron;
+		neuron_j		= this->network->GetLayer( this->network->GetLayers().size() - 2 ).first_neuron;
 
 		// Calcolo l'errore dei pesi sinaptici del neurone
 		// dE/dw_ji += dE/dy_i * dy_i/dP_i * dP_i/dw_ji
@@ -230,12 +174,12 @@ Trainer::ComputeError( const T_Precision *target ) {
 		// Ciclo per tutti i neuroni del penultimo strato
 		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_t++ ) {
 
-			synapse_t->train->dEdw += neuron_i->dEdy * d_sigmoid( neuron_i->value ) * neuron_j->value;
+			synapse_t->dEdw += neuron_i->dEdy * d_sigmoid( neuron_i->value ) * neuron_j->value;
 		}
 
 		// Aggiungo l'errore del bias al peso sinaptico del neurone
 		// dE/dw_ji += dE/dy_i * dy_i/dP_i
-		synapse_t->train->dEdw += neuron_i->dEdy * d_sigmoid( neuron_i->value );
+		synapse_t->dEdw += neuron_i->dEdy * d_sigmoid( neuron_i->value );
 
 		// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
 		synapse_t++;
@@ -268,7 +212,7 @@ Trainer::BackpropagateError() {
 
 		// Preparo gli iteratori delle sinapsi
 		synapse_t = this->network->GetLayer(t + 1).first_synapse;
-		synapse_row_t1 = this->network->GetLayers()[t + 2]->first_synapse;
+		synapse_row_t1 = this->network->GetLayer(t + 2).first_synapse;
 
 		// Preparo l'iteratore dei neuroni
 		last_neuron_j	= this->network->GetLayer(t + 1).last_neuron;
@@ -284,14 +228,14 @@ Trainer::BackpropagateError() {
 			synapse_t1 = synapse_row_t1;
 
 			// Preparo l'iteratore dei neuroni
-			last_neuron_k	= this->network->GetLayers()[t + 2]->last_neuron;
-			neuron_k		= this->network->GetLayers()[t + 2]->first_neuron;
+			last_neuron_k	= this->network->GetLayer(t + 2).last_neuron;
+			neuron_k		= this->network->GetLayer(t + 2).first_neuron;
 
 			// Calcolo l'errore retropropagato dai neuroni dello strato successivo
 			// dE/dz_k = SUM( dE/dy_j * dy_j/dP_j * dP_j/dz_k )
 
 			// Ciclo per tutti i neuroni dello strato 't + 2'
-			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->network->GetLayers()[t + 2]->synapses_per_row ) {
+			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->network->GetLayer(t + 2).synapses_per_row ) {
 
 				neuron_j->dEdy += neuron_k->dEdy * d_sigmoid( neuron_k->value ) * synapse_t1->weight;
 			}
@@ -307,12 +251,12 @@ Trainer::BackpropagateError() {
 			for ( ; neuron_i <= last_neuron_i; neuron_i++, synapse_t++ ) {
 
 				// dE/dw_ij += dE/dy_j * dy_j/dP_j * Z_i
-				synapse_t->train->dEdw += delta * neuron_i->value;
+				synapse_t->dEdw += delta * neuron_i->value;
 			}
 
 			// Aggiungo l'errore del bias al peso sinaptico del neurone
 			// dE/dw_ij += dE/dy_j * dy_j/dP_j
-			synapse_t->train->dEdw += delta;
+			synapse_t->dEdw += delta;
 
 			// Sposto l'iteratore oltre la sinapsi del bias, nella riga contente le sinapsi del neurone successivo
 			synapse_t++;

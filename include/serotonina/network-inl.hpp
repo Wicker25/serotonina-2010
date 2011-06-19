@@ -39,6 +39,13 @@ Network::GetOutputs() const {
 	return this->output_data;
 }
 
+inline const T_Precision
+Network::GetOutput( size_t n ) const {
+
+	// Ritorno un uscita della rete
+	return this->output_data[n];
+}
+
 inline std::vector< Layer * > &
 Network::GetLayers() {
 

@@ -29,25 +29,9 @@ struct TrainData;
 // Struttura di una connessione tra due neuroni (sinapsi)
 struct Synapse {
 
-	T_Precision weight;		// Peso della connessione
-	TrainData *train;		// Dati per l'addestramento
-};
-
-// Struttura contenente i dati per l'addestramento
-struct TrainData {
-
-	T_Precision delta_weight;	// Spostamento del peso della connessione
-	T_Precision dEdw;			// Errore della connessione
-	T_Precision prev_dEdw;		// Errore precedente della connessione
-	T_Precision learning_rate;	// Tasso di apprendimento della connessione (per i metoti RPROP)
-
-	// Metodo costruttore
-	TrainData() {
-
-		// Inizializzo i parametri dell'addestramento
-		delta_weight = dEdw = prev_dEdw = 0.0;
-		learning_rate	= 0.1;
-	}
+	T_Precision weight;	// Peso della connessione
+	T_Precision dEdw;	// Errore della connessione
+	void *train;		// Dati per l'addestramento
 };
 
 } // Chiudo il namespace di Serotonina
