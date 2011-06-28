@@ -91,7 +91,7 @@ Rprop::CheckParams( std::vector< T_Precision > &train_params ) {
 }
 
 void
-Rprop::AllocData( Network &network ) {
+Rprop::InitTraining( Network &network ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
@@ -120,7 +120,7 @@ Rprop::AllocData( Network &network ) {
 
 void
 Rprop::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-						T_Precision net_error, T_Precision prev_net_error ) {
+						T_Precision net_error, T_Precision old_net_error ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
@@ -187,7 +187,7 @@ Rprop::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params
 }
 
 void
-Rprop::DeallocData( Network &network ) {
+Rprop::EndTraining( Network &network ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );

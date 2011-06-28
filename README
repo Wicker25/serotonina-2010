@@ -51,6 +51,7 @@ Building with CMake
  $ cd <SOURCES>
  $ cmake ./ -DCMAKE_INSTALL_PREFIX=<PATH>
  $ make
+ $ make doc_{en|it} (`make doc_en` for english documentation)
  # make install
 
 

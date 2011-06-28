@@ -59,7 +59,7 @@ Batch::CheckParams( std::vector< T_Precision > &train_params ) {
 }
 
 void
-Batch::AllocData( Network &network ) {
+Batch::InitTraining( Network &network ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
@@ -88,7 +88,7 @@ Batch::AllocData( Network &network ) {
 
 void
 Batch::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-						T_Precision net_error, T_Precision prev_net_error ) {
+						T_Precision net_error, T_Precision old_net_error ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
@@ -129,7 +129,7 @@ Batch::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params
 }
 
 void
-Batch::DeallocData( Network &network ) {
+Batch::EndTraining( Network &network ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );

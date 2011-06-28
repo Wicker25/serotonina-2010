@@ -176,7 +176,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 	if ( train_algorithm::CheckParams( this->train_params ) ) {
 
 		// Creo le strutture per l'addestramento
-		train_algorithm::AllocData( *this->network );
+		train_algorithm::InitTraining( *this->network );
 
 		// Flag di uscita forzata dall'addestramento
 		int interrupt_flag = 0;
@@ -206,7 +206,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 				this->network->Run( &input_samples[ i * this->network->GetLayers().front()->n_neurons ] );
 
 				// Calcolo l'errore delle uscite
-				this->ComputeError( &output_samples[ i * this->network->GetLayers().back()->n_neurons ] );
+				this->ComputeOutputError( &output_samples[ i * this->network->GetLayers().back()->n_neurons ] );
 
 				// Retropropago l'errore nella rete
 				this->BackpropagateError();
@@ -230,8 +230,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 					// Passo le informazioni alla funzione di report
 					interrupt_flag = this->report_fun(	*this->network, epochs, t_elapsed, this->net_error,
-														this->network->GetOutputs(),
-														this->network->GetLayers().back()->n_neurons, this->report_fun_data );
+														this->network->GetOutputs(), this->report_fun_data );
 				}
 
 				// Incremento il contatore delle epoche
@@ -249,12 +248,12 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 			t_elapsed = ( time( NULL ) - t_start );
 
 			// Passo le informazioni alla funzione di report
-			this->report_fun(	*this->network, epochs, t_elapsed, this->net_error, this->network->GetOutputs(),
-								this->network->GetLayers().back()->n_neurons, this->report_fun_data );
+			this->report_fun(	*this->network, epochs, t_elapsed, this->net_error,
+								this->network->GetOutputs(), this->report_fun_data );
 		}
 
 		// Cancello le strutture per l'addestramento
-		train_algorithm::DeallocData( *this->network );
+		train_algorithm::EndTraining( *this->network );
 
 		// Controllo il modo in cui è terminato l'addestramento
 		if ( interrupt_flag ) {

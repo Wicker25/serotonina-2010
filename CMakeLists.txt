@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto la versione della libreria
 set( SEROTONINA_VERSION_MAJOR 1 )
 set( SEROTONINA_VERSION_MINOR 1 )
-set( SEROTONINA_VERSION_PATCH 4 )
+set( SEROTONINA_VERSION_PATCH 5 )
 
 # Aggiungo una direttiva al compilatore
 add_definitions( -Wall -ansi -pedantic -pedantic-errors )
@@ -58,6 +58,18 @@ add_library( serotonina SHARED	${SEROTONINA_SOURCE_DIR}/network.cpp
 
 target_link_libraries( serotonina m )
 
+# Cerco doxygen nel sistema
+find_package( Doxygen )
+
+# Controllo se doxygen è installato sul sistema
+if ( DOXYGEN_FOUND )
+
+	# Aggiungo i comandi per la creazione della documentazione
+	add_custom_target( doc_en COMMAND doxygen doxy_en.conf )
+	add_custom_target( doc_it COMMAND doxygen doxy_it.conf )
+
+endif ( DOXYGEN_FOUND )
+
 # Installatore della libreria
 install_targets( /lib serotonina )
 
@@ -71,6 +83,12 @@ install( DIRECTORY ${CMAKE_SOURCE_DIR}/include/serotonina
 		 PATTERN "*"
 		 PATTERN "*.in" EXCLUDE )
 
+# Installatore della documentazione
+install( DIRECTORY ${CMAKE_SOURCE_DIR}/doc/
+		 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/serotonina
+		 FILES_MATCHING
+		 PATTERN "*" )
+
 # Installatore delle informazioni per pkg-config
 install( FILES ${CMAKE_SOURCE_DIR}/pkgconfig/serotonina.pc
 		 DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig )
@@ -83,6 +101,7 @@ install( FILES ${CMAKE_SOURCE_DIR}/cmake/FindSerotonina.cmake
 file( WRITE "${CMAKE_SOURCE_DIR}/install_directory.txt"
 
 	"${CMAKE_INSTALL_PREFIX}/include/serotonina\n"
+	"${CMAKE_INSTALL_PREFIX}/share/doc/serotonina\n"
 )
 
 # Aggiungo il "make uninstall"

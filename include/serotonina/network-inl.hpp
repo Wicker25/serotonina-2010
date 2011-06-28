@@ -26,27 +26,27 @@
 namespace Serotonina { // Namespace di Serotonina
 
 inline void
-Network::SetInputs( const std::vector< T_Precision > &input ) {
+Network::SetInputs( const std::vector< T_Precision > &inputs ) {
 
 	// Richiamo la funzione principale
-	this->SetInputs( &input[0] );
+	this->SetInputs( &inputs[0] );
 }
 
 inline const std::vector< T_Precision > &
-Network::Run( const T_Precision *input ) {
+Network::Run( const T_Precision *inputs ) {
 
 	// Imposto gli ingressi della rete neurale
-	this->SetInputs( input );
+	this->SetInputs( inputs );
 
 	// Richiamo la funzione principale
 	return this->Run();
 }
 
 inline const std::vector< T_Precision > &
-Network::Run( const std::vector< T_Precision > &input ) {
+Network::Run( const std::vector< T_Precision > &inputs ) {
 
 	// Imposto gli ingressi della rete neurale
-	this->SetInputs( input );
+	this->SetInputs( inputs );
 
 	// Richiamo la funzione principale
 	return this->Run();

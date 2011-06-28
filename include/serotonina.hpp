@@ -21,6 +21,16 @@
 #ifndef _SEROTONINA_HPP_
 #define _SEROTONINA_HPP_
 
+/*!
+ * @namespace Serotonina
+ * \if english
+ *   Main namespace of the library.
+ * \endif
+ * \if italian
+ *   Namespace principale della libreria
+ * \endif
+ */
+
 // Includo tutti gli headers della libreria
 
 #include <serotonina/version.hpp>

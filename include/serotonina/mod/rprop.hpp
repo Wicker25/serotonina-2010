@@ -30,18 +30,77 @@ namespace Serotonina { // Namespace di Serotonina
 
 namespace Algorithms { // Namespace degli algoritmi
 
+/*!
+ * @class Rprop
+ * \if english
+ *   @brief Class of rprop algorithm
+ * \endif
+ * \if italian
+ *   @brief Classe dell'algoritmo rprop
+ * \endif
+ */
+
 class Rprop : public TrainAlgorithm {
 
 	/* ALGORITMO RPROP */
 
 public:
 
+	/*!
+	 * @struct TrainingData
+	 * \if english
+	 *   @brief Structure containing data of training
+	 * \endif
+	 * \if italian
+	 *   @brief Struttura contenente i dati per l'addestramento
+	 * \endif
+	 */
+
 	// Struttura contenente i dati per l'addestramento
 	struct TrainingData {
 
+		/**
+		 * \if english
+		 *   @brief Learning rate of the connection
+		 * \endif
+		 * \if italian
+		 *   @brief Tasso di apprendimento della connessione
+		 * \endif
+		 */
+
 		T_Precision learning_rate;	// Tasso di apprendimento della connessione
+
+		/**
+		 * \if english
+		 *   @brief Weight's correction at previous epoch
+		 * \endif
+		 * \if italian
+		 *   @brief Correzione del peso nell'epoca precedente
+		 * \endif
+		 */
+
 		T_Precision delta_weight;	// Correzione del peso della connessione
+
+		/**
+		 * \if english
+		 *   @brief The error of the connection
+		 * \endif
+		 * \if italian
+		 *   @brief L'errore della connessione
+		 * \endif
+		 */
+
 		T_Precision dEdw;			// Errore della connessione
+
+		/**
+		 * \if english
+		 *   @brief The error of the connection at previous epoch
+		 * \endif
+		 * \if italian
+		 *   @brief L'errore della connessione nell'epoca precedente
+		 * \endif
+		 */
+
 		T_Precision prev_dEdw;		// Errore precedente della connessione
 
 		// Metodo costruttore
@@ -62,14 +121,14 @@ public:
 	static bool CheckParams( std::vector< T_Precision > &train_params );
 
 	// Inizializza le strutture per l'addestramento
-	static void AllocData( Network &network );
+	static void InitTraining( Network &network );
 
 	// Esegue la correzione dei pesi
 	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-								T_Precision net_error, T_Precision prev_net_error );
+								T_Precision net_error, T_Precision old_net_error );
 
 	// Deinizializza le strutture per l'addestramento
-	static void DeallocData( Network &network );
+	static void EndTraining( Network &network );
 };
 
 } // Chiudo il namespace degli algoritmi

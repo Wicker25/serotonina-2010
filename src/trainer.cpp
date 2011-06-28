@@ -26,11 +26,11 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
-/** INIZIO METODI STATICI **/
+/* INIZIO METODI STATICI */
 
 int
-Trainer::training_report(	Network &network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-							const std::vector< T_Precision > &outputs, size_t outputs_size, void *data ) {
+Trainer::training_report(	Network &network, size_t epochs, time_t elapsed_time, T_Precision current_error,
+							const std::vector< T_Precision > &outputs, void *data ) {
 
 	// Calcolo le ore, i minuti e i secondi del tempo trascorso
 	size_t hours, mins, secs;
@@ -41,12 +41,12 @@ Trainer::training_report(	Network &network, size_t epochs, time_t elapsed_time, 
 
 	// Stampo il rapporto dell'addestramento
 	printf(	" - Epoch #%lu, time %luh%lum%lus, error %.10f\n",
-			(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
+			(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) current_error );
 
 	return 0;
 }
 
-/** FINE METODI STATICI **/
+/* FINE METODI STATICI */
 
 
 Trainer::Trainer( Network *network_ ) {
@@ -138,7 +138,7 @@ Trainer::InitWeights() {
 }
 
 void
-Trainer::ComputeError( const T_Precision *target ) {
+Trainer::ComputeOutputError( const T_Precision *desired_error ) {
 
 	// Iteratore
 	size_t i = 0;
@@ -162,7 +162,7 @@ Trainer::ComputeError( const T_Precision *target ) {
 
 		// Calcolo l'errore dell'uscita
 		// dE/dy_i = -(D_i - Y_i)
-		neuron_i->dEdy = - ( target[i] - neuron_i->value );
+		neuron_i->dEdy = - ( desired_error[i] - neuron_i->value );
 
 		// Preparo l'iteratore dei neuroni
 		last_neuron_j	= this->network->GetLayer( this->network->GetLayers().size() - 2 ).last_neuron;

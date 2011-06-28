@@ -122,7 +122,7 @@ Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 }
 
 void
-Network::SetInputs( const T_Precision *input ) {
+Network::SetInputs( const T_Precision *inputs ) {
 
 	// Iteratore
 	size_t i = 0;
@@ -130,7 +130,7 @@ Network::SetInputs( const T_Precision *input ) {
 	// Imposto gli ingressi della rete neurale
 	for ( ; i < this->layers.front()->n_neurons; i++ ) {
 
-		this->layers.front()->neurons[i].value = between( input[i], 0.0, 1.0 );
+		this->layers.front()->neurons[i].value = between( inputs[i], 0.0, 1.0 );
 	}
 }
 

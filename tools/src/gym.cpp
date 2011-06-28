@@ -453,7 +453,7 @@ Gym::handle( int event ) {
 
 					// Aggiorno il grafico dell'addestramento se uno è in corso
 					if ( this->neural_network != NULL )
-						this->UpdatePlot( NULL, 0, 0, 0, NULL, 0 );
+						this->UpdatePlot( NULL, 0, 0, 0, NULL );
 				}
 
 			} else {
@@ -480,7 +480,7 @@ Gym::handle( int event ) {
 
 							// Aggiorno il grafico dell'addestramento se uno è in corso
 							if ( this->neural_network != NULL )
-								this->UpdatePlot( NULL, 0, 0, 0, NULL, 0 );
+								this->UpdatePlot( NULL, 0, 0, 0, NULL );
 						}
 
 						break;
@@ -499,7 +499,7 @@ Gym::handle( int event ) {
 
 							// Aggiorno il grafico dell'addestramento se uno è in corso
 							if ( this->neural_network != NULL )
-								this->UpdatePlot( NULL, 0, 0, 0, NULL, 0 );
+								this->UpdatePlot( NULL, 0, 0, 0, NULL );
 						}
 
 						break;
@@ -931,8 +931,8 @@ Gym::StartTraining() {
 }
 
 int
-Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precision max_error,
-					const T_Precision *outputs, size_t outputs_size ) {
+Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time,
+					T_Precision current_error, const T_Precision *outputs ) {
 
 	// Prendo il controllo sulle FLTK
 	Fl::lock();
@@ -980,7 +980,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 	if ( network != NULL ) {
 
 		// Aggiungo l'errore massimo ai dati
-		this->error_data.push_back( (float) max_error );
+		this->error_data.push_back( (float) current_error );
 	}
 
 	// Uscite desiderate e della rete del campione
@@ -1015,7 +1015,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 		this->epochs_box->value( (double) epochs );
 
 		// Aggiorno il riquadro dell'errore massimo
-		this->error_box->value( (double) max_error );
+		this->error_box->value( (double) current_error );
 
 		// Calcolo le ore, i minuti e i secondi del tempo trascorso
 		size_t hours, mins, secs;
@@ -1027,7 +1027,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time, T_Precisi
 		// Costruisco il testo del nuovo log di lavoro
 		char str_buffer[200];
 		snprintf(	str_buffer, 200, "\n  Epoch #%lu, time %luh%lum%lus, error %.10f",
-					(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) max_error );
+					(unsigned long) epochs, (unsigned long) hours, (unsigned long) mins, (unsigned long) secs, (double) current_error );
 
 		// Aggiorno il log di lavoro
 		this->log_buffer->append( str_buffer );

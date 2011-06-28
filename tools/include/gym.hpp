@@ -97,8 +97,8 @@ public:
 	static void *static_start_training( void *data );
 
 	// Aggiorna i grafici della rete neurale (statico)
-	static int static_update_plot(	Serotonina::Network &network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
-									const std::vector< T_Precision > &outputs, size_t outputs_size, void *data );
+	static int static_update_plot(	Serotonina::Network &network, size_t epochs, time_t elapsed_time, 
+									Serotonina::T_Precision current_error, const std::vector< T_Precision > &outputs, void *data );
 
 	/** FINE METODI STATICI **/
 
@@ -123,8 +123,8 @@ public:
 	void SaveNeuralNetwork( const char *path );
 
 	// Aggiorna i grafici della rete neurale
-	int UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time, Serotonina::T_Precision max_error,
-					const Serotonina::T_Precision *outputs, size_t outputs_size );
+	int UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time,
+					Serotonina::T_Precision current_error, const Serotonina::T_Precision *outputs );
 
 	// Funzione per la gestione degli eventi della finestra
 	virtual int handle( int event );

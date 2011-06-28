@@ -32,6 +32,16 @@ namespace Serotonina { // Namespace di Serotonina
 
 namespace Algorithms { // Namespace degli algoritmi
 
+/*!
+ * @class IRpropMinus
+ * \if english
+ *   @brief Class of irprop- algorithm
+ * \endif
+ * \if italian
+ *   @brief Classe dell'algoritmo irprop-
+ * \endif
+ */
+
 class IRpropMinus : public Rprop {
 
 	/* ALGORITMO IRPROP- */
@@ -43,7 +53,7 @@ public:
 
 	// Esegue la correzione dei pesi
 	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-								T_Precision net_error, T_Precision prev_net_error );
+								T_Precision net_error, T_Precision old_net_error );
 };
 
 } // Chiudo il namespace degli algoritmi

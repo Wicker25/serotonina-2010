@@ -47,14 +47,14 @@ public:
 	static bool CheckParams( std::vector< T_Precision > &train_params );
 
 	// Inizializza le strutture per l'addestramento
-	static void AllocData( Network &network );
+	static void InitTraining( Network &network );
 
 	// Esegue la correzione dei pesi
 	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision prev_net_error );
 
 	// Deinizializza le strutture per l'addestramento
-	static void DeallocData( Network &network );
+	static void EndTraining( Network &network );
 };
 
 
@@ -90,7 +90,7 @@ MyBatch::CheckParams( std::vector< T_Precision > &train_params ) {
 }
 
 void
-MyBatch::AllocData( Network &network ) {
+MyBatch::InitTraining( Network &network ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
@@ -160,7 +160,7 @@ MyBatch::UpdateWeights(	Network &network, std::vector< T_Precision > &train_para
 }
 
 void
-MyBatch::DeallocData( Network &network ) {
+MyBatch::EndTraining( Network &network ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );

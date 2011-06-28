@@ -26,30 +26,119 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+/*!
+ * @struct Layer
+ * \if english
+ *   @brief Layer's structure
+ * \endif
+ * \if italian
+ *   @brief Struttura di uno strato
+ * \endif
+ */
+
 // Struttura di uno strato della rete
 struct Layer {
+
+	/**
+	 * \if english
+	 *   @brief Number of neurons
+	 * \endif
+	 * \if italian
+	 *   @brief Numero dei neuroni
+	 * \endif
+	 */
 
 	// Numero dei neuroni dello strato
 	size_t n_neurons;
 
+	/**
+	 * \if english
+	 *   @brief Neurons of the layer (and pointer to the first neuron)
+	 * \endif
+	 * \if italian
+	 *   @brief Neuroni dello strato (e puntatore al primo neurone dello strato)
+	 * \endif
+	 */
+
 	// Neuroni dello strato (e puntatore al primo neurone dello strato)
-	union { Neuron *neurons, *first_neuron; };
+	union {
+
+		Neuron *neurons,
+		*first_neuron;
+	};
+
+	/**
+	 * \if english
+	 *   @brief Pointer to the last neuron in the layer
+	 * \endif
+	 * \if italian
+	 *   @brief Puntatore all'ultimo neurone nello strato
+	 * \endif
+	 */
 
 	// Puntatore all'ultimo neurone dello strato
 	Neuron *last_neuron;
 
-	// Numero delle sinapsi dello strato
+	/**
+	 * \if english
+	 *   @brief Number of synpases in the layer
+	 * \endif
+	 * \if italian
+	 *   @brief Numero delle sinapsi nello strato
+	 * \endif
+	 */
+
+	// Numero delle sinapsi nello strato
 	size_t n_synapses;
+
+	/**
+	 * \if english
+	 *   @brief Synapses of the layer (and pointer to the first synapse)
+	 * \endif
+	 * \if italian
+	 *   @brief Sinapsi dello strato (e puntatore al primo neurone dello strato)
+	 * \endif
+	 */
 
 	// Sinapsi tra i due strati (e puntatore alla prima sinapsi)
 	union { Synapse *synapses, *first_synapse; };
 
+	/**
+	 * \if english
+	 *   @brief Pointer to the last synapse in the layer
+	 * \endif
+	 * \if italian
+	 *   @brief Puntatore all'ultima sinapsi nello strato
+	 * \endif
+	 */
+
 	// Puntatore all'ultima sinapsi
 	Synapse *last_synapse;
+
+	/**
+	 * \if english
+	 *   @brief Number of synapses per row
+	 * \endif
+	 * \if italian
+	 *   @brief Numero di sinapsi per riga
+	 * \endif
+	 */
 
 	// Numero di sinapsi per riga
 	size_t synapses_per_row;
 
+	/**
+	 * \if english
+	 *   @brief Constructor method
+	 *   @param[in] n_neurons_ Numbers of neurons in the layer
+	 *   @param[in] prev_n_neurons Numbers of neurons in the previous layer
+	 * \endif
+	 * \if italian
+	 *   @brief Metodo costruttore
+	 *   @param[in] n_neurons_ Numero dei neuroni nello strato
+	 *   @param[in] prev_n_neurons Numero dei neuroni nello strato precedente
+	 * \endif
+	 */
 
 	// Metodo costruttore
 	Layer( size_t n_neurons_, size_t prev_n_neurons ) {

@@ -23,15 +23,51 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
-// Prototipi
-struct TrainData;
+/*!
+ * @struct Synapse
+ * \if english
+ *   @brief Neuron's structure
+ * \endif
+ * \if italian
+ *   @brief Struttura di un neurone
+ * \endif
+ */
 
 // Struttura di una connessione tra due neuroni (sinapsi)
 struct Synapse {
 
+	/**
+	 * \if english
+	 *   @brief Weight of connection
+	 * \endif
+	 * \if italian
+	 *   @brief Peso della connessione
+	 * \endif
+	 */
+
 	T_Precision weight;	// Peso della connessione
+
+	/**
+	 * \if english
+	 *   @brief Error of connection
+	 * \endif
+	 * \if italian
+	 *   @brief Errore della connessione
+	 * \endif
+	 */
+
 	T_Precision dEdw;	// Errore della connessione
-	void *train;		// Dati per l'addestramento
+
+	/**
+	 * \if english
+	 *   @brief Pointer to structure for training
+	 * \endif
+	 * \if italian
+	 *   @brief Puntatore alla struttura per l'addestramento
+	 * \endif
+	 */
+
+	void *train;	// Puntatore alla struttura per l'addestramento
 };
 
 } // Chiudo il namespace di Serotonina

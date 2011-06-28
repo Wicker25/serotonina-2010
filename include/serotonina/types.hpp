@@ -25,6 +25,16 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+/**
+ * \typedef T_Precision
+ * \if english
+ *   The type used for structures of the neural network
+ * \endif
+ * \if italian
+ *   Il tipo usato per le strutture della rete neurale
+ * \endif
+ */
+
 // Precisione dei valori della rete
 //typedef float Precision;
 typedef double T_Precision;

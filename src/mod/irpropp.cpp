@@ -32,7 +32,7 @@ const char *IRpropPlus::description = "IRprop+";
 
 void
 IRpropPlus::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-							T_Precision net_error, T_Precision prev_net_error ) {
+							T_Precision net_error, T_Precision old_net_error ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );
@@ -84,7 +84,7 @@ IRpropPlus::UpdateWeights(	Network &network, std::vector< T_Precision > &train_p
 				training_data->learning_rate = max( training_data->learning_rate * train_params[0], train_params[2] );
 
 				// Se l'errore è aumentato, ripristino il vecchio peso sinaptico precedente
-				if ( net_error > prev_net_error )
+				if ( net_error > old_net_error )
 					synapse_t->weight -= training_data->delta_weight;
 
 				// Memorizzo l'errore del peso sinaptico per il ciclo successivo

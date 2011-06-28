@@ -32,7 +32,7 @@ const char *RpropMinus::description = "Rprop-";
 
 void
 RpropMinus::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-							T_Precision net_error, T_Precision prev_net_error ) {
+							T_Precision net_error, T_Precision old_net_error ) {
 
 	// Iteratori
 	short int t = ( network.GetLayers().size() - 1 );

@@ -23,11 +23,40 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+/*!
+ * @struct Neuron
+ * \if english
+ *   @brief Neuron's structure
+ * \endif
+ * \if italian
+ *   @brief Struttura di un neurone
+ * \endif
+ */
+
 // Struttura di un neurone della rete
 struct Neuron {
 
+	/**
+	 * \if english
+	 *   @brief Transfer value
+	 * \endif
+	 * \if italian
+	 *   @brief Valore di trasferimento
+	 * \endif
+	 */
+
 	T_Precision value;	// Valore di trasferimento
-	T_Precision dEdy;	// Errore del neurone
+
+	/**
+	 * \if english
+	 *   @brief Error of output
+	 * \endif
+	 * \if italian
+	 *   @brief Errore sull'uscita
+	 * \endif
+	 */
+
+	T_Precision dEdy;	// Errore sull'uscita
 };
 
 } // Chiudo il namespace di Serotonina

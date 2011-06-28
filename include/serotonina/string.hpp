@@ -28,6 +28,21 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+/**
+ * \if english
+ *   @brief Returns a vector containing the number in a string
+ *   @param[in] str The string
+ *   @param[out] vect The output vector
+ *   @return Vector containing the number in a string
+ * \endif
+ * \if italian
+ *   @brief Ritorna un vettore contenente i numeri in una stringa
+ *   @param[in] str La stringa
+ *   @param[out] vect Il vettore di uscita
+ *   @return Un vettore contenente i numeri nella stringa
+ * \endif
+ */
+
 template < typename T > size_t
 values_from_string( const std::string &str, std::vector< T > &vect ) {
 

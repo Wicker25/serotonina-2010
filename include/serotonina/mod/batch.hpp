@@ -30,14 +30,43 @@ namespace Serotonina { // Namespace di Serotonina
 
 namespace Algorithms { // Namespace degli algoritmi
 
+/*!
+ * @class Batch
+ * \if english
+ *   @brief Class of batch algorithm
+ * \endif
+ * \if italian
+ *   @brief Classe dell'algoritmo batch
+ * \endif
+ */
+
 class Batch : public TrainAlgorithm {
 
 	/* ALGORITMO BATCH */
 
 public:
 
+	/*!
+	 * @struct TrainingData
+	 * \if english
+	 *   @brief Structure containing data of training
+	 * \endif
+	 * \if italian
+	 *   @brief Struttura contenente i dati per l'addestramento
+	 * \endif
+	 */
+
 	// Struttura contenente i dati per l'addestramento
 	struct TrainingData {
+
+		/**
+		 * \if english
+		 *   @brief Weight's correction at previous epoch
+		 * \endif
+		 * \if italian
+		 *   @brief Correzione del peso nell'epoca precedente
+		 * \endif
+		 */
 
 		T_Precision delta_weight;	// Correzione del peso della connessione
 	};
@@ -49,14 +78,14 @@ public:
 	static bool CheckParams( std::vector< T_Precision > &train_params );
 
 	// Inizializza le strutture per l'addestramento
-	static void AllocData( Network &network );
+	static void InitTraining( Network &network );
 
 	// Esegue la correzione dei pesi
 	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
-								T_Precision net_error, T_Precision prev_net_error );
+								T_Precision net_error, T_Precision old_net_error );
 
 	// Deinizializza le strutture per l'addestramento
-	static void DeallocData( Network &network );
+	static void EndTraining( Network &network );
 };
 
 } // Chiudo il namespace degli algoritmi

@@ -42,51 +42,277 @@
 
 namespace Serotonina { // Namespace di Serotonina
 
+/*!
+ * @class Network
+ * \if english
+ *   @brief Neural network's class
+ * \endif
+ * \if italian
+ *   @brief Classe della rete neurale
+ * \endif
+ */
+
 class Network {
 
 	/* RETE NEURALE */
 
 public:
 
-	// Metodi costruttore e distruttore
+	/**
+	 * \if english
+	 *   @brief Constructor method
+	 *   @param[in] n_layers Number of layers
+	 *   @param[in] ... Sequence of unsigned integers containing the number of neurons in each layer
+	 * \endif
+	 * \if italian
+	 *   @brief Metodo costruttore
+	 *   @param[in] n_layers Numero degli strati
+	 *   @param[in] ... Sequenza di interi senza segno contenente il numero dei neuroni di ogni strato
+	 * \endif
+	 */
+
+	// Metodo costruttore
 	Network( size_t n_layers, ... );
+
+	/**
+	 * \if english
+	 *   @brief Constructor method
+	 *   @param[in] n_layers Number of layers
+	 *   @param[in] layers_struct Vector containing the number of neurons in each layer
+	 * \endif
+	 * \if italian
+	 *   @brief Metodo costruttore
+	 *   @param[in] n_layers Numero degli strati
+	 *   @param[in] layers_struct Vettore contenente il numero dei neuroni di ogni strato
+	 * \endif
+	 */
+
+	// Metodo costruttore
 	Network( size_t n_layers, const size_t *layers_struct );
+
+	/**
+	 * \if english
+	 *   @brief Constructor method
+	 *   @param[in] layers_struct Vector containing the number of neurons in each layer
+	 * \endif
+	 * \if italian
+	 *   @brief Metodo costruttore
+	 *   @param[in] layers_struct Vettore contenente il numero dei neuroni di ogni strato
+	 * \endif
+	 */
+
+	// Metodo costruttore
 	Network( const std::vector< size_t > &layers_struct );
+
+	/**
+	 * \if english
+	 *   @brief Constructor method. Load the neural network from a file
+	 *   @param[in] path Path to file of neural the network
+	 * \endif
+	 * \if italian
+	 *   @brief Metodo costruttore. Carica la rete neurale da un file
+	 *   @param[in] path Percorso al file di una rete neurale
+	 * \endif
+	 */
+
+	// Metodo costruttore
 	Network( const std::string &path );
+
+	// Metodo distruttore
 	virtual ~Network();
 
+	/**
+	 * \if english
+	 *   @brief Set inputs of the network
+	 *   @param[in] inputs Vector containing the inputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Imposta gli ingressi della rete
+	 *   @param[in] inputs Vettore contenente gli ingressi
+	 * \endif
+	 */
+
 	// Imposta gli ingressi della rete
-	void SetInputs( const T_Precision *input );
-	void SetInputs( const std::vector< T_Precision > &input );
+	void SetInputs( const T_Precision *inputs );
+
+	/**
+	 * \if english
+	 *   @brief Set inputs of the network
+	 *   @param[in] inputs Vector containing the inputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Imposta gli ingressi della rete
+	 *   @param[in] inputs Vettore contenente gli ingressi
+	 * \endif
+	 */
+
+	// Imposta gli ingressi della rete
+	void SetInputs( const std::vector< T_Precision > &inputs );
+
+	/**
+	 * \if english
+	 *   @brief Compute the network's outputs
+	 *   @return Vector containing the outputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Calcola le uscite della rete
+	 *   @return Vettore contenente le uscite della rete
+	 * \endif
+	 */
 
 	// Esegue la rete neurale
 	const std::vector< T_Precision > &Run();
-	const std::vector< T_Precision > &Run( const T_Precision *input );
-	const std::vector< T_Precision > &Run( const std::vector< T_Precision > &input );
+
+	/**
+	 * \if english
+	 *   @brief Compute the network's outputs
+	 *   @param[in] inputs Vector containing the inputs of the network
+	 *   @return Vector containing the outputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Calcola le uscite della rete
+	 *   @param[in] inputs Vettore contenente gli ingressi della rete
+	 *   @return Vettore contenente le uscite della rete
+	 * \endif
+	 */
+
+	// Esegue la rete neurale
+	const std::vector< T_Precision > &Run( const T_Precision *inputs );
+
+	/**
+	 * \if english
+	 *   @brief Compute the network's outputs
+	 *   @param[in] inputs Vector containing the inputs of the network
+	 *   @return Vector containing the outputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Calcola le uscite della rete
+	 *   @param[in] inputs Vettore contenente gli ingressi della rete
+	 *   @return Vettore contenente le uscite della rete
+	 * \endif
+	 */
+
+	// Esegue la rete neurale
+	const std::vector< T_Precision > &Run( const std::vector< T_Precision > &inputs );
+
+	/**
+	 * \if english
+	 *   @brief Returns the outputs of the network 
+	 *   @return Vector containing the outputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Ritorna le uscite della rete
+	 *   @return Vettore contenente le uscite della rete
+	 * \endif
+	 */
 
 	// Ritorna le uscite della rete
 	const std::vector< T_Precision > &GetOutputs() const;
+
+	/**
+	 * \if english
+	 *   @brief Returns an output of the network 
+	 *   @return Output of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Ritorna un'uscita della rete
+	 *   @return Uscita della rete
+	 * \endif
+	 */
+
 	// Ritorna un uscita della rete
 	const T_Precision GetOutput( size_t n ) const;
 
+	/**
+	 * \if english
+	 *   @brief Returns the layers of the network
+	 *   @return Vector containing the layers of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Ritorna gli strati della rete
+	 *   @return Vettore contenente gli strati della rete
+	 * \endif
+	 */
+
 	// Ritorna gli strati della rete
 	std::vector< Layer * > &GetLayers();
+
+	/**
+	 * \if english
+	 *   @brief Returns a layer of the network
+	 *   @return Layer of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Ritorna uno strato della rete
+	 *   @return Strato della rete
+	 * \endif
+	 */
+
 	// Ritorna uno strato specifico della rete
 	Layer &GetLayer( size_t n );
 
+	/**
+	 * \if english
+	 *   @brief Save the network into a file
+	 *   @param[in] path Path to the file
+	 * \endif
+	 * \if italian
+	 *   @brief Salva la rete neurale in un file
+	 *   @param[in] path Percorso al file
+	 * \endif
+	 */
+
 	// Salva la rete neurale in un file
 	void Save( const std::string &path );
+
+	/**
+	 * \if english
+	 *   @brief Load the network from a file
+	 *   @param[in] path Path to the file
+	 * \endif
+	 * \if italian
+	 *   @brief Carica la rete neurale da un file
+	 *   @param[in] path Percorso al file
+	 * \endif
+	 */
 
 	// Carica la rete neurale da un file
 	void Load( const std::string &path );
 
 private:
 
+	/**
+	 * \if english
+	 *   Vector containing the layers of the network
+	 * \endif
+	 * \if italian
+	 *   Vettore contenente gli strati della rete
+	 * \endif
+	 */
+
 	// Strati della rete
 	std::vector< Layer * > layers;
 
+	/**
+	 * \if english
+	 *   Vector containing the outputs of the network
+	 * \endif
+	 * \if italian
+	 *   Vettore contenente le uscite della rete
+	 * \endif
+	 */
+
 	// Dati di uscita
 	std::vector< T_Precision > output_data;
+
+	/**
+	 * \if english
+	 *   @brief Make structures of the new neural network
+	 * \endif
+	 * \if italian
+	 *   @brief Costruisce le strutture della nuova rete neurale
+	 * \endif
+	 */
 
 	// Costruisce le strutture della nuova rete neurale
 	void MakeStructures( size_t n_layers, const size_t *layers_struct );
