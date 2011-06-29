@@ -573,11 +573,11 @@ protected:
 	/**
 	 * \if english
 	 *   @brief Compute the error of the network's outputs
-	 *   @param[in] desired_error Vector containing the examples of output
+	 *   @param[in] desired_output Vector containing the examples of output
 	 * \endif
 	 * \if italian
 	 *   @brief Calcola l'errore delle uscite
-	 *   @param[in] desired_error Vettore contenente gli esempi di uscita
+	 *   @param[in] desired_output Vettore contenente gli esempi di uscita
 	 * \endif
 	 */
 
