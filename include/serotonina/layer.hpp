@@ -51,20 +51,30 @@ struct Layer {
 	// Numero dei neuroni dello strato
 	size_t n_neurons;
 
-	/**
-	 * \if english
-	 *   @brief Neurons of the layer (and pointer to the first neuron)
-	 * \endif
-	 * \if italian
-	 *   @brief Neuroni dello strato (e puntatore al primo neurone dello strato)
-	 * \endif
-	 */
-
 	// Neuroni dello strato (e puntatore al primo neurone dello strato)
 	union {
 
-		Neuron *neurons,
-		*first_neuron;
+		/**
+		 * \if english
+		 *   @brief Neurons of the layer
+		 * \endif
+		 * \if italian
+		 *   @brief Neuroni dello strato
+		 * \endif
+		 */
+
+		Neuron *neurons;
+
+		/**
+		 * \if english
+		 *   @brief Pointer to the first neuron of the layer
+		 * \endif
+		 * \if italian
+		 *   @brief Puntatore al primo neurone dello strato
+		 * \endif
+		 */
+
+		Neuron *first_neuron;
 	};
 
 	/**
@@ -91,17 +101,31 @@ struct Layer {
 	// Numero delle sinapsi nello strato
 	size_t n_synapses;
 
-	/**
-	 * \if english
-	 *   @brief Synapses of the layer (and pointer to the first synapse)
-	 * \endif
-	 * \if italian
-	 *   @brief Sinapsi dello strato (e puntatore al primo neurone dello strato)
-	 * \endif
-	 */
-
 	// Sinapsi tra i due strati (e puntatore alla prima sinapsi)
-	union { Synapse *synapses, *first_synapse; };
+	union {
+
+		/**
+		 * \if english
+		 *   @brief Synapses of the layer
+		 * \endif
+		 * \if italian
+		 *   @brief Sinapsi dello strato
+		 * \endif
+		 */
+
+		Synapse *synapses;
+
+		/**
+		 * \if english
+		 *   @brief Pointer to the first synapse of the layer
+		 * \endif
+		 * \if italian
+		 *   @brief Puntatore alla prima sinapsi dello strato
+		 * \endif
+		 */
+
+		Synapse *first_synapse;
+	};
 
 	/**
 	 * \if english
