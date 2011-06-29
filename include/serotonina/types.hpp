@@ -28,10 +28,10 @@ namespace Serotonina { // Namespace di Serotonina
 /**
  * \typedef T_Precision
  * \if english
- *   The type used for structures of the neural network
+ *   @brief The type used for structures of the neural network
  * \endif
  * \if italian
- *   Il tipo usato per le strutture della rete neurale
+ *   @brief Il tipo usato per le strutture della rete neurale
  * \endif
  */
 
