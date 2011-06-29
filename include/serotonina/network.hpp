@@ -283,10 +283,10 @@ private:
 
 	/**
 	 * \if english
-	 *   Vector containing the layers of the network
+	 *   @brief Vector containing the layers of the network
 	 * \endif
 	 * \if italian
-	 *   Vettore contenente gli strati della rete
+	 *   @brief Vettore contenente gli strati della rete
 	 * \endif
 	 */
 
@@ -295,10 +295,10 @@ private:
 
 	/**
 	 * \if english
-	 *   Vector containing the outputs of the network
+	 *   @brief Vector containing the outputs of the network
 	 * \endif
 	 * \if italian
-	 *   Vettore contenente le uscite della rete
+	 *   @brief Vettore contenente le uscite della rete
 	 * \endif
 	 */
 

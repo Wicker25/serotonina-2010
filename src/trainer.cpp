@@ -138,7 +138,7 @@ Trainer::InitWeights() {
 }
 
 void
-Trainer::ComputeOutputError( const T_Precision *desired_error ) {
+Trainer::ComputeOutputError( const T_Precision *desired_output ) {
 
 	// Iteratore
 	size_t i = 0;
@@ -162,7 +162,7 @@ Trainer::ComputeOutputError( const T_Precision *desired_error ) {
 
 		// Calcolo l'errore dell'uscita
 		// dE/dy_i = -(D_i - Y_i)
-		neuron_i->dEdy = - ( desired_error[i] - neuron_i->value );
+		neuron_i->dEdy = - ( desired_output[i] - neuron_i->value );
 
 		// Preparo l'iteratore dei neuroni
 		last_neuron_j	= this->network->GetLayer( this->network->GetLayers().size() - 2 ).last_neuron;

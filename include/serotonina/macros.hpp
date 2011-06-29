@@ -182,12 +182,12 @@ inline T pow3( const T &x ) {
 
 /**
  * \if english
- *   @brief Returns a random number between 0 and 1
- *   @return A random number between 0 and 1
+ *   @brief Returns a pseudo-random number between 0 and 1
+ *   @return A pseudo-random number between 0 and 1
  * \endif
  * \if italian
- *   @brief Ritorna un numero compreso tra 0 e 1
- *   @return Un numero compreso tra 0 e 1
+ *   @brief Ritorna un numero pseudo-casuale compreso tra 0 e 1
+ *   @return Un numero pseudo-casuale compreso tra 0 e 1
  * \endif
  */
 

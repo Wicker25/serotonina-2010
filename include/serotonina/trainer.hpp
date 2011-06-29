@@ -148,12 +148,12 @@ public:
 	/**
 	 * \if english
 	 *   @brief Constructor method
-	 *   @param[in] network_ Reference to the neural network to be trained
+	 *   @param[in] network_ Pointer to the neural network to be trained
 	 *   @param[in] init_weights If 'true' the weights of the neural network will be initialized
 	 * \endif
 	 * \if italian
 	 *   @brief Metodo costruttore
-	 *   @param[in] network_ Riferimento alla rete neurale da addestrare
+	 *   @param[in] network_ Puntatore alla rete neurale da addestrare
 	 *   @param[in] init_weights Se è 'true' i pesi della rete neurale verranno inizializzati
 	 * \endif
 	 */
@@ -187,7 +187,7 @@ public:
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta la rete neurale da addestrare
-	 *   @param[in] network_ Puntatore alla rete neural da addestrare
+	 *   @param[in] network_ Puntatore alla rete neurale da addestrare
 	 * \endif
 	 */
 
@@ -355,9 +355,11 @@ public:
 	/**
 	 * \if english
 	 *   @brief Set the report's function
+	 *   @param[in] fun Reference to the report's function
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta la funzione di report
+	 *   @param[in] fun Riferimento alla funzione di report
 	 * \endif
 	 */
 
@@ -379,9 +381,11 @@ public:
 	/**
 	 * \if english
 	 *   @brief Set data used by report's function
+	 *   @param[in] data Pointer to data used by report's function
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta le informazioni usate dalla funzione di report
+	 *   @param[in] data Puntatore alle informazioni usate dalla funzione di report
 	 * \endif
 	 */
 
@@ -496,10 +500,10 @@ protected:
 
 	/**
 	 * \if english
-	 *   Pointer to the neural network to be trained
+	 *   @brief Pointer to the neural network to be trained
 	 * \endif
 	 * \if italian
-	 *   Puntatore alla rete neurale da addestrare
+	 *   @brief Puntatore alla rete neurale da addestrare
 	 * \endif
 	 */
 
@@ -508,10 +512,10 @@ protected:
 
 	/**
 	 * \if english
-	 *   The error of the neural network
+	 *   @brief The error of the neural network
 	 * \endif
 	 * \if italian
-	 *   L'errore della rete neurale
+	 *   @brief L'errore della rete neurale
 	 * \endif
 	 */
 
@@ -520,10 +524,10 @@ protected:
 
 	/**
 	 * \if english
-	 *   The error of the neural network at previous epoch
+	 *   @brief The error of the neural network at previous epoch
 	 * \endif
 	 * \if italian
-	 *   L'errore della rete neurale nell'epoca precedente
+	 *   @brief L'errore della rete neurale nell'epoca precedente
 	 * \endif
 	 */
 
@@ -532,10 +536,10 @@ protected:
 
 	/**
 	 * \if english
-	 *   Vector containing parameters of training
+	 *   @brief Vector containing parameters of training
 	 * \endif
 	 * \if italian
-	 *   Vettore contenente i parametri dell'addestramento
+	 *   @brief Vettore contenente i parametri dell'addestramento
 	 * \endif
 	 */
 
@@ -544,10 +548,10 @@ protected:
 
 	/**
 	 * \if english
-	 *   Pointer to the report's function
+	 *   @brief Pointer to the report's function
 	 * \endif
 	 * \if italian
-	 *   Puntatore alla funzione di report
+	 *   @brief Puntatore alla funzione di report
 	 * \endif
 	 */
 
@@ -556,10 +560,10 @@ protected:
 
 	/**
 	 * \if english
-	 *   Pointer to the data of the report's function
+	 *   @brief Pointer to the data of the report's function
 	 * \endif
 	 * \if italian
-	 *   Puntatore alle informazioni della funzione di report
+	 *   @brief Puntatore alle informazioni della funzione di report
 	 * \endif
 	 */
 
@@ -573,12 +577,12 @@ protected:
 	 * \endif
 	 * \if italian
 	 *   @brief Calcola l'errore delle uscite
-	 *   @param[in] desired_error Vettore contenente gli esempi di ingresso
+	 *   @param[in] desired_error Vettore contenente gli esempi di uscita
 	 * \endif
 	 */
 
 	// Calcola l'errore delle uscite
-	void ComputeOutputError( const T_Precision *desired_error );
+	void ComputeOutputError( const T_Precision *desired_output );
 
 	/**
 	 * \if english

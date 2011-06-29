@@ -95,7 +95,7 @@ public:
 	 * \endif
 	 * \if italian
 	 *   @brief Controlla i parametri dell'addestramento
-	 *   @param[in] train_params I parametri dell'addestramento passati Trainer
+	 *   @param[in] train_params I parametri dell'addestramento passati dal Trainer
 	 *   @return Risultato del controllo
 	 *   @retval true Se i parametri sono corretti
 	 *   @retval false Se i parametri non sono corretti
@@ -108,11 +108,11 @@ public:
 	/**
 	 * \if english
 	 *   @brief Initializes structures of training
-	 *   @param[in] network The neural network passed by Trainer
+	 *   @param[in] network Reference to the neural network passed by Trainer
 	 * \endif
 	 * \if italian
 	 *   @brief Inizializza le strutture dell'addestramento
-	 *   @param[in] network La rete neurale passata dal Trainer
+	 *   @param[in] network Riferimento alla rete neurale passata dal Trainer
 	 * \endif
 	 */
 
@@ -143,11 +143,11 @@ public:
 	/**
 	 * \if english
 	 *   @brief Deinitializes structures of training
-	 *   @param[in] network The neural network passed by Trainer
+	 *   @param[in] network Reference to the neural network passed by Trainer
 	 * \endif
 	 * \if italian
 	 *   @brief Deinizializza le strutture dell'addestramento
-	 *   @param[in] network La rete neurale passata dal Trainer
+	 *   @param[in] network Riferimento alla rete neurale passata dal Trainer
 	 * \endif
 	 */
 
