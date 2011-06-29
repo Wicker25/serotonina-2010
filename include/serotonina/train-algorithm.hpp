@@ -47,10 +47,10 @@ namespace Serotonina { // Namespace di Serotonina
 /*!
  * @namespace Serotonina::Algorithms
  * \if english
- *   Namespace of training algorithms.
+ *   @brief Namespace of training algorithms.
  * \endif
  * \if italian
- *   Namespace degli algoritmi di addestramento
+ *   @brief Namespace degli algoritmi di addestramento
  * \endif
  */
  

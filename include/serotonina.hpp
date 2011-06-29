@@ -24,10 +24,10 @@
 /*!
  * @namespace Serotonina
  * \if english
- *   Main namespace of the library.
+ *   @brief Main namespace of the library.
  * \endif
  * \if italian
- *   Namespace principale della libreria
+ *   @brief Namespace principale della libreria
  * \endif
  */
 
