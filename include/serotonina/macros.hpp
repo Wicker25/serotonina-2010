@@ -203,10 +203,12 @@ inline T rand0to1() {
 /**
  * \if english
  *   @brief Returns sigmoid(x)
+ *   @param[in] x The number 'x'
  *   @return sigmoid(x)
  * \endif
  * \if italian
  *   @brief Ritorna sigmoid(x)
+ *   @param[in] x Il numero 'x'
  *   @return sigmoid(x)
  * \endif
  */
@@ -221,10 +223,12 @@ inline T sigmoid( const T &x ) {
 /**
  * \if english
  *   @brief Returns sigmoid(x)(1 - sigmoid(x))
+ *   @param[in] x The number 'x'
  *   @return sigmid(x)(1 - sigmid(x))
  * \endif
  * \if italian
  *   @brief Ritorna sigmoid(x)(1 - sigmoid(x))
+ *   @param[in] x Il numero 'x'
  *   @return sigmoid(x)(1 - sigmoid(x))
  * \endif
  */
