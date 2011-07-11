@@ -14,28 +14,28 @@ IF ( SEROTONINA_FOUND )
 
 	# Compilo tutti gli esempi
 	add_executable( create_network ${CMAKE_SOURCE_DIR}/create_network.cpp )
-	target_link_libraries( create_network ${SEROTONINA_LIBRARY} )
+	target_link_libraries( create_network ${SEROTONINA_LIBRARIES} )
 
 	add_executable( train_network ${CMAKE_SOURCE_DIR}/train_network.cpp )
-	target_link_libraries( train_network ${SEROTONINA_LIBRARY} )
+	target_link_libraries( train_network ${SEROTONINA_LIBRARIES} )
 
 	add_executable( load_from_file ${CMAKE_SOURCE_DIR}/load_from_file.cpp )
-	target_link_libraries( load_from_file ${SEROTONINA_LIBRARY} )
+	target_link_libraries( load_from_file ${SEROTONINA_LIBRARIES} )
 
 	add_executable( create_train_algorithm ${CMAKE_SOURCE_DIR}/create_train_algorithm.cpp )
-	target_link_libraries( create_train_algorithm ${SEROTONINA_LIBRARY} )
+	target_link_libraries( create_train_algorithm ${SEROTONINA_LIBRARIES} )
 
 	add_executable( and ${CMAKE_SOURCE_DIR}/and.cpp )
-	target_link_libraries( and ${SEROTONINA_LIBRARY} )
+	target_link_libraries( and ${SEROTONINA_LIBRARIES} )
 
 	add_executable( xor ${CMAKE_SOURCE_DIR}/xor.cpp )
-	target_link_libraries( xor ${SEROTONINA_LIBRARY} )
+	target_link_libraries( xor ${SEROTONINA_LIBRARIES} )
 
 	add_executable( coder ${CMAKE_SOURCE_DIR}/coder.cpp )
-	target_link_libraries( coder ${SEROTONINA_LIBRARY} )
+	target_link_libraries( coder ${SEROTONINA_LIBRARIES} )
 
 	add_executable( face ${CMAKE_SOURCE_DIR}/face.cpp )
-	target_link_libraries( face ${SEROTONINA_LIBRARY} )
+	target_link_libraries( face ${SEROTONINA_LIBRARIES} )
 
 ELSE ( SEROTONINA_FOUND )
 

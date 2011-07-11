@@ -15,7 +15,7 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
+    along with Serotonina. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef _SEROTONINA_MACROS_HPP_
@@ -222,21 +222,21 @@ inline T sigmoid( const T &x ) {
 
 /**
  * \if english
- *   @brief Returns sigmoid(x)(1 - sigmoid(x))
+ *   @brief Returns sigmoid'(x) = sigmoid(x)(1 - sigmoid(x))
  *   @param[in] x The number 'x'
- *   @return sigmid(x)(1 - sigmid(x))
+ *   @return sigmoid'(x) = sigmoid(x)(1 - sigmoid(x))
  * \endif
  * \if italian
- *   @brief Ritorna sigmoid(x)(1 - sigmoid(x))
+ *   @brief Ritorna sigmoid'(x) = sigmoid(x)(1 - sigmoid(x))
  *   @param[in] x Il numero 'x'
- *   @return sigmoid(x)(1 - sigmoid(x))
+ *   @return sigmoid'(x) = sigmoid(x)(1 - sigmoid(x))
  * \endif
  */
  
 template < typename T >
 inline T d_sigmoid( const T &x ) {
 
-	// Derivata della sigmoide come T'(x) = T(x)(1 - T(x))
+	// Derivata della sigmoide come sigmoid'(x) = sigmoid(x)(1 - sigmoid(x))
 	return ( x * ( 1 - x ) );
 }
 

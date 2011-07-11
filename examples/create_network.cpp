@@ -15,7 +15,7 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
+    along with Serotonina. If not, see <http://www.gnu.org/licenses/>.
 
     To compile: g++ `pkg-config --libs --cflags serotonina` create_network.cpp -o create_network
 */
@@ -36,7 +36,7 @@ int main( void ) {
 
 	/* ------------------------ */
 
-	// Creo l'array che descrive la struttura della rete
+	// Creo l'array contenente le dimensioni della rete
 	size_t layers_struct1[3] = { 5, 20, 5 };
 
 	// Creo una rete neurale 5x20x5
@@ -44,7 +44,7 @@ int main( void ) {
 
 	/* ------------------------ */
 
-	// Creo il vettore che descrive la struttura della rete
+	// Creo il vettore contenente le dimensioni della rete
 	std::vector< size_t > layers_struct2;
 
 	layers_struct2.push_back(20);

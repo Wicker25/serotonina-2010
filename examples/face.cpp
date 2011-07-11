@@ -15,7 +15,7 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
+    along with Serotonina. If not, see <http://www.gnu.org/licenses/>.
 
     To compile: g++ `pkg-config --libs --cflags serotonina` face.cpp -o face
 */
@@ -31,7 +31,7 @@ using namespace Serotonina;
 int main( void ) {
 
 	// Creo la rete neurale
-	Serotonina::Network network( 3, 280, 15, 1 );
+	Network network( 3, 280, 15, 1 );
 
 	// Creo l'addestratore della rete neurale
 	Trainer trainer( network );

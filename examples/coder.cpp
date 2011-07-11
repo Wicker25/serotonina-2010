@@ -15,7 +15,7 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
+    along with Serotonina. If not, see <http://www.gnu.org/licenses/>.
 
     To compile: g++ `pkg-config --libs --cflags serotonina` coder.cpp -o coder
 */
@@ -41,8 +41,8 @@ int main( void ) {
 	trainer.TrainOnFile< Algorithms::Batch >( "train/coder.train", 0.000001, 100000, 5000 );
 
 	// Eseguo la rete neurale
-	Serotonina::T_Precision in[3] = { 0, 1, 1 };
-	const std::vector< Serotonina::T_Precision > &out = network.Run( in );
+	T_Precision in[3] = { 0, 1, 1 };
+	const std::vector< T_Precision > &out = network.Run( in );
 
 	// Iteratore
 	size_t i;

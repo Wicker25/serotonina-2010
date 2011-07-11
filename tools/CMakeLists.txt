@@ -52,7 +52,7 @@ configure_file(
 # Imposto la cartella delle librerie generate
 set( LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib )
 
-# Controllo se è stata trovata la libreria di Serotonina
+# Controllo se è stata trovata la libreria Serotonina
 IF ( SEROTONINA_FOUND )
 
 	# Controllo se il sistema operativo è UNIX
@@ -70,10 +70,7 @@ IF ( SEROTONINA_FOUND )
 			# Strumento Gym per l'addestramento delle reti neurali
 			add_executable( st_gym ${CMAKE_SOURCE_DIR}/src/gym.cpp )
 
-			add_dependencies( st_gym serotonina )
-			add_dependencies( st_gym serotonina_plot )
-
-			target_link_libraries( st_gym serotonina )
+			target_link_libraries( st_gym ${SEROTONINA_LIBRARIES} )
 			target_link_libraries( st_gym serotonina_plot )
 			target_link_libraries( st_gym ${CMAKE_THREAD_LIBS_INIT} )
 			target_link_libraries( st_gym ${FLTK_LIBRARIES} )
@@ -82,9 +79,7 @@ IF ( SEROTONINA_FOUND )
 			# Strumento OCR per il riconoscimento di caratteri manoscritti
 			add_executable( st_ocr ${CMAKE_SOURCE_DIR}/src/ocr.cpp )
 
-			add_dependencies( st_ocr serotonina )
-
-			target_link_libraries( st_ocr serotonina )
+			target_link_libraries( st_ocr ${SEROTONINA_LIBRARIES} )
 			target_link_libraries( st_ocr ${CMAKE_THREAD_LIBS_INIT} )
 			target_link_libraries( st_ocr ${FLTK_LIBRARIES} )
 			target_link_libraries( st_ocr ${OPENGL_LIBRARIES} )
@@ -95,9 +90,7 @@ IF ( SEROTONINA_FOUND )
 				# Strumento Face recognition per il riconoscimento di un volto attraverso la webcam
 				add_executable( st_face_recognition ${CMAKE_SOURCE_DIR}/src/face-recognition.cpp )
 
-				add_dependencies( st_face_recognition serotonina )
-
-				target_link_libraries( st_face_recognition serotonina )
+				target_link_libraries( st_face_recognition ${SEROTONINA_LIBRARIES} )
 				target_link_libraries( st_face_recognition ${FLTK_LIBRARIES} )
 				target_link_libraries( st_face_recognition ${OPENGL_LIBRARIES} )
 				target_link_libraries( st_face_recognition ${OpenCV_LIBS} )

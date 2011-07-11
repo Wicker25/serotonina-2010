@@ -1,5 +1,5 @@
 /* 
-	Title --- xor.cpp
+    Title --- xor.cpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
 
@@ -15,7 +15,7 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with Serotonina.  If not, see <http://www.gnu.org/licenses/>.
+    along with Serotonina. If not, see <http://www.gnu.org/licenses/>.
 
     To compile: g++ `pkg-config --libs --cflags serotonina` xor.cpp -o xor
 */
@@ -31,7 +31,7 @@ using namespace Serotonina;
 int main( void ) {
 
 	// Creo la rete neurale
-	Serotonina::Network network( 3, 2, 5, 1 );
+	Network network( 3, 2, 5, 1 );
 
 	// Creo l'addestratore della rete neurale
 	Trainer trainer( network );
@@ -41,7 +41,7 @@ int main( void ) {
 	trainer.TrainOnFile< Algorithms::Batch >( "train/xor.train", 0.000001, 100000, 5000 );
 
 	// Ingressi della rete
-	Serotonina::T_Precision in[2];
+	T_Precision in[2];
 
 	// Iteratori
 	size_t i, j = 0;
@@ -56,7 +56,7 @@ int main( void ) {
 			in[1] = (T_Precision) i;
 
 			// Calcolo l'uscita della rete neurale
-			const std::vector< Serotonina::T_Precision > &out = network.Run( in );
+			const std::vector< T_Precision > &out = network.Run( in );
 
 			// Stampo i risultati
 			std::cout.setf( std::ios::fixed, std::ios::floatfield );

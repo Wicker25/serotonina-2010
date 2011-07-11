@@ -1,0 +1,19 @@
+# CMake's configuration
+
+# Vincolo sulle versioni minori di CMake
+cmake_minimum_required( VERSION 2.6 )
+
+# Cerco la libreria Serotonina nel sistema
+find_package( Serotonina )
+
+# Controllo se è stata trovata la libreria Serotonina
+IF ( SEROTONINA_FOUND )
+
+	# Compilo il progetto
+	add_executable( <ESEGUIBILE> ${CMAKE_SOURCE_DIR}/<SORGENTE> )
+
+	# Linko la libreria al progetto
+	target_link_libraries( <ESEGUIBILE> ${SEROTONINA_LIBRARIES} )
+
+ENDIF ( SEROTONINA_FOUND )
+
