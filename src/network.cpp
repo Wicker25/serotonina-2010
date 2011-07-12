@@ -89,6 +89,9 @@ Network::~Network() {
 	// Elimino gli strati della rete
 	for ( ; i < this->layers.size(); i++ )
 		delete this->layers[i];
+
+	// Pulisco il vettore degli strati
+	this->layers.clear();
 }
 
 void
@@ -97,11 +100,8 @@ Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 	// Controllo che siano stati scelti almeno tre strati
 	if ( n_layers < 2 ) {
 
-		// Communico l'errore all'utente
-		fprintf( stderr, "(W) Insufficient number of layers!\n" );
-
-		// Termino
-		exit(0);
+		// Sollevo un'eccezione
+		throw Exception( "Insufficient number of layers" );
 	}
 
 	// Creo lo strato di ingresso
@@ -119,6 +119,20 @@ Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 
 	// Creo il vettore contenente i dati di uscita
 	this->output_data.resize( this->layers.back()->n_neurons );
+}
+
+void
+Network::SetInputs( const std::vector< T_Precision > &inputs ) {
+
+	// Controllo che gli input passati siano tanti quanti quelli della rete
+	if ( inputs.size() != this->layers.front()->n_neurons ) {
+
+		// Sollevo un'eccezione
+		throw Exception( "Insufficient number of inputs" );
+	}
+
+	// Richiamo la funzione principale
+	this->SetInputs( &inputs[0] );
 }
 
 void
@@ -216,11 +230,8 @@ Network::Save( const std::string &path ) {
 	// Controllo se il file è stato aperto correttamente
 	if ( !file.is_open() ) {
 
-		// Communico l'errore all'utente
-		fprintf( stderr, "(W) Couldn't open file '%s'!\n", path.c_str() );
-
-		// Termino l'esecuzione del programma
-		exit(1);
+		// Sollevo un'eccezione
+		throw Exception( "Couldn't open file '", path, "'" );
 	}
 
 	// Imposto la precisione dei pesi
@@ -276,11 +287,14 @@ Network::Load( const std::string &path ) {
 	if ( !this->layers.empty() ) {
 
 		// Iteratore
-		size_t i;
+		size_t i = 0;
 
 		// Elimino gli strati della rete
-		for ( i = 0; i < this->layers.size(); i++ )
+		for ( ; i < this->layers.size(); i++ )
 			delete this->layers[i];
+
+		// Pulisco il vettore degli strati
+		this->layers.clear();
 	}
 
 	// Apre uno stream al file sorgente
@@ -289,11 +303,8 @@ Network::Load( const std::string &path ) {
 	// Controllo se il file è stato aperto correttamente
 	if ( !file.is_open() ) {
 
-		// Communico l'errore all'utente
-		fprintf( stderr, "(W) Couldn't read from file '%s'!\n", path.c_str() );
-
-		// Termino l'esecuzione del programma
-		exit(1);
+		// Sollevo un'eccezione
+		throw Exception( "Couldn't read from file '", path, "'" );
 	}
 
 	// Vettore con i valori estratti dalla riga
@@ -337,7 +348,6 @@ Network::Load( const std::string &path ) {
 			n_line++;
 		}
 	}
-
 
 	// Vettore con i valori estratti dalla riga
 	std::vector< T_Precision > values;

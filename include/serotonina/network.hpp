@@ -31,6 +31,7 @@
 #include <serotonina/version.hpp>
 #include <serotonina/types.hpp>
 #include <serotonina/macros.hpp>
+#include <serotonina/exception.hpp>
 #include <serotonina/string.hpp>
 
 #include <serotonina/neuron.hpp>
@@ -151,6 +152,20 @@ public:
 
 	/**
 	 * \if english
+	 *   @brief Returns the number of the inputs
+	 *   @return Number of the inputs
+	 * \endif
+	 * \if italian
+	 *   @brief Ritorna il numero degli ingressi
+	 *   @return Il numero degli ingressi
+	 * \endif
+	 */
+
+	// Ritorna il numero degli ingressi della rete
+	size_t GetNumOfInputs() const;
+
+	/**
+	 * \if english
 	 *   @brief Compute the network's outputs
 	 *   @return Vector containing the outputs of the network
 	 * \endif
@@ -222,6 +237,20 @@ public:
 
 	// Ritorna un uscita della rete
 	const T_Precision GetOutput( size_t n ) const;
+
+	/**
+	 * \if english
+	 *   @brief Returns the number of the outputs
+	 *   @return Number of the outputs
+	 * \endif
+	 * \if italian
+	 *   @brief Ritorna il numero delle uscite
+	 *   @return Il numero delle uscite
+	 * \endif
+	 */
+
+	// Ritorna il numero delle uscite della rete
+	size_t GetNumOfOutputs() const;
 
 	/**
 	 * \if english

@@ -158,9 +158,15 @@ inline void
 Trainer::Train(	const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples,
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports ) {
 
-	// Richiamo la funzione di addestramento principale
-	this->Train< train_algorithm >(	&input_samples[0], &output_samples[0], ( input_samples.size() / this->network->GetLayers()[0]->n_neurons ), 
-					desired_error, max_epochs, epochs_between_reports );
+	// Controllo la correttezza dell'insieme di addestramento
+	if ( (float) input_samples.size() / (float) input_samples.size() == this->network->GetNumOfInputs() / this->network->GetNumOfOutputs() ) {
+
+		// Richiamo la funzione di addestramento principale
+		this->Train< train_algorithm >(	&input_samples[0], &output_samples[0], ( input_samples.size() / this->network->GetLayers()[0]->n_neurons ), 
+										desired_error, max_epochs, epochs_between_reports );
+
+	// Altrimenti sollevo un eccezione
+	} else throw Exception( "Wrong training set" );
 }
 
 template < class train_algorithm >
@@ -267,8 +273,8 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 			std::cout << "Training completed in " << epochs << " epochs.\n";
 		}
 
-	// Comunico l'errore
-	} else std::cout << "Training interrupted.\n";
+	// Sollevo un'eccezione
+	} else throw Exception( "Wrong parameters of training" );
 }
 
 template < class train_algorithm >
@@ -282,11 +288,8 @@ Trainer::TrainOnFile(	const std::string &path, T_Precision desired_error,
 	// Controllo se il file è stato aperto correttamente
 	if ( !file.is_open() ) {
 
-		// Communico l'errore all'utente
-		fprintf( stderr, "(W) Couldn't open file '%s'!\n", path.c_str() );
-
-		// Termino l'esecuzione del programma
-		exit(1);
+		// Sollevo un'eccezione
+		throw Exception( "Couldn't open file '", path, "'" );
 	}
 
 	// Valori d'ingresso
@@ -328,8 +331,8 @@ Trainer::TrainOnFile(	const std::string &path, T_Precision desired_error,
 			// Controllo se il tipo di addestramento non è adatto alla rete corrente
 			if ( this->network->GetLayers().front()->n_neurons != (size_t) info[0] || this->network->GetLayers().back()->n_neurons != (size_t) info[1] ) {
 
-				// Communico l'errore all'utente
-				fprintf( stderr, " (W) Inadequate training file '%s'!\n", path.c_str() );
+				// Sollevo un'eccezione
+				throw Exception( "Incompatible training file '", path, "'" );
 			}
 
 			// Imposto il flag di uscita

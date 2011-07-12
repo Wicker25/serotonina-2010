@@ -25,7 +25,7 @@
  * @namespace Serotonina
  * \if english
  *
- *   \mainpage Serotonina v1.1.5 - Reference Manual
+ *   \mainpage Serotonina v1.1.6 - Reference Manual
  *
  *   \section description Description
  *
@@ -77,7 +77,7 @@
  * \endif
  * \if italian
  *
- *   \mainpage Serotonina v1.1.5 - Manuale di riferimento
+ *   \mainpage Serotonina v1.1.6 - Manuale di riferimento
  *
  *   \section description Descrizione
  *
@@ -144,6 +144,7 @@
 #include <serotonina/version.hpp>
 #include <serotonina/types.hpp>
 #include <serotonina/macros.hpp>
+#include <serotonina/exception.hpp>
 #include <serotonina/string.hpp>
 
 #include <serotonina/neuron.hpp>

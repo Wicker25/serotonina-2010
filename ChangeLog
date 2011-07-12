@@ -1,5 +1,13 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.1.6 - urgency=low =============
+
+2011-07-11  Wicker25  < wicker25@gmail.com >
+
+    * all: Added exception handling (`exception.hpp`).
+           Updated all examples to version 1.1.6 .
+
+    * network.hpp: Added `Network->GetNumOfInputs` and `Network->GetNumOfOutputs` methods.
 
 ============= Serotonina 1.1.5 - urgency=low =============
 

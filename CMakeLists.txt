@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto la versione della libreria
 set( SEROTONINA_VERSION_MAJOR 1 )
 set( SEROTONINA_VERSION_MINOR 1 )
-set( SEROTONINA_VERSION_PATCH 5 )
+set( SEROTONINA_VERSION_PATCH 6 )
 
 # Aggiungo una direttiva al compilatore
 add_definitions( -Wall -ansi -pedantic -pedantic-errors )
@@ -48,7 +48,6 @@ set( SEROTONINA_BINARY_DIR ${CMAKE_BINARY_DIR}/bin )
 # Libreria Serotonina
 add_library( serotonina SHARED	${SEROTONINA_SOURCE_DIR}/network.cpp
 								${SEROTONINA_SOURCE_DIR}/trainer.cpp
-								${SEROTONINA_SOURCE_DIR}/train-algorithm.cpp
 								${SEROTONINA_SOURCE_DIR}/mod/batch.cpp
 								${SEROTONINA_SOURCE_DIR}/mod/rprop.cpp
 								${SEROTONINA_SOURCE_DIR}/mod/rpropp.cpp
