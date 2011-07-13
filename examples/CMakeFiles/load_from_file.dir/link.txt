@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/load_from_file.dir/load_from_file.cpp.o  -o load_from_file -rdynamic -lserotonina 

@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/xor.dir/xor.cpp.o  -o xor -rdynamic -lserotonina 

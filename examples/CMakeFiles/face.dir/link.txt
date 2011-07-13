@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/face.dir/face.cpp.o  -o face -rdynamic -lserotonina 

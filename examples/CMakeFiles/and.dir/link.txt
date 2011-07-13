@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/and.dir/and.cpp.o  -o and -rdynamic -lserotonina 
