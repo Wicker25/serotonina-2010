@@ -159,7 +159,7 @@ Trainer::Train(	const std::vector< T_Precision > &input_samples, const std::vect
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports ) {
 
 	// Controllo la correttezza dell'insieme di addestramento
-	if ( (float) input_samples.size() / (float) input_samples.size() == this->network->GetNumOfInputs() / this->network->GetNumOfOutputs() ) {
+	if ( (float) input_samples.size() / (float) output_samples.size() == (float) this->network->GetNumOfInputs() / (float) this->network->GetNumOfOutputs() ) {
 
 		// Richiamo la funzione di addestramento principale
 		this->Train< train_algorithm >(	&input_samples[0], &output_samples[0], ( input_samples.size() / this->network->GetLayers()[0]->n_neurons ), 
