@@ -158,7 +158,6 @@
 #include <serotonina/trainer-inl.hpp>
 
 #include <serotonina/train-algorithm.hpp>
-#include <serotonina/train-algorithm.hpp>
 
 // Includo i moduli per l'addestramento
 

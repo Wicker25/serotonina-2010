@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/coder.dir/coder.cpp.o  -o coder -rdynamic -lserotonina 

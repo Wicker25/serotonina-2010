@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/create_train_algorithm.dir/create_train_algorithm.cpp.o  -o create_train_algorithm -rdynamic -lserotonina 

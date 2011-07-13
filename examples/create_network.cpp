@@ -54,5 +54,10 @@ int main( void ) {
 
 	// Creo una rete neurale 20x10x10x1
 	Network network2( layers_struct2 );
+
+	/* ------------------------ */
+
+	// Carico la rete neurale da un file
+	Network network3( "train/and.net" );
 }
 

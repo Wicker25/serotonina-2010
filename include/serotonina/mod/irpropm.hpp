@@ -24,7 +24,6 @@
 #include <iostream>
 
 #include <serotonina/train-algorithm.hpp>
-#include <serotonina/train-algorithm-inl.hpp>
 
 #include <serotonina/mod/rprop.hpp>
 

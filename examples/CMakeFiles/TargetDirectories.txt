@@ -1,0 +1,8 @@
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/and.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/coder.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/create_network.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/create_train_algorithm.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/face.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/load_from_file.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/train_network.dir
+/home/wicker25/Progetti/C-C++/Serotonina/examples/CMakeFiles/xor.dir

@@ -43,7 +43,6 @@
 #include <serotonina/network-inl.hpp>
 
 #include <serotonina/train-algorithm.hpp>
-#include <serotonina/train-algorithm-inl.hpp>
 
 namespace Serotonina { // Namespace di Serotonina
 
