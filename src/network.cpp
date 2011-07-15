@@ -81,6 +81,42 @@ Network::Network( const std::string &path ) {
 	this->Load( path );
 }
 
+Network::Network( Network &other ) {
+
+	// Creo lo strato di ingresso
+	this->layers.push_back( new Layer( other.GetLayer(0).n_neurons, 0 ) );
+
+	// Iteratore
+	size_t i = 1;
+
+	// Iteratori delle sinapsi
+	Synapse *synapse_i, *last_synapse_i;
+	Synapse *synapse_j;
+
+	// Creo gli strati della rete
+	for ( ; i < other.GetLayers().size(); i++ ) {
+
+		// Creo lo strato
+		this->layers.push_back( new Layer( other.GetLayer(i).n_neurons, other.GetLayer(i - 1).n_neurons ) );
+
+		// Preparo l'iteratore delle sinapsi
+		last_synapse_i	= this->GetLayer(i).last_synapse;
+		synapse_i		= this->GetLayer(i).first_synapse;
+
+		// Preparo l'iteratore delle sinapsi dell'altra rete neurale
+		synapse_j = other.GetLayer(i).first_synapse;
+
+		// Copio i pesi sinaptici dall'altra rete neurale
+		for ( ; synapse_i <= last_synapse_i; synapse_i++, synapse_j++ ) {
+
+			synapse_i->weight = synapse_j->weight;
+		}
+	}   
+
+	// Creo il vettore contenente i dati di uscita
+	this->output_data.resize( this->layers.back()->n_neurons );
+}
+
 Network::~Network() {
 
 	// Iteratore
@@ -165,11 +201,11 @@ Network::Run() {
 	for ( t = 1; t < this->layers.size(); t++ ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->layers[t]->first_synapse;
+		synapse_t = this->GetLayer(t).first_synapse;
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_i	= this->layers[t]->last_neuron;
-		neuron_i		= this->layers[t]->first_neuron;
+		last_neuron_i	= this->GetLayer(t).last_neuron;
+		neuron_i		= this->GetLayer(t).first_neuron;
 
 		// Calcolo i valori di uscita dello strato corrente
 		// Y_i = T( SUM( w_ji - bias_i ) ) oppure Y_i = T( SUM( w_ji ) )
@@ -247,7 +283,7 @@ Network::Save( const std::string &path ) {
 	// Inserisco le informazioni generali della rete
 	for ( ; t < this->layers.size(); t++ ) {
 
-		file << this->layers[t]->n_neurons << " ";
+		file << this->GetLayer(t).n_neurons << " ";
 	}
 
 	file << std::endl;
@@ -262,8 +298,8 @@ Network::Save( const std::string &path ) {
 		file << std::endl << "# Pesi sinaptici dello strato " << t << std::endl;
 
 		// Preparo l'iteratore delle sinapsi
-		last_synapse_i	= this->layers[t]->last_synapse;
-		synapse_i		= this->layers[t]->first_synapse;
+		last_synapse_i	= this->GetLayer(t).last_synapse;
+		synapse_i		= this->GetLayer(t).first_synapse;
 
 		// Inserisco i pesi sinaptici dello strato t
 		for ( ; synapse_i <= last_synapse_i; synapse_i++ ) {
@@ -368,11 +404,11 @@ Network::Load( const std::string &path ) {
 		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Estraggo i valori di uscita
-			if ( values_from_string( line, values ) == this->layers[t]->n_synapses ) {
+			if ( values_from_string( line, values ) == this->GetLayer(t).n_synapses ) {
 
 				// Preparo l'iteratore delle sinapsi
-				synapse_i		= this->layers[t]->first_synapse;
-				last_synapse_i	= this->layers[t]->last_synapse;
+				synapse_i		= this->GetLayer(t).first_synapse;
+				last_synapse_i	= this->GetLayer(t).last_synapse;
 
 				// Copio i pesi sinaptici dello strato t
 				for ( i = 0; synapse_i <= last_synapse_i; i++, synapse_i++ ) {

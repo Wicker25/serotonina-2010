@@ -6,6 +6,8 @@ ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
     * network.hpp, trainer.hpp: Added some generic method.
 
+    * network.hpp: Added copy constructor method.
+	
 ============= Serotonina 1.1.6 - urgency=low =============
 
 2011-07-11  Wicker25  < wicker25@gmail.com >

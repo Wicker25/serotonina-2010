@@ -108,7 +108,7 @@ public:
 	/**
 	 * \if english
 	 *   @brief Constructor method. Load the neural network from a file
-	 *   @param[in] path Path to file of neural the network
+	 *   @param[in] path Path to file of the neural network
 	 * \endif
 	 * \if italian
 	 *   @brief Metodo costruttore. Carica la rete neurale da un file
@@ -118,6 +118,20 @@ public:
 
 	// Metodo costruttore
 	Network( const std::string &path );
+
+	/**
+	 * \if english
+	 *   @brief Copy constructor method.
+	 *   @param[in] other Another neural network
+	 * \endif
+	 * \if italian
+	 *   @brief Metodo costruttore di copia.
+	 *   @param[in] other Un'altra rete neurale
+	 * \endif
+	 */
+
+	// Metodo costruttore di copia
+	Network( Network &other );
 
 	// Metodo distruttore
 	virtual ~Network();
