@@ -96,7 +96,7 @@ int main( void ) {
 	// Log di lavoro
 	std::cout << "\nTraining with file.train :" << std::endl;
 
-	// Addestro la rete neurale usando un file
+	// Addestro la rete neurale leggendo l'insieme di addestramento da un file
 	trainer.TrainOnFile< Algorithms::Batch >( "train/xor.train", 0.000001, 100000, 5000 );
 
 

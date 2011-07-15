@@ -402,6 +402,24 @@ Network::Load( const std::string &path ) {
 	file.close();
 }
 
+std::ostream &
+operator<<( std::ostream &out, Network &network ) {
+
+	// Scrivo la struttura della rete neurale nello stream
+	out << "<Neural network [" << network.GetLayer(0).n_neurons;
+
+	size_t i = 1;
+
+	for ( ; i < network.GetLayers().size(); i++ ) {
+
+		out << "," << network.GetLayer(i).n_neurons;
+	}
+
+	out << "]>";
+
+	return out;
+}
+
 } // Chiudo il namespace di Serotonina
 
 #endif

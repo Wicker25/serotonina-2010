@@ -596,6 +596,22 @@ protected:
 	void BackpropagateError();
 };
 
+/**
+ * \if english
+ *   @brief Write a trainer on a stream
+ *   @param[in] out Stream
+ *   @param[in] trainer The trainer instance
+ * \endif
+ * \if italian
+ *   @brief Scrive la struttura di un addestratore su uno stream
+ *   @param[in] out Stream
+ *   @param[in] trainer L'istanza dell'addestratore
+ * \endif
+ */
+
+// Scrive la struttura della rete neurale in uno stream
+std::ostream &operator<<( std::ostream &out, Trainer &trainer );
+
 } // Chiudo il namespace di Serotonina
 
 #endif

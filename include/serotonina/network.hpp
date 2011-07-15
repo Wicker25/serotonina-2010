@@ -347,6 +347,22 @@ private:
 	void MakeStructures( size_t n_layers, const size_t *layers_struct );
 };
 
+/**
+ * \if english
+ *   @brief Write a network on a stream
+ *   @param[in] out Stream
+ *   @param[in] network The neural network
+ * \endif
+ * \if italian
+ *   @brief Scrive la struttura di una rete su uno stream
+ *   @param[in] out Stream
+ *   @param[in] network La rete neurale
+ * \endif
+ */
+
+// Scrive la struttura della rete neurale in uno stream
+std::ostream &operator<<( std::ostream &out, Network &network );
+
 } // Chiudo il namespace di Serotonina
 
 #endif

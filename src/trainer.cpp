@@ -264,6 +264,15 @@ Trainer::BackpropagateError() {
 	}
 }
 
+std::ostream &
+operator<<( std::ostream &out, Trainer &trainer ) {
+
+	// Scrivo la struttura dell'addestratore nello stream
+	out << "<Trainer>";
+
+	return out;
+}
+
 } // Chiudo il namespace di Serotonina
 
 #endif

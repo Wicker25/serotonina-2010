@@ -1,5 +1,11 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============= Serotonina 1.1.7 - urgency=low =============
+
+2011-07-11  Wicker25  < wicker25@gmail.com >
+
+    * network.hpp, trainer.hpp: Added some generic method.
+
 ============= Serotonina 1.1.6 - urgency=low =============
 
 2011-07-11  Wicker25  < wicker25@gmail.com >
