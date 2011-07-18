@@ -275,7 +275,7 @@ Network::Save( const std::string &path ) {
 	file.precision( 10 );
 
 	// Inserisco l'intestazione del file
-	file << "# Rete neurale" << std::endl;
+	file << "# Neural networks " << std::endl;
 
 	// Iteratore
 	size_t t = 0;
@@ -295,7 +295,7 @@ Network::Save( const std::string &path ) {
 	for ( t = 1; t < this->layers.size(); t++ ) {
 
 		// Inserisco l'intestazione dei pesi sinaptici
-		file << std::endl << "# Pesi sinaptici dello strato " << t << std::endl;
+		file << std::endl << "# Neural network's weights " << t << std::endl;
 
 		// Preparo l'iteratore delle sinapsi
 		last_synapse_i	= this->GetLayer(t).last_synapse;
@@ -376,7 +376,7 @@ Network::Load( const std::string &path ) {
 			} else {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf(	stderr, " (W) Syntax error on training file '%s', at line %lu: Insufficient number of layers!\n",
+				fprintf(	stderr, " (W) Syntax error on neural network's file '%s', at line %lu: Insufficient number of layers!\n",
 							path.c_str(), (unsigned long) n_line );
 			}
 
@@ -425,7 +425,7 @@ Network::Load( const std::string &path ) {
 			} else {
 
 				// E se trovo un errore lo communico all'utente
-				fprintf(	stderr, " (W) Syntax error on training file '%s', at line %lu!\n",
+				fprintf(	stderr, " (W) Syntax error on neural network's file '%s', at line %lu!\n",
 							path.c_str(), (unsigned long)  n_line );
 			}
 
