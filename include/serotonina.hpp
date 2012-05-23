@@ -130,7 +130,7 @@
  */
 
 /*!
- * @namespace Serotonina
+ * @namespace serotonina
  * \if english
  *   @brief Main namespace of the library.
  * \endif
