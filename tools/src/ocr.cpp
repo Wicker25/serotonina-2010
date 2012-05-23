@@ -357,27 +357,27 @@ Ocr::TrainNetwork( int choice ) {
 	do {
 
 		// Controllo se non si è raggiunto l'errore desiderato
-		if ( trainer.GetError() > 0.00001 ) {
+		if ( trainer.getError() > 0.00001 ) {
 
 			// Log di lavoro
 			printf( "Riprovo a studiare la lettera '%c'...\n", 'A' + (char) choice );
 
 			// Reinizializzo i pesi sinaptici prima del nuovo addestramento
-			trainer.InitWeights();
+			trainer.initWeights();
 		}
 
 		// Addestro la rete neurale
-		trainer.SetParameters( 0.5, 1.2 );
-		trainer.TrainOnFile< Algorithms::Rprop>( "data/character/train/character.train", 0.00001, 200, 1 );
+		trainer.setParams( 0.5, 1.2 );
+		trainer.trainOnFile< algorithms::Rprop>( "data/character/train/character.train", 0.00001, 200, 1 );
 
 	// Ciclo finché non raggiungo l'errore desiderato
-	} while ( trainer.GetError() > 0.00001 );
+	} while ( trainer.getError() > 0.00001 );
 
 	// Costruisco il percorso di destinazione
 	snprintf( path, 100, "data/character/%c.net", 'a' + (char) choice );
 
 	// Salva la rete nel file di destinazione
-	this->neural_network[choice]->Save( path );
+	this->neural_network[choice]->save( path );
 }
 
 void
@@ -659,7 +659,7 @@ Ocr::RecognitionCharacter() {
 	for ( i = 0; i < _OCR_CHARACTER_NUM_; i++ ) {
 
 		// Cerco il riscontro migliore
-		if ( ( new_check = this->neural_network[i]->Run( input )[0])  > check ) {
+		if ( ( new_check = this->neural_network[i]->run( input )[0])  > check ) {
 
 			// Memorizzo il nuovo migliore riscontro
 			check = new_check;

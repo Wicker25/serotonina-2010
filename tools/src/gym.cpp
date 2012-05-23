@@ -788,8 +788,8 @@ Gym::startTraining() {
 	Trainer trainer( this->neural_network );
 
 	// Imposto la funzione di report dell'addestramento
-	trainer.SetReportFun( Gym::static_update_plot );
-	trainer.SetReportFunData( (void *) this );
+	trainer.setReportFun( Gym::static_update_plot );
+	trainer.setReportFunData( (void *) this );
 
 	// Controllo l'algoritmo di addestramento della rete neurale
 	switch ( train_algorithm ) {
@@ -804,10 +804,10 @@ Gym::startTraining() {
 			const T_Precision momentum = (T_Precision) this->momentum_input->value();
 
 			// Imposto i parametri dell'apprendimento
-			trainer.SetParameters( eps, momentum );
+			trainer.setParams( eps, momentum );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::Batch >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.trainOnFile< algorithms::Batch >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -822,10 +822,10 @@ Gym::startTraining() {
 			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i parametri dell'apprendimento
-			trainer.SetParameters( decrease_factor, increase_factor );
+			trainer.setParams( decrease_factor, increase_factor );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::Rprop >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.trainOnFile< algorithms::Rprop >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -840,10 +840,10 @@ Gym::startTraining() {
 			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i parametri dell'apprendimento
-			trainer.SetParameters( decrease_factor, increase_factor );
+			trainer.setParams( decrease_factor, increase_factor );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::RpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.trainOnFile< algorithms::RpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -858,10 +858,10 @@ Gym::startTraining() {
 			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i parametri dell'apprendimento
-			trainer.SetParameters( decrease_factor, increase_factor );
+			trainer.setParams( decrease_factor, increase_factor );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::RpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.trainOnFile< algorithms::RpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -876,10 +876,10 @@ Gym::startTraining() {
 			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i parametri dell'apprendimento
-			trainer.SetParameters( decrease_factor, increase_factor );
+			trainer.setParams( decrease_factor, increase_factor );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::IRpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.trainOnFile< algorithms::IRpropPlus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -894,10 +894,10 @@ Gym::startTraining() {
 			const T_Precision decrease_factor = (T_Precision) this->decrease_factor_input->value();
 
 			// Imposto i parametri dell'apprendimento
-			trainer.SetParameters( decrease_factor, increase_factor );
+			trainer.setParams( decrease_factor, increase_factor );
 
 			// Addestro la rete neurale
-			trainer.TrainOnFile< Algorithms::IRpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
+			trainer.trainOnFile< algorithms::IRpropMinus >( this->train_set_path.c_str(), desired_error, max_epochs, report_frequency );
 
 			break;
 		}
@@ -963,7 +963,7 @@ Gym::updatePlot(	Network *network, size_t epochs, time_t elapsed_time,
 		}
 
 		// Eseguo la rete neurale con gli ingressi dell'esempio
-		const std::vector< T_Precision > out = this->neural_network->Run( &inputs_sample[0] );
+		const std::vector< T_Precision > out = this->neural_network->run( &inputs_sample[0] );
 
 		// Memorizzo le uscite della rete
 		for ( j = 0; j < this->output_size; j++ ) {
@@ -1048,7 +1048,7 @@ Gym::saveNeuralNetwork( const char *path ) {
 	if ( this->neural_network != NULL ) {
 
 		// Salvo la rete neurale in un file
-		this->neural_network->Save( path );
+		this->neural_network->save( path );
 	}
 }
 
