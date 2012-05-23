@@ -1,8 +1,8 @@
 # - Try to find Serotonina
 
-#  SEROTONINA_INCLUDE_DIRS - where to find curl/curl.h, etc.
-#  SEROTONINA_LIBRARIES    - List of libraries when using curl.
-#  SEROTONINA_FOUND        - True if curl found.
+#  SEROTONINA_INCLUDE_DIRS
+#  SEROTONINA_LIBRARIES
+#  SEROTONINA_FOUND
 
 FIND_PATH( SEROTONINA_INCLUDE_DIR NAMES serotonina )
 MARK_AS_ADVANCED( SEROTONINA_INCLUDE_DIR )
