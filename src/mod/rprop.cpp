@@ -23,15 +23,15 @@
 
 #include <serotonina/mod/rprop.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
-namespace Algorithms { // Namespace degli algoritmi
+namespace algorithms { // Namespace degli algoritmi
 
 // Imposto la descrizione dell'algoritmo
 const char *Rprop::description = "Rprop";
 
 bool
-Rprop::CheckParams( std::vector< T_Precision > &train_params ) {
+Rprop::check( std::vector< T_Precision > &train_params ) {
 
 	// Flag di controllo
 	bool valid = false;
@@ -91,10 +91,10 @@ Rprop::CheckParams( std::vector< T_Precision > &train_params ) {
 }
 
 void
-Rprop::InitTraining( Network &network ) {
+Rprop::init( Network &network ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -104,32 +104,32 @@ Rprop::InitTraining( Network &network ) {
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Creo la struttura per l'addestramento
-			synapse_t->train = new Rprop::TrainingData;
+			synapse_t->train = new Rprop::TrainData;
 		}
 	}
 }
 
 void
-Rprop::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+Rprop::updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 						T_Precision net_error, T_Precision old_net_error ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Concordanza della derivata dell'errore
 	T_Precision delta_sign;
 
 	// Puntatore alla struttura contenente i dati dell'addestramento
-	Rprop::TrainingData *training_data;
+	Rprop::TrainData *training_data;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -139,16 +139,16 @@ Rprop::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Ricavo la struttura contenente i dati dell'addestramento
-			training_data = ((Rprop::TrainingData *) synapse_t->train);
+			training_data = ((Rprop::TrainData *) synapse_t->train);
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			delta_sign = training_data->prev_dEdw * synapse_t->dEdw;
@@ -187,10 +187,10 @@ Rprop::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params
 }
 
 void
-Rprop::EndTraining( Network &network ) {
+Rprop::end( Network &network ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -200,16 +200,16 @@ Rprop::EndTraining( Network &network ) {
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Cancello la struttura per l'addestramento
-			delete (Rprop::TrainingData *) synapse_t->train;
+			delete (Rprop::TrainData *) synapse_t->train;
 		}
 	}
 }

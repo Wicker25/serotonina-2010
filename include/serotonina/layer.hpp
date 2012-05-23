@@ -24,7 +24,7 @@
 #include <serotonina/neuron.hpp>
 #include <serotonina/synapse.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /*!
  * @struct Layer

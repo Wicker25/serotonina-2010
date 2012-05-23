@@ -26,7 +26,7 @@
 
 #include <serotonina/types.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /**
  * \if english

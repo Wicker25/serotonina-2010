@@ -42,7 +42,7 @@
 #include <serotonina/network.hpp>
 #include <serotonina/network-inl.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /*!
  * @namespace Serotonina::Algorithms
@@ -103,7 +103,7 @@ public:
 	 */
 
 	// Verifica la correttezza dei parametri
-	static bool CheckParams( std::vector< T_Precision > &train_params );
+	static bool check( std::vector< T_Precision > &train_params );
 
 	/**
 	 * \if english
@@ -117,7 +117,7 @@ public:
 	 */
 
 	// Inizializza le strutture per l'addestramento
-	static void InitTraining( Network &network );
+	static void init( Network &network );
 
 	/**
 	 * \if english
@@ -137,7 +137,7 @@ public:
 	 */
 
 	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+	static void updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision old_net_error );
 
 	/**
@@ -152,7 +152,7 @@ public:
 	 */
 
 	// Deinizializza le strutture per l'addestramento
-	static void EndTraining( Network &network );
+	static void end( Network &network );
 };
 
 } // Chiudo il namespace di Serotonina

@@ -41,7 +41,7 @@
 #define _SEROTONINA_COMMENT_		'#'
 #define _SEROTONINA_SEPARATOR_		':'
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /*!
  * @class Network
@@ -148,7 +148,7 @@ public:
 	 */
 
 	// Imposta gli ingressi della rete
-	void SetInputs( const T_Precision *inputs );
+	void setInputs( const T_Precision *inputs );
 
 	/**
 	 * \if english
@@ -162,7 +162,7 @@ public:
 	 */
 
 	// Imposta gli ingressi della rete
-	void SetInputs( const std::vector< T_Precision > &inputs );
+	void setInputs( const std::vector< T_Precision > &inputs );
 
 	/**
 	 * \if english
@@ -176,7 +176,7 @@ public:
 	 */
 
 	// Ritorna il numero degli ingressi della rete
-	size_t GetNumOfInputs() const;
+	size_t getNumOfInputs() const;
 
 	/**
 	 * \if english
@@ -190,23 +190,7 @@ public:
 	 */
 
 	// Esegue la rete neurale
-	const std::vector< T_Precision > &Run();
-
-	/**
-	 * \if english
-	 *   @brief Compute the network's outputs
-	 *   @param[in] inputs Vector containing the inputs of the network
-	 *   @return Vector containing the outputs of the network
-	 * \endif
-	 * \if italian
-	 *   @brief Calcola le uscite della rete
-	 *   @param[in] inputs Vettore contenente gli ingressi della rete
-	 *   @return Vettore contenente le uscite della rete
-	 * \endif
-	 */
-
-	// Esegue la rete neurale
-	const std::vector< T_Precision > &Run( const T_Precision *inputs );
+	const std::vector< T_Precision > &run();
 
 	/**
 	 * \if english
@@ -222,7 +206,23 @@ public:
 	 */
 
 	// Esegue la rete neurale
-	const std::vector< T_Precision > &Run( const std::vector< T_Precision > &inputs );
+	const std::vector< T_Precision > &run( const T_Precision *inputs );
+
+	/**
+	 * \if english
+	 *   @brief Compute the network's outputs
+	 *   @param[in] inputs Vector containing the inputs of the network
+	 *   @return Vector containing the outputs of the network
+	 * \endif
+	 * \if italian
+	 *   @brief Calcola le uscite della rete
+	 *   @param[in] inputs Vettore contenente gli ingressi della rete
+	 *   @return Vettore contenente le uscite della rete
+	 * \endif
+	 */
+
+	// Esegue la rete neurale
+	const std::vector< T_Precision > &run( const std::vector< T_Precision > &inputs );
 
 	/**
 	 * \if english
@@ -236,7 +236,7 @@ public:
 	 */
 
 	// Ritorna le uscite della rete
-	const std::vector< T_Precision > &GetOutputs() const;
+	const std::vector< T_Precision > &getOutputs() const;
 
 	/**
 	 * \if english
@@ -250,7 +250,7 @@ public:
 	 */
 
 	// Ritorna un uscita della rete
-	const T_Precision GetOutput( size_t n ) const;
+	const T_Precision getOutput( size_t n ) const;
 
 	/**
 	 * \if english
@@ -264,7 +264,7 @@ public:
 	 */
 
 	// Ritorna il numero delle uscite della rete
-	size_t GetNumOfOutputs() const;
+	size_t getNumOfOutputs() const;
 
 	/**
 	 * \if english
@@ -278,7 +278,7 @@ public:
 	 */
 
 	// Ritorna gli strati della rete
-	std::vector< Layer * > &GetLayers();
+	std::vector< Layer * > &getLayers();
 
 	/**
 	 * \if english
@@ -292,7 +292,7 @@ public:
 	 */
 
 	// Ritorna uno strato specifico della rete
-	Layer &GetLayer( size_t n );
+	Layer &getLayer( size_t n );
 
 	/**
 	 * \if english
@@ -306,7 +306,7 @@ public:
 	 */
 
 	// Salva la rete neurale in un file
-	void Save( const std::string &path );
+	void save( const std::string &path );
 
 	/**
 	 * \if english
@@ -320,7 +320,7 @@ public:
 	 */
 
 	// Carica la rete neurale da un file
-	void Load( const std::string &path );
+	void load( const std::string &path );
 
 private:
 
@@ -358,7 +358,7 @@ private:
 	 */
 
 	// Costruisce le strutture della nuova rete neurale
-	void MakeStructures( size_t n_layers, const size_t *layers_struct );
+	void makeStructs( size_t n_layers, const size_t *layers_struct );
 };
 
 /**

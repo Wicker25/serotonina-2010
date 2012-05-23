@@ -23,7 +23,7 @@
 
 #include <vector>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /**
  * \typedef T_Precision

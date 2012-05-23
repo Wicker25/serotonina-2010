@@ -26,7 +26,7 @@
 #include <serotonina.hpp>
 
 // Uso il namespace di Serotonina
-using namespace Serotonina;
+using namespace serotonina;
 
 int main( void ) {
 
@@ -42,7 +42,7 @@ int main( void ) {
 		inputs.push_back(0);
 
 		// Calcolo l'uscita della rete neurale
-		const std::vector< T_Precision > &out = network.Run( inputs );
+		const std::vector< T_Precision > &out = network.run( inputs );
 
 	// Catturo eventuali eccezioni
 	} catch ( Exception &ex ) {

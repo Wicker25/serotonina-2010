@@ -25,7 +25,7 @@
  * @namespace Serotonina
  * \if english
  *
- *   \mainpage Serotonina v1.1.7 - Reference Manual
+ *   \mainpage Serotonina v1.1.8 - Reference Manual
  *
  *   \section description Description
  *
@@ -77,7 +77,7 @@
  * \endif
  * \if italian
  *
- *   \mainpage Serotonina v1.1.7 - Manuale di riferimento
+ *   \mainpage Serotonina v1.1.8 - Manuale di riferimento
  *
  *   \section description Descrizione
  *

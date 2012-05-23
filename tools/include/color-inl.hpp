@@ -23,7 +23,7 @@
 
 #include "color.hpp"
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 
 } // Chiudo il namespace di Serotonina

@@ -25,9 +25,9 @@
 
 #include <serotonina/train-algorithm.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
-namespace Algorithms { // Namespace degli algoritmi
+namespace algorithms { // Namespace degli algoritmi
 
 /*!
  * @class Rprop
@@ -46,7 +46,7 @@ class Rprop : public TrainAlgorithm {
 public:
 
 	/*!
-	 * @struct TrainingData
+	 * @struct TrainData
 	 * \if english
 	 *   @brief Structure containing data of training
 	 * \endif
@@ -56,7 +56,7 @@ public:
 	 */
 
 	// Struttura contenente i dati per l'addestramento
-	struct TrainingData {
+	struct TrainData {
 
 		/**
 		 * \if english
@@ -103,7 +103,7 @@ public:
 		T_Precision prev_dEdw;		// Errore precedente della connessione
 
 		// Metodo costruttore
-		TrainingData() {
+		TrainData() {
 
 			// Inizializzo i parametri dell'addestramento
 			delta_weight	= 0.0;
@@ -117,17 +117,17 @@ public:
 	static const char *description;
 
 	// Verifica la correttezza dei parametri
-	static bool CheckParams( std::vector< T_Precision > &train_params );
+	static bool check( std::vector< T_Precision > &train_params );
 
 	// Inizializza le strutture per l'addestramento
-	static void InitTraining( Network &network );
+	static void init( Network &network );
 
 	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+	static void updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision old_net_error );
 
 	// Deinizializza le strutture per l'addestramento
-	static void EndTraining( Network &network );
+	static void end( Network &network );
 };
 
 } // Chiudo il namespace degli algoritmi

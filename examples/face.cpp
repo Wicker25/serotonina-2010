@@ -26,7 +26,7 @@
 #include <serotonina.hpp>
 
 // Uso il namespace di Serotonina
-using namespace Serotonina;
+using namespace serotonina;
 
 int main( void ) {
 
@@ -37,11 +37,11 @@ int main( void ) {
 	Trainer trainer( network );
 
 	// Addestro la rete neurale con il metodo IRprop-
-	trainer.SetParameters( 0.5, 1.2 );
-	trainer.TrainOnFile< Algorithms::IRpropMinus >( "train/face.train", 0.0001, 100000, 1 );
+	trainer.setParams( 0.5, 1.2 );
+	trainer.trainOnFile< algorithms::IRpropMinus >( "train/face.train", 0.0001, 100000, 1 );
 
 	// Salvo la rete in un file
-	network.Save( "train/face.net" );
+	network.save( "train/face.net" );
 
 	return 0;
 }

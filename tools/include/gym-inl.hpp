@@ -32,7 +32,7 @@ Gym::static_start_training( void *data ) {
 	Gym *gym = static_cast< Gym * >( data );
 
 	// Chiama il metodo corrispondente
-	gym->StartTraining();
+	gym->startTraining();
 
 	return NULL;
 }
@@ -45,7 +45,7 @@ Gym::static_update_plot(	Network &network, size_t epochs, time_t elapsed_time, T
 	Gym *gym = static_cast< Gym * >( data );
 
 	// Avvio la funzione di aggiornamento del grafico
-	return gym->UpdatePlot( &network, epochs, elapsed_time, max_error, &outputs[0] );
+	return gym->updatePlot( &network, epochs, elapsed_time, max_error, &outputs[0] );
 }
 
 /** FINE METODI STATICI **/

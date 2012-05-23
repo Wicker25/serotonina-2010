@@ -44,7 +44,7 @@
 
 #include <serotonina/train-algorithm.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /**
  * \typedef T_ReportFun
@@ -191,7 +191,7 @@ public:
 	 */
 
 	// Imposta la rete neurale da addestrare
-	void SetNetwork( Network *network_ );
+	void setNetwork( Network *network_ );
 
 	/**
 	 * \if english
@@ -205,7 +205,7 @@ public:
 	 */
 
 	// Imposta la rete neurale da addestrare
-	void SetNetwork( Network &network_ );
+	void setNetwork( Network &network_ );
 
 	/**
 	 * \if english
@@ -217,12 +217,12 @@ public:
 	 */
 
 	// Inizializzo i pesi sinaptici della rete
-	void InitWeights();
+	void initWeights();
 
 	/**
 	 * \if english
 	 *   @brief Set parameters of training
-	 *   @param[in] p0 Parameter #1
+	 *   @param[in] p0 Param #1
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta i parametri dell'addestramento
@@ -231,13 +231,13 @@ public:
 	 */
 
 	// Imposta i parametri dell'addestramento
-	void SetParameters( T_Precision p0 );
+	void setParams( T_Precision p0 );
 
 	/**
 	 * \if english
 	 *   @brief Set parameters of training
-	 *   @param[in] p0 Parameter #1
-	 *   @param[in] p1 Parameter #2
+	 *   @param[in] p0 Param #1
+	 *   @param[in] p1 Param #2
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta i parametri dell'addestramento
@@ -247,14 +247,14 @@ public:
 	 */
 
 	// Imposta i parametri dell'addestramento
-	void SetParameters( T_Precision p0, T_Precision p1 );
+	void setParams( T_Precision p0, T_Precision p1 );
 
 	/**
 	 * \if english
 	 *   @brief Set parameters of training
-	 *   @param[in] p0 Parameter #1
-	 *   @param[in] p1 Parameter #2
-	 *   @param[in] p2 Parameter #3
+	 *   @param[in] p0 Param #1
+	 *   @param[in] p1 Param #2
+	 *   @param[in] p2 Param #3
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta i parametri dell'addestramento
@@ -265,15 +265,15 @@ public:
 	 */
 
 	// Imposta i parametri dell'addestramento
-	void SetParameters( T_Precision p0, T_Precision p1, T_Precision p2 );
+	void setParams( T_Precision p0, T_Precision p1, T_Precision p2 );
 
 	/**
 	 * \if english
 	 *   @brief Set parameters of training
-	 *   @param[in] p0 Parameter #1
-	 *   @param[in] p1 Parameter #2
-	 *   @param[in] p2 Parameter #3
-	 *   @param[in] p3 Parameter #4
+	 *   @param[in] p0 Param #1
+	 *   @param[in] p1 Param #2
+	 *   @param[in] p2 Param #3
+	 *   @param[in] p3 Param #4
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta i parametri dell'addestramento
@@ -285,16 +285,16 @@ public:
 	 */
 
 	// Imposta i parametri dell'addestramento
-	void SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3 );
+	void setParams( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3 );
 
 	/**
 	 * \if english
 	 *   @brief Set parameters of training
-	 *   @param[in] p0 Parameter #1
-	 *   @param[in] p1 Parameter #2
-	 *   @param[in] p2 Parameter #3
-	 *   @param[in] p3 Parameter #4
-	 *   @param[in] p4 Parameter #5
+	 *   @param[in] p0 Param #1
+	 *   @param[in] p1 Param #2
+	 *   @param[in] p2 Param #3
+	 *   @param[in] p3 Param #4
+	 *   @param[in] p4 Param #5
 	 * \endif
 	 * \if italian
 	 *   @brief Imposta i parametri dell'addestramento
@@ -307,7 +307,7 @@ public:
 	 */
 
 	// Imposta i parametri dell'addestramento
-	void SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3, T_Precision p4 );
+	void setParams( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3, T_Precision p4 );
 
 	/**
 	 * \if english
@@ -321,7 +321,7 @@ public:
 	 */
 
 	// Imposta i parametri dell'addestramento
-	void SetParameters( const std::vector< T_Precision > &params );
+	void setParams( const std::vector< T_Precision > &params );
 
 	/**
 	 * \if english
@@ -335,7 +335,7 @@ public:
 	 */
 
 	// Ritorna i parametri dell'addestramento
-	const std::vector< T_Precision > &GetParameters() const;
+	const std::vector< T_Precision > &getParams() const;
 
 	/**
 	 * \if english
@@ -349,7 +349,7 @@ public:
 	 */
 
 	// Ritorna un parametro dell'addestramento
-	const T_Precision GetParameter( size_t n ) const;
+	const T_Precision getParam( size_t n ) const;
 
 	/**
 	 * \if english
@@ -363,7 +363,7 @@ public:
 	 */
 
 	// Imposta la funzione di report dell'addestramento
-	void SetReportFun( T_ReportFun &fun );
+	void setReportFun( T_ReportFun &fun );
 
 	/**
 	 * \if english
@@ -375,7 +375,7 @@ public:
 	 */
 
 	// Ritorna la funzione di report dell'addestramento
-	T_ReportFun *GetReportFun() const;
+	T_ReportFun *getReportFun() const;
 
 	/**
 	 * \if english
@@ -389,7 +389,7 @@ public:
 	 */
 
 	// Imposta il parametro ausiliario della funzione di report
-	void SetReportFunData( void *data );
+	void setReportFunData( void *data );
 
 	/**
 	 * \if english
@@ -401,7 +401,7 @@ public:
 	 */
 
 	// Ritorna le informazioni usate per la funzione di report
-	void *GetReportFunData() const;
+	void *getReportFunData() const;
 
 	/**
 	 * \if english
@@ -428,7 +428,7 @@ public:
 
 	// Addestra la rete neurale usando degli esempi
 	template < class train_algorithm >
-	void Train( const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
+	void train( const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples, 
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports );
 
 	/**
@@ -454,7 +454,7 @@ public:
 
 	// Addestra la rete neurale usando degli esempi
 	template < class train_algorithm >
-	void Train( const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples, 
+	void train( const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples, 
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports );
 
 	/**
@@ -478,7 +478,7 @@ public:
 
 	// Addestra la rete neurale usando degli esempi da un file
 	template < class train_algorithm >
-	void TrainOnFile(	const std::string &training_file, T_Precision desired_error,
+	void trainOnFile(	const std::string &training_file, T_Precision desired_error,
 						size_t max_epochs, size_t epochs_between_reports );
 
 	/**
@@ -493,7 +493,7 @@ public:
 	 */
 
 	// Ritorna l'errore della rete neurale
-	T_Precision GetError() const;
+	T_Precision getError() const;
 
 protected:
 
@@ -581,7 +581,7 @@ protected:
 	 */
 
 	// Calcola l'errore delle uscite
-	void ComputeOutputError( const T_Precision *desired_output );
+	void computeOutputError( const T_Precision *desired_output );
 
 	/**
 	 * \if english
@@ -593,7 +593,7 @@ protected:
 	 */
 
 	// Retropropaga l'errore della rete neurale
-	void BackpropagateError();
+	void backpropagateError();
 };
 
 /**

@@ -26,7 +26,7 @@
 #include <serotonina.hpp>
 
 // Uso il namespace di Serotonina
-using namespace Serotonina;
+using namespace serotonina;
 
 class MyBatch : public TrainAlgorithm {
 
@@ -35,7 +35,7 @@ class MyBatch : public TrainAlgorithm {
 public:
 
 	// Struttura contenente i dati per l'addestramento
-	struct TrainingData {
+	struct TrainData {
 
 		T_Precision delta_weight;	// Correzione del peso della connessione
 	};
@@ -44,17 +44,17 @@ public:
 	static const char *description;
 
 	// Verifica la correttezza dei parametri
-	static bool CheckParams( std::vector< T_Precision > &train_params );
+	static bool check( std::vector< T_Precision > &train_params );
 
 	// Inizializza le strutture per l'addestramento
-	static void InitTraining( Network &network );
+	static void init( Network &network );
 
 	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+	static void updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision prev_net_error );
 
 	// Deinizializza le strutture per l'addestramento
-	static void EndTraining( Network &network );
+	static void end( Network &network );
 };
 
 
@@ -62,7 +62,7 @@ public:
 const char *MyBatch::description = "MyBatch :P";
 
 bool
-MyBatch::CheckParams( std::vector< T_Precision > &train_params ) {
+MyBatch::check( std::vector< T_Precision > &train_params ) {
 
 	// Flag di controllo
 	bool valid = false;
@@ -90,10 +90,10 @@ MyBatch::CheckParams( std::vector< T_Precision > &train_params ) {
 }
 
 void
-MyBatch::InitTraining( Network &network ) {
+MyBatch::init( Network &network ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -103,29 +103,29 @@ MyBatch::InitTraining( Network &network ) {
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Creo la struttura per l'addestramento
-			synapse_t->train = new MyBatch::TrainingData;
+			synapse_t->train = new MyBatch::TrainData;
 		}
 	}
 }
 
 void
-MyBatch::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+MyBatch::updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 						T_Precision net_error, T_Precision prev_net_error ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Puntatore alla struttura contenente i dati dell'addestramento
-	MyBatch::TrainingData *training_data;
+	MyBatch::TrainData *training_data;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -135,16 +135,16 @@ MyBatch::UpdateWeights(	Network &network, std::vector< T_Precision > &train_para
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Ricavo la struttura contenente i dati dell'addestramento
-			training_data = ((MyBatch::TrainingData *) synapse_t->train);
+			training_data = ((MyBatch::TrainData *) synapse_t->train);
 
 			// Calcolo la modifica del peso
 			training_data->delta_weight = - train_params[0] * synapse_t->dEdw + \
@@ -160,10 +160,10 @@ MyBatch::UpdateWeights(	Network &network, std::vector< T_Precision > &train_para
 }
 
 void
-MyBatch::EndTraining( Network &network ) {
+MyBatch::end( Network &network ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -173,16 +173,16 @@ MyBatch::EndTraining( Network &network ) {
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Cancello la struttura per l'addestramento
-			delete (MyBatch::TrainingData *) synapse_t->train;
+			delete (MyBatch::TrainData *) synapse_t->train;
 		}
 	}
 }
@@ -197,8 +197,8 @@ int main( void ) {
 	Trainer trainer( network );
 
 	// Addestro la rete neurale con il metodo Batch
-	trainer.SetParameters( 0.5, 0.8 );
-	trainer.TrainOnFile< MyBatch >( "train/xor.train", 0.000001, 100000, 5000 );
+	trainer.setParams( 0.5, 0.8 );
+	trainer.trainOnFile< MyBatch >( "train/xor.train", 0.000001, 100000, 5000 );
 
 	// Ingressi della rete neurale
 	T_Precision in[2];
@@ -216,7 +216,7 @@ int main( void ) {
 			in[1] = (T_Precision) i;
 
 			// Calcolo l'uscita della rete neurale
-			const std::vector< T_Precision > &out = network.Run( in );
+			const std::vector< T_Precision > &out = network.run( in );
 
 			// Stampo i risultati
 			std::cout.setf( std::ios::fixed, std::ios::floatfield );

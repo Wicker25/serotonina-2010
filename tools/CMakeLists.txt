@@ -10,8 +10,6 @@ add_definitions( -Wall -ansi -pedantic -pedantic-errors )
 find_package( Serotonina )
 find_package( FLTK )
 find_package( OpenGL )
-find_package( OpenCV )
-#find_package( OpenCV COMPONENTS highgui )
 find_package( Threads )
 
 # Imposto le versioni degli strumenti
@@ -26,10 +24,6 @@ set( SEROTONINA_GYM_VERSION_PATCH 1 )
 set( SEROTONINA_OCR_VERSION_MAJOR 1 )
 set( SEROTONINA_OCR_VERSION_MINOR 0 )
 set( SEROTONINA_OCR_VERSION_PATCH 1 )
-
-set( SEROTONINA_FACE_RECOGNITION_VERSION_MAJOR 1 )
-set( SEROTONINA_FACE_RECOGNITION_VERSION_MINOR 0 )
-set( SEROTONINA_FACE_RECOGNITION_VERSION_PATCH 1 )
 
 # Percorso degli headers
 include_directories(
@@ -83,24 +77,6 @@ IF ( SEROTONINA_FOUND )
 			target_link_libraries( st_ocr ${CMAKE_THREAD_LIBS_INIT} )
 			target_link_libraries( st_ocr ${FLTK_LIBRARIES} )
 			target_link_libraries( st_ocr ${OPENGL_LIBRARIES} )
-
-			# Controllo se sono state trovate le OpenCV
-			IF ( OpenCV_FOUND )
-
-				# Strumento Face recognition per il riconoscimento di un volto attraverso la webcam
-				add_executable( st_face_recognition ${CMAKE_SOURCE_DIR}/src/face-recognition.cpp )
-
-				target_link_libraries( st_face_recognition ${SEROTONINA_LIBRARIES} )
-				target_link_libraries( st_face_recognition ${FLTK_LIBRARIES} )
-				target_link_libraries( st_face_recognition ${OPENGL_LIBRARIES} )
-				target_link_libraries( st_face_recognition ${OpenCV_LIBS} )
-
-			ELSE ( OpenCV_FOUND )
-
-				# Log di lavoro
-				MESSAGE( STATUS "WARNING: could NOT find dependencies of Face Recognition tool." )
-
-			ENDIF ( OpenCV_FOUND )
 
 		ELSE ( FLTK_FOUND )
 

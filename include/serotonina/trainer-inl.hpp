@@ -23,24 +23,24 @@
 
 #include <serotonina/trainer.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 inline void
-Trainer::SetNetwork( Network *network_ ) {
+Trainer::setNetwork( Network *network_ ) {
 
 	// Imposto la rete neurale da addestrare
 	this->network = network_;
 }
 
 inline void
-Trainer::SetNetwork( Network &network_ ) {
+Trainer::setNetwork( Network &network_ ) {
 
 	// Imposto la rete neurale da addestrare
 	this->network = &network_;
 }
 
 inline void
-Trainer::SetParameters( T_Precision p0 ) {
+Trainer::setParams( T_Precision p0 ) {
 
 	// Cancello i parametri esistenti
 	this->train_params.clear();
@@ -50,59 +50,59 @@ Trainer::SetParameters( T_Precision p0 ) {
 }
 
 inline void
-Trainer::SetParameters( T_Precision p0, T_Precision p1 ) {
+Trainer::setParams( T_Precision p0, T_Precision p1 ) {
 
 	// Cancello i parametri esistenti
 	this->train_params.clear();
 
 	// Richiamo la funzione inferiore
-	this->SetParameters( p0 );
+	this->setParams( p0 );
 
 	// Memorizzo i parametri dell'addestramento
 	this->train_params.push_back( p1 );
 }
 
 inline void
-Trainer::SetParameters( T_Precision p0, T_Precision p1, T_Precision p2 ) {
+Trainer::setParams( T_Precision p0, T_Precision p1, T_Precision p2 ) {
 
 	// Cancello i parametri esistenti
 	this->train_params.clear();
 
 	// Richiamo la funzione inferiore
-	this->SetParameters( p0, p1 );
+	this->setParams( p0, p1 );
 
 	// Memorizzo i parametri dell'addestramento
 	this->train_params.push_back( p2 );
 }
 
 inline void
-Trainer::SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3 ) {
+Trainer::setParams( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3 ) {
 
 	// Cancello i parametri esistenti
 	this->train_params.clear();
 
 	// Richiamo la funzione inferiore
-	this->SetParameters( p0, p1, p2 );
+	this->setParams( p0, p1, p2 );
 
 	// Memorizzo i parametri dell'addestramento
 	this->train_params.push_back( p3 );
 }
 
 inline void
-Trainer::SetParameters( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3, T_Precision p4 ) {
+Trainer::setParams( T_Precision p0, T_Precision p1, T_Precision p2, T_Precision p3, T_Precision p4 ) {
 
 	// Cancello i parametri esistenti
 	this->train_params.clear();
 
 	// Richiamo la funzione inferiore
-	this->SetParameters( p0, p1, p2, p3 );
+	this->setParams( p0, p1, p2, p3 );
 
 	// Memorizzo i parametri dell'addestramento
 	this->train_params.push_back( p4 );
 }
 
 inline void
-Trainer::SetParameters( const std::vector< T_Precision > &params ) {
+Trainer::setParams( const std::vector< T_Precision > &params ) {
 
 	// Cancello i parametri esistenti
 	this->train_params.clear();
@@ -112,42 +112,42 @@ Trainer::SetParameters( const std::vector< T_Precision > &params ) {
 }
 
 inline const std::vector< T_Precision > &
-Trainer::GetParameters() const {
+Trainer::getParams() const {
 
 	// Ritorno i parametri dell'addestramento
 	return this->train_params;
 }
 
 inline const T_Precision
-Trainer::GetParameter( size_t n ) const {
+Trainer::getParam( size_t n ) const {
 
 	// Ritorno un parametro dell'addestramento
 	return this->train_params.at(n);
 }
 
 inline void
-Trainer::SetReportFun( T_ReportFun &fun ) {
+Trainer::setReportFun( T_ReportFun &fun ) {
 
 	// Imposto la funzione di report dell'addestramento
 	this->report_fun = &fun;
 }
 
 inline T_ReportFun *
-Trainer::GetReportFun() const {
+Trainer::getReportFun() const {
 
 	// Ritorno la funzione di report dell'addestramento
 	return this->report_fun;
 }
 
 inline void
-Trainer::SetReportFunData( void *data ) {
+Trainer::setReportFunData( void *data ) {
 
 	// Imposto il parametro ausiliario della funzione di report
 	this->report_fun_data = data;
 }
 
 inline void *
-Trainer::GetReportFunData() const {
+Trainer::getReportFunData() const {
 
 	// Ritorno il parametro ausiliario della funzione di report
 	return this->report_fun_data;
@@ -155,14 +155,14 @@ Trainer::GetReportFunData() const {
 
 template < class train_algorithm >
 inline void
-Trainer::Train(	const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples,
+Trainer::train(	const std::vector< T_Precision > &input_samples, const std::vector< T_Precision > &output_samples,
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports ) {
 
 	// Controllo la correttezza dell'insieme di addestramento
-	if ( (float) input_samples.size() / (float) output_samples.size() == (float) this->network->GetNumOfInputs() / (float) this->network->GetNumOfOutputs() ) {
+	if ( (float) input_samples.size() / (float) output_samples.size() == (float) this->network->getNumOfInputs() / (float) this->network->getNumOfOutputs() ) {
 
 		// Richiamo la funzione di addestramento principale
-		this->Train< train_algorithm >(	&input_samples[0], &output_samples[0], ( input_samples.size() / this->network->GetLayers()[0]->n_neurons ), 
+		this->train< train_algorithm >(	&input_samples[0], &output_samples[0], ( input_samples.size() / this->network->getLayers()[0]->n_neurons ), 
 										desired_error, max_epochs, epochs_between_reports );
 
 	// Altrimenti sollevo un eccezione
@@ -171,7 +171,7 @@ Trainer::Train(	const std::vector< T_Precision > &input_samples, const std::vect
 
 template < class train_algorithm >
 void
-Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples,
+Trainer::train(	const T_Precision *input_samples, const T_Precision *output_samples, size_t n_samples,
 				T_Precision desired_error, size_t max_epochs, size_t epochs_between_reports ) {
 
 	// Log di lavoro
@@ -179,10 +179,10 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 	std::cout << "Set algorithm: '" << train_algorithm::description << "'\n";
 
 	// Verifico i parametri dell'addestramento
-	if ( train_algorithm::CheckParams( this->train_params ) ) {
+	if ( train_algorithm::check( this->train_params ) ) {
 
 		// Creo le strutture per l'addestramento
-		train_algorithm::InitTraining( *this->network );
+		train_algorithm::init( *this->network );
 
 		// Flag di uscita forzata dall'addestramento
 		int interrupt_flag = 0;
@@ -209,24 +209,24 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 			for ( i = 0; i < n_samples; i++ ) {
 
 				// Eseguo la rete neurale
-				this->network->Run( &input_samples[ i * this->network->GetLayers().front()->n_neurons ] );
+				this->network->run( &input_samples[ i * this->network->getLayers().front()->n_neurons ] );
 
 				// Calcolo l'errore delle uscite
-				this->ComputeOutputError( &output_samples[ i * this->network->GetLayers().back()->n_neurons ] );
+				this->computeOutputError( &output_samples[ i * this->network->getLayers().back()->n_neurons ] );
 
 				// Retropropago l'errore nella rete
-				this->BackpropagateError();
+				this->backpropagateError();
 			}
 
 			// Calcolo l'errore quadratico medio della rete (MSE)
 			// E(x) = SUM( e^2 ) / n_samples
-			this->net_error /= ( this->network->GetLayers().back()->n_neurons * n_samples );
+			this->net_error /= ( this->network->getLayers().back()->n_neurons * n_samples );
 
 			// Controllo se non si è raggiunto l'errore desiderato
 			if ( this->net_error > desired_error ) {
 
 				// Aggiorno i pesi sinaptici della rete
-				train_algorithm::UpdateWeights( *this->network, this->train_params, this->net_error, this->prev_net_error );
+				train_algorithm::updateWeights( *this->network, this->train_params, this->net_error, this->prev_net_error );
 
 				// Log dell'addestramento ogni N epoche
 				if ( epochs_between_reports && epochs % epochs_between_reports == 0 ) {
@@ -236,7 +236,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 					// Passo le informazioni alla funzione di report
 					interrupt_flag = this->report_fun(	*this->network, epochs, t_elapsed, this->net_error,
-														this->network->GetOutputs(), this->report_fun_data );
+														this->network->getOutputs(), this->report_fun_data );
 				}
 
 				// Incremento il contatore delle epoche
@@ -255,15 +255,15 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 			// Passo le informazioni alla funzione di report
 			this->report_fun(	*this->network, epochs, t_elapsed, this->net_error,
-								this->network->GetOutputs(), this->report_fun_data );
+								this->network->getOutputs(), this->report_fun_data );
 		}
 
 		// Cancello le strutture per l'addestramento
-		train_algorithm::EndTraining( *this->network );
+		train_algorithm::end( *this->network );
 
 		// Controllo il modo in cui è terminato l'addestramento
 		if ( interrupt_flag ) {
-					
+
 			// Log di lavoro
 			std::cout << "Training is interrupted.\n";
 
@@ -279,7 +279,7 @@ Trainer::Train(	const T_Precision *input_samples, const T_Precision *output_samp
 
 template < class train_algorithm >
 void
-Trainer::TrainOnFile(	const std::string &path, T_Precision desired_error,
+Trainer::trainOnFile(	const std::string &path, T_Precision desired_error,
 						size_t max_epochs, size_t epochs_between_reports ) {
 
 	// Apre uno stream al file dell'addestramento
@@ -329,7 +329,7 @@ Trainer::TrainOnFile(	const std::string &path, T_Precision desired_error,
 			}
 
 			// Controllo se il tipo di addestramento non è adatto alla rete corrente
-			if ( this->network->GetLayers().front()->n_neurons != (size_t) info[0] || this->network->GetLayers().back()->n_neurons != (size_t) info[1] ) {
+			if ( this->network->getLayers().front()->n_neurons != (size_t) info[0] || this->network->getLayers().back()->n_neurons != (size_t) info[1] ) {
 
 				// Sollevo un'eccezione
 				throw Exception( "Incompatible training file '", path, "'" );
@@ -356,14 +356,14 @@ Trainer::TrainOnFile(	const std::string &path, T_Precision desired_error,
 			int found = line.find_first_of( _SEROTONINA_SEPARATOR_ );
 
 			// Estraggo i valori di ingresso
-			if ( values_from_string( line.substr( 0, found ), inputs_samples ) != this->network->GetLayers().front()->n_neurons ) {
+			if ( values_from_string( line.substr( 0, found ), inputs_samples ) != this->network->getLayers().front()->n_neurons ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
 			}
 
 			// Estraggo i valori di uscita
-			if ( values_from_string( line.substr( found + 1 ), outputs_samples ) != this->network->GetLayers().back()->n_neurons ) {
+			if ( values_from_string( line.substr( found + 1 ), outputs_samples ) != this->network->getLayers().back()->n_neurons ) {
 
 				// E se trovo un errore lo communico all'utente
 				fprintf( stderr, " (W) Syntax error on training file '%s', at line %lu!\n", path.c_str(), (unsigned long) n_line );
@@ -381,11 +381,11 @@ Trainer::TrainOnFile(	const std::string &path, T_Precision desired_error,
 	file.close();
 
 	// Richiamo la funzione di addestramento principale
-	this->Train< train_algorithm >( &inputs_samples[0], &outputs_samples[0], n_samples, desired_error, max_epochs, epochs_between_reports );
+	this->train< train_algorithm >( &inputs_samples[0], &outputs_samples[0], n_samples, desired_error, max_epochs, epochs_between_reports );
 }
 
 inline T_Precision
-Trainer::GetError() const {
+Trainer::getError() const {
 
 	// Ritorno l'errore della rete
 	return this->net_error;

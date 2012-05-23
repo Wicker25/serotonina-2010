@@ -45,12 +45,12 @@
 
 #include "color.hpp"
 
-#define _OCR_TITLE_				"Serotonina::OCR - Riconoscimento di un carattere"
+#define _OCR_TITLE_				"serotonina::OCR - Riconoscimento di un carattere"
 #define _OCR_FPS_				30.0
 #define _OCR_CHARACTER_NUM_		26
 
 // Uso il namespace di serotonina;
-using namespace Serotonina;
+using namespace serotonina;
 
 // Struttura di un rettangolo
 struct Rect {
@@ -140,7 +140,7 @@ private:
 	Rect char_boundary;
 
 	// Rete neurale
-	Serotonina::Network *neural_network[_OCR_CHARACTER_NUM_];
+	serotonina::Network *neural_network[_OCR_CHARACTER_NUM_];
 
 	// Id del thread dell'addestramento
 	pthread_t thread_id;

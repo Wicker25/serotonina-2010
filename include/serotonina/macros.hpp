@@ -24,7 +24,7 @@
 #include <cstdlib>
 #include <cmath>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /**
  * \if english

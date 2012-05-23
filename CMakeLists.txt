@@ -1,6 +1,6 @@
 # CMake's configuration
 
-# Nome del progetto e linguaggio utilizzato
+# Nome del progetto
 project( Serotonina )
 
 # Vincolo sulle versioni minori di CMake
@@ -9,7 +9,7 @@ cmake_minimum_required( VERSION 2.6 )
 # Imposto la versione della libreria
 set( SEROTONINA_VERSION_MAJOR 1 )
 set( SEROTONINA_VERSION_MINOR 1 )
-set( SEROTONINA_VERSION_PATCH 7 )
+set( SEROTONINA_VERSION_PATCH 8 )
 
 # Aggiungo una direttiva al compilatore
 add_definitions( -Wall -ansi -pedantic -pedantic-errors )

@@ -24,7 +24,7 @@
 #include <serotonina/network.hpp>
 #include <serotonina/network-inl.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 Network::Network( size_t n_layers, ... ) {
 
@@ -51,7 +51,7 @@ Network::Network( size_t n_layers, ... ) {
 	va_end( args );
 
 	// Costruisco le strutture della nuova rete neurale
-	this->MakeStructures( layers_struct.size(), layers_struct.data() );
+	this->makeStructs( layers_struct.size(), layers_struct.data() );
 }
 
 Network::Network( size_t n_layers, const size_t *layers_struct ) {
@@ -60,7 +60,7 @@ Network::Network( size_t n_layers, const size_t *layers_struct ) {
 	srand( (size_t) time( NULL ) );
 
 	// Costruisco le strutture della nuova rete neurale
-	this->MakeStructures( n_layers, layers_struct );
+	this->makeStructs( n_layers, layers_struct );
 }
 
 Network::Network( const std::vector< size_t > &layers_struct ) {
@@ -69,7 +69,7 @@ Network::Network( const std::vector< size_t > &layers_struct ) {
 	srand( (size_t) time( NULL ) );
 
 	// Costruisco le strutture della nuova rete neurale
-	this->MakeStructures( layers_struct.size(), layers_struct.data() );
+	this->makeStructs( layers_struct.size(), layers_struct.data() );
 }
 
 Network::Network( const std::string &path ) {
@@ -78,13 +78,13 @@ Network::Network( const std::string &path ) {
 	srand( (size_t) time( NULL ) );
 
 	// Carico la rete neurale dal file
-	this->Load( path );
+	this->load( path );
 }
 
 Network::Network( Network &other ) {
 
 	// Creo lo strato di ingresso
-	this->layers.push_back( new Layer( other.GetLayer(0).n_neurons, 0 ) );
+	this->layers.push_back( new Layer( other.getLayer(0).n_neurons, 0 ) );
 
 	// Iteratore
 	size_t i = 1;
@@ -94,17 +94,17 @@ Network::Network( Network &other ) {
 	Synapse *synapse_j;
 
 	// Creo gli strati della rete
-	for ( ; i < other.GetLayers().size(); i++ ) {
+	for ( ; i < other.getLayers().size(); i++ ) {
 
 		// Creo lo strato
-		this->layers.push_back( new Layer( other.GetLayer(i).n_neurons, other.GetLayer(i - 1).n_neurons ) );
+		this->layers.push_back( new Layer( other.getLayer(i).n_neurons, other.getLayer(i - 1).n_neurons ) );
 
 		// Preparo l'iteratore delle sinapsi
-		last_synapse_i	= this->GetLayer(i).last_synapse;
-		synapse_i		= this->GetLayer(i).first_synapse;
+		last_synapse_i	= this->getLayer(i).last_synapse;
+		synapse_i		= this->getLayer(i).first_synapse;
 
 		// Preparo l'iteratore delle sinapsi dell'altra rete neurale
-		synapse_j = other.GetLayer(i).first_synapse;
+		synapse_j = other.getLayer(i).first_synapse;
 
 		// Copio i pesi sinaptici dall'altra rete neurale
 		for ( ; synapse_i <= last_synapse_i; synapse_i++, synapse_j++ ) {
@@ -131,7 +131,7 @@ Network::~Network() {
 }
 
 void
-Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
+Network::makeStructs( size_t n_layers, const size_t *layers_struct ) {
 
 	// Controllo che siano stati scelti almeno tre strati
 	if ( n_layers < 2 ) {
@@ -158,7 +158,7 @@ Network::MakeStructures( size_t n_layers, const size_t *layers_struct ) {
 }
 
 void
-Network::SetInputs( const std::vector< T_Precision > &inputs ) {
+Network::setInputs( const std::vector< T_Precision > &inputs ) {
 
 	// Controllo che gli input passati siano tanti quanti quelli della rete
 	if ( inputs.size() != this->layers.front()->n_neurons ) {
@@ -168,11 +168,11 @@ Network::SetInputs( const std::vector< T_Precision > &inputs ) {
 	}
 
 	// Richiamo la funzione principale
-	this->SetInputs( &inputs[0] );
+	this->setInputs( &inputs[0] );
 }
 
 void
-Network::SetInputs( const T_Precision *inputs ) {
+Network::setInputs( const T_Precision *inputs ) {
 
 	// Iteratore
 	size_t i = 0;
@@ -185,7 +185,7 @@ Network::SetInputs( const T_Precision *inputs ) {
 }
 
 const std::vector< T_Precision > &
-Network::Run() {
+Network::run() {
 
 	// Iteratore
 	short unsigned int t;
@@ -201,11 +201,11 @@ Network::Run() {
 	for ( t = 1; t < this->layers.size(); t++ ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->GetLayer(t).first_synapse;
+		synapse_t = this->getLayer(t).first_synapse;
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_i	= this->GetLayer(t).last_neuron;
-		neuron_i		= this->GetLayer(t).first_neuron;
+		last_neuron_i	= this->getLayer(t).last_neuron;
+		neuron_i		= this->getLayer(t).first_neuron;
 
 		// Calcolo i valori di uscita dello strato corrente
 		// Y_i = T( SUM( w_ji - bias_i ) ) oppure Y_i = T( SUM( w_ji ) )
@@ -250,7 +250,7 @@ Network::Run() {
 	}
 
 	// Ritorna un puntatore ai valori di uscita
-	return this->GetOutputs();
+	return this->getOutputs();
 }
 
 /*******************************************************************
@@ -258,7 +258,7 @@ Network::Run() {
  *******************************************************************/
 
 void
-Network::Save( const std::string &path ) {
+Network::save( const std::string &path ) {
 
 	// Apre uno stream al file di destinazione
 	std::ofstream file( path.c_str() );
@@ -283,7 +283,7 @@ Network::Save( const std::string &path ) {
 	// Inserisco le informazioni generali della rete
 	for ( ; t < this->layers.size(); t++ ) {
 
-		file << this->GetLayer(t).n_neurons << " ";
+		file << this->getLayer(t).n_neurons << " ";
 	}
 
 	file << std::endl;
@@ -298,8 +298,8 @@ Network::Save( const std::string &path ) {
 		file << std::endl << "# Neural network's weights " << t << std::endl;
 
 		// Preparo l'iteratore delle sinapsi
-		last_synapse_i	= this->GetLayer(t).last_synapse;
-		synapse_i		= this->GetLayer(t).first_synapse;
+		last_synapse_i	= this->getLayer(t).last_synapse;
+		synapse_i		= this->getLayer(t).first_synapse;
 
 		// Inserisco i pesi sinaptici dello strato t
 		for ( ; synapse_i <= last_synapse_i; synapse_i++ ) {
@@ -317,7 +317,7 @@ Network::Save( const std::string &path ) {
 }
 
 void
-Network::Load( const std::string &path ) {
+Network::load( const std::string &path ) {
 
 	// Controllo se esiste già una rete neurale
 	if ( !this->layers.empty() ) {
@@ -368,7 +368,7 @@ Network::Load( const std::string &path ) {
 			if ( values_from_string< size_t >( line, layers_struct ) >= 2 ) {
 
 				// Costruisco le strutture della nuova rete neurale
-				this->MakeStructures( layers_struct.size(), layers_struct.data() );
+				this->makeStructs( layers_struct.size(), layers_struct.data() );
 
 				// Imposto il flag di uscita
 				end = true;
@@ -404,11 +404,11 @@ Network::Load( const std::string &path ) {
 		if ( !line.empty() && line.at(0) != _SEROTONINA_COMMENT_ ) {
 
 			// Estraggo i valori di uscita
-			if ( values_from_string( line, values ) == this->GetLayer(t).n_synapses ) {
+			if ( values_from_string( line, values ) == this->getLayer(t).n_synapses ) {
 
 				// Preparo l'iteratore delle sinapsi
-				synapse_i		= this->GetLayer(t).first_synapse;
-				last_synapse_i	= this->GetLayer(t).last_synapse;
+				synapse_i		= this->getLayer(t).first_synapse;
+				last_synapse_i	= this->getLayer(t).last_synapse;
 
 				// Copio i pesi sinaptici dello strato t
 				for ( i = 0; synapse_i <= last_synapse_i; i++, synapse_i++ ) {
@@ -442,13 +442,13 @@ std::ostream &
 operator<<( std::ostream &out, Network &network ) {
 
 	// Scrivo la struttura della rete neurale nello stream
-	out << "<Neural network [" << network.GetLayer(0).n_neurons;
+	out << "<Neural network [" << network.getLayer(0).n_neurons;
 
 	size_t i = 1;
 
-	for ( ; i < network.GetLayers().size(); i++ ) {
+	for ( ; i < network.getLayers().size(); i++ ) {
 
-		out << "," << network.GetLayer(i).n_neurons;
+		out << "," << network.getLayer(i).n_neurons;
 	}
 
 	out << "]>";

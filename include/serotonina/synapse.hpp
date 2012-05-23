@@ -21,7 +21,7 @@
 #ifndef _SEROTONINA_SYNAPSE_HPP_
 #define _SEROTONINA_SYNAPSE_HPP_
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /*!
  * @struct Synapse

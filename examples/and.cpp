@@ -26,7 +26,7 @@
 #include <serotonina.hpp>
 
 // Uso il namespace di Serotonina
-using namespace Serotonina;
+using namespace serotonina;
 
 int main( void ) {
 
@@ -37,8 +37,8 @@ int main( void ) {
 	Trainer trainer( network );
 
 	// Addestro la rete neurale con il metodo Batch
-	trainer.SetParameters( 0.5, 0.8 );
-	trainer.TrainOnFile< Algorithms::Batch >( "train/and.train", 0.000001, 100000, 5000 );
+	trainer.setParams( 0.5, 0.8 );
+	trainer.trainOnFile< algorithms::Batch >( "train/and.train", 0.000001, 100000, 5000 );
 
 	// Ingressi della rete neurale
 	T_Precision in[2];
@@ -56,7 +56,7 @@ int main( void ) {
 			in[1] = (T_Precision) i;
 
 			// Calcolo l'uscita della rete neurale
-			const std::vector< T_Precision > &out = network.Run( in );
+			const std::vector< T_Precision > &out = network.run( in );
 
 			// Stampo i risultati
 			std::cout.setf( std::ios::fixed, std::ios::floatfield );

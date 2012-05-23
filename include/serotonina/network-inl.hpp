@@ -23,65 +23,65 @@
 
 #include <serotonina/network.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 inline const std::vector< T_Precision > &
-Network::Run( const T_Precision *inputs ) {
+Network::run( const T_Precision *inputs ) {
 
 	// Imposto gli ingressi della rete neurale
-	this->SetInputs( inputs );
+	this->setInputs( inputs );
 
 	// Richiamo la funzione principale
-	return this->Run();
+	return this->run();
 }
 
 inline const std::vector< T_Precision > &
-Network::Run( const std::vector< T_Precision > &inputs ) {
+Network::run( const std::vector< T_Precision > &inputs ) {
 
 	// Imposto gli ingressi della rete neurale
-	this->SetInputs( inputs );
+	this->setInputs( inputs );
 
 	// Richiamo la funzione principale
-	return this->Run();
+	return this->run();
 }
 
 inline const std::vector< T_Precision > &
-Network::GetOutputs() const {
+Network::getOutputs() const {
 
 	// Ritorno le uscite della rete
 	return this->output_data;
 }
 
 inline const T_Precision
-Network::GetOutput( size_t n ) const {
+Network::getOutput( size_t n ) const {
 
 	// Ritorno un uscita della rete
 	return this->output_data.at(n);
 }
 
 inline std::vector< Layer * > &
-Network::GetLayers() {
+Network::getLayers() {
 
 	// Ritorno gli strati della rete
 	return this->layers;
 }
 
 inline Layer &
-Network::GetLayer( size_t n ) {
+Network::getLayer( size_t n ) {
 
 	// Ritorno uno strato specifico della rete
 	return *this->layers.at(n);
 }
 
 inline size_t
-Network::GetNumOfInputs() const {
+Network::getNumOfInputs() const {
 
 	// Ritorno il numero degli ingressi della rete
 	return this->layers.front()->n_neurons;
 }
 
 inline size_t
-Network::GetNumOfOutputs() const {
+Network::getNumOfOutputs() const {
 
 	// Ritorno il numero delle uscite della rete
 	return this->layers.back()->n_neurons;

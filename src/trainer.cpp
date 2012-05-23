@@ -24,7 +24,7 @@
 #include <serotonina/trainer.hpp>
 #include <serotonina/trainer-inl.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /* INIZIO METODI STATICI */
 
@@ -52,10 +52,10 @@ Trainer::training_report(	Network &network, size_t epochs, time_t elapsed_time, 
 Trainer::Trainer( Network *network_ ) {
 
 	// Memorizzo l'indirizzo della rete neurale
-	this->SetNetwork( network_ );
+	this->setNetwork( network_ );
 
 	// Inizializzo i pesi sinaptici della rete neurale
-	this->InitWeights();
+	this->initWeights();
 
 	// Imposto la funzione di report dell'addestramento
 	this->report_fun = &Trainer::training_report;
@@ -64,10 +64,10 @@ Trainer::Trainer( Network *network_ ) {
 Trainer::Trainer( Network &network_ ) {
 
 	// Memorizzo l'indirizzo della rete neurale
-	this->SetNetwork( network_ );
+	this->setNetwork( network_ );
 
 	// Inizializzo i pesi sinaptici della rete neurale
-	this->InitWeights();
+	this->initWeights();
 
 	// Imposto la funzione di report dell'addestramento
 	this->report_fun = &Trainer::training_report;
@@ -76,13 +76,13 @@ Trainer::Trainer( Network &network_ ) {
 Trainer::Trainer( Network *network_, bool init_weights ) {
 
 	// Memorizzo l'indirizzo della rete neurale
-	this->SetNetwork( network_ );
+	this->setNetwork( network_ );
 
 	// Controllo se si è scelto di inizializzare i pesi sinaptici della rete
 	if ( init_weights ) {
 
 		// Inizializzo i pesi sinaptici della rete neurale
-		this->InitWeights();
+		this->initWeights();
 	}
 
 	// Imposto la funzione di report dell'addestramento
@@ -92,13 +92,13 @@ Trainer::Trainer( Network *network_, bool init_weights ) {
 Trainer::Trainer( Network &network_, bool init_weights ) {
 
 	// Memorizzo l'indirizzo della rete neurale
-	this->SetNetwork( network_ );
+	this->setNetwork( network_ );
 
 	// Controllo se si è scelto di inizializzare i pesi sinaptici della rete
 	if ( init_weights ) {
 
 		// Inizializzo i pesi sinaptici della rete neurale
-		this->InitWeights();
+		this->initWeights();
 	}
 
 	// Imposto la funzione di report dell'addestramento
@@ -110,10 +110,10 @@ Trainer::~Trainer() {
 }
 
 void
-Trainer::InitWeights() {
+Trainer::initWeights() {
 
 	// Iteratori
-	short int t = ( this->network->GetLayers().size() - 1 ) - 1;
+	short int t = ( this->network->getLayers().size() - 1 ) - 1;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -123,10 +123,10 @@ Trainer::InitWeights() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = this->network->GetLayer(t + 1).first_synapse;
+		synapse_t = this->network->getLayer(t + 1).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = this->network->GetLayer(t + 1).last_synapse;
+		end_synapse_t = this->network->getLayer(t + 1).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
@@ -138,7 +138,7 @@ Trainer::InitWeights() {
 }
 
 void
-Trainer::ComputeOutputError( const T_Precision *desired_output ) {
+Trainer::computeOutputError( const T_Precision *desired_output ) {
 
 	// Iteratore
 	size_t i = 0;
@@ -151,11 +151,11 @@ Trainer::ComputeOutputError( const T_Precision *desired_output ) {
 	Synapse *synapse_t;
 
 	// Preparo l'iteratore dei neuroni
-	last_neuron_i	= this->network->GetLayers().back()->last_neuron;
-	neuron_i		= this->network->GetLayers().back()->first_neuron;
+	last_neuron_i	= this->network->getLayers().back()->last_neuron;
+	neuron_i		= this->network->getLayers().back()->first_neuron;
 
 	// Preparo l'iteratore delle sinapsi
-	synapse_t = this->network->GetLayers().back()->first_synapse;
+	synapse_t = this->network->getLayers().back()->first_synapse;
 
 	// Calcolo l'errore dello strato di uscita
 	for ( ; neuron_i <= last_neuron_i; i++, neuron_i++ ) {
@@ -165,8 +165,8 @@ Trainer::ComputeOutputError( const T_Precision *desired_output ) {
 		neuron_i->dEdy = - ( desired_output[i] - neuron_i->value );
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_j	= this->network->GetLayer( this->network->GetLayers().size() - 2 ).last_neuron;
-		neuron_j		= this->network->GetLayer( this->network->GetLayers().size() - 2 ).first_neuron;
+		last_neuron_j	= this->network->getLayer( this->network->getLayers().size() - 2 ).last_neuron;
+		neuron_j		= this->network->getLayer( this->network->getLayers().size() - 2 ).first_neuron;
 
 		// Calcolo l'errore dei pesi sinaptici del neurone
 		// dE/dw_ji += dE/dy_i * dy_i/dP_i * dP_i/dw_ji
@@ -190,10 +190,10 @@ Trainer::ComputeOutputError( const T_Precision *desired_output ) {
 }
 
 void
-Trainer::BackpropagateError() {
+Trainer::backpropagateError() {
 
 	// Iteratori
-	short int t = ( (short int) this->network->GetLayers().size() - 1 ) - 2;
+	short int t = ( (short int) this->network->getLayers().size() - 1 ) - 2;
 
 	// Delta per la correzione del peso sinaptico
 	T_Precision delta;
@@ -211,12 +211,12 @@ Trainer::BackpropagateError() {
 	for ( ; t >= 0; t-- ) {
 
 		// Preparo gli iteratori delle sinapsi
-		synapse_t		= this->network->GetLayer(t + 1).first_synapse;
-		synapse_row_t1	= this->network->GetLayer(t + 2).first_synapse;
+		synapse_t		= this->network->getLayer(t + 1).first_synapse;
+		synapse_row_t1	= this->network->getLayer(t + 2).first_synapse;
 
 		// Preparo l'iteratore dei neuroni
-		last_neuron_j	= this->network->GetLayer(t + 1).last_neuron;
-		neuron_j		= this->network->GetLayer(t + 1).first_neuron;
+		last_neuron_j	= this->network->getLayer(t + 1).last_neuron;
+		neuron_j		= this->network->getLayer(t + 1).first_neuron;
 
 		// Ciclo per tutti i neuroni dello strato 't + 1'
 		for ( ; neuron_j <= last_neuron_j; neuron_j++, synapse_row_t1++ ) {
@@ -228,14 +228,14 @@ Trainer::BackpropagateError() {
 			synapse_t1 = synapse_row_t1;
 
 			// Preparo l'iteratore dei neuroni
-			last_neuron_k	= this->network->GetLayer(t + 2).last_neuron;
-			neuron_k		= this->network->GetLayer(t + 2).first_neuron;
+			last_neuron_k	= this->network->getLayer(t + 2).last_neuron;
+			neuron_k		= this->network->getLayer(t + 2).first_neuron;
 
 			// Calcolo l'errore retropropagato dai neuroni dello strato successivo
 			// dE/dz_k = SUM( dE/dy_j * dy_j/dP_j * dP_j/dz_k )
 
 			// Ciclo per tutti i neuroni dello strato 't + 2'
-			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->network->GetLayer(t + 2).synapses_per_row ) {
+			for ( ; neuron_k <= last_neuron_k; neuron_k++, synapse_t1 += this->network->getLayer(t + 2).synapses_per_row ) {
 
 				neuron_j->dEdy += neuron_k->dEdy * d_sigmoid( neuron_k->value ) * synapse_t1->weight;
 			}
@@ -244,8 +244,8 @@ Trainer::BackpropagateError() {
 			delta = neuron_j->dEdy * d_sigmoid( neuron_j->value );
 
 			// Preparo l'iteratore dei neuroni
-			last_neuron_i	= this->network->GetLayer(t).last_neuron;
-			neuron_i		= this->network->GetLayer(t).first_neuron;
+			last_neuron_i	= this->network->getLayer(t).last_neuron;
+			neuron_i		= this->network->getLayer(t).first_neuron;
 
 			// Ciclo per tutti i neuroni dello strato 't'
 			for ( ; neuron_i <= last_neuron_i; neuron_i++, synapse_t++ ) {

@@ -1,5 +1,11 @@
 ChangeLog of Serotonina - A Simple C++ Artificial Neural Network Library
 
+============ Serotonina 1.1.8 - urgency=low =============
+
+2012-05-23 Wicker25  < wicker25@gmail.com >
+
+    * all: Updated naming convention.
+
 ============= Serotonina 1.1.7 - urgency=low =============
 
 2011-07-11  Wicker25  < wicker25@gmail.com >

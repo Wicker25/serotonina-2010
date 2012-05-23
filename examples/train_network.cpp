@@ -27,7 +27,7 @@
 #include <serotonina.hpp>
 
 // Uso il namespace di Serotonina
-using namespace Serotonina;
+using namespace serotonina;
 
 int main( void ) {
 
@@ -39,7 +39,7 @@ int main( void ) {
 	Trainer trainer( network );
 
 	// Addestro la rete neurale con il metodo Batch
-	trainer.SetParameters( 0.5, 0.8 );
+	trainer.setParams( 0.5, 0.8 );
 
 	// Esempi di ingresso
 	const T_Precision inputs0[] =	{
@@ -61,7 +61,7 @@ int main( void ) {
 	std::cout << "Training with array :" << std::endl;
 
 	// Addestro la rete neurale usando gli esempi
-	trainer.Train< Algorithms::Batch >( inputs0, outputs0, 4, 0.000001, 100000, 5000 );
+	trainer.train< algorithms::Batch >( inputs0, outputs0, 4, 0.000001, 100000, 5000 );
 
 	// Esempi di ingresso
 	std::vector< T_Precision> inputs1;
@@ -90,14 +90,14 @@ int main( void ) {
 	std::cout << "\nTraining with std::vector :" << std::endl;
 
 	// Addestro la rete neurale usando gli esempi
-	trainer.Train< Algorithms::Batch >( inputs1, outputs1, 0.000001, 100000, 5000 );
+	trainer.train< algorithms::Batch >( inputs1, outputs1, 0.000001, 100000, 5000 );
 
 
 	// Log di lavoro
 	std::cout << "\nTraining with file.train :" << std::endl;
 
 	// Addestro la rete neurale leggendo l'insieme di addestramento da un file
-	trainer.TrainOnFile< Algorithms::Batch >( "train/xor.train", 0.000001, 100000, 5000 );
+	trainer.trainOnFile< algorithms::Batch >( "train/xor.train", 0.000001, 100000, 5000 );
 
 
 	// Log di lavoro
@@ -119,7 +119,7 @@ int main( void ) {
 			in[1] = (T_Precision) i;
 
 			// Calcolo l'uscita della rete neurale
-			const std::vector< T_Precision > &out = network.Run( in );
+			const std::vector< T_Precision > &out = network.run( in );
 
 			// Stampo i risultati
 			std::cout.setf( std::ios::fixed, std::ios::floatfield );

@@ -44,14 +44,14 @@
 #include "plot.hpp"
 #include "plot-inl.hpp"
 
-#define _GYM_TITLE_		"Serotonina::Gym - Tool grafico per l'addestramento delle reti neurali"
+#define _GYM_TITLE_		"serotonina::Gym - Tool grafico per l'addestramento delle reti neurali"
 #define _GYM_FPS_		30.0
 
 // Linea di comando
 #define _GYM_CMD_TRAINING_SET_	"--training-set"
 
 // Uso il namespace di serotonina;
-using namespace Serotonina;
+using namespace serotonina;
 
 // Algoritmi di apprendimento
 enum TrainAlgorithm {
@@ -97,8 +97,8 @@ public:
 	static void *static_start_training( void *data );
 
 	// Aggiorna i grafici della rete neurale (statico)
-	static int static_update_plot(	Serotonina::Network &network, size_t epochs, time_t elapsed_time, 
-									Serotonina::T_Precision current_error, const std::vector< T_Precision > &outputs, void *data );
+	static int static_update_plot(	serotonina::Network &network, size_t epochs, time_t elapsed_time, 
+									serotonina::T_Precision current_error, const std::vector< T_Precision > &outputs, void *data );
 
 	/** FINE METODI STATICI **/
 
@@ -108,23 +108,23 @@ public:
 	virtual ~Gym();
 
 	// Interpreta la linea di comando
-	void CommandLine( int argc, char **argv );
+	void commandLine( int argc, char **argv );
 
 	// Avvia l'addestramento della rete neurale
-	void StartTraining();
+	void startTraining();
 
 	// Carica i campioni per l'addestramento della rete
-	void LoadTrainingSet( const char *path );
+	void loadTrainingSet( const char *path );
 
 	// Carica i campioni per il test della rete
-	void LoadTestSet( const char *path );
+	void loadTestSet( const char *path );
 
 	// Salva la rete neurale in un file
-	void SaveNeuralNetwork( const char *path );
+	void saveNeuralNetwork( const char *path );
 
 	// Aggiorna i grafici della rete neurale
-	int UpdatePlot(	Serotonina::Network *network, size_t epochs, time_t elapsed_time,
-					Serotonina::T_Precision current_error, const Serotonina::T_Precision *outputs );
+	int updatePlot(	serotonina::Network *network, size_t epochs, time_t elapsed_time,
+					serotonina::T_Precision current_error, const serotonina::T_Precision *outputs );
 
 	// Funzione per la gestione degli eventi della finestra
 	virtual int handle( int event );
@@ -132,7 +132,7 @@ public:
 private:
 
 	// Rete neurale
-	Serotonina::Network *neural_network;
+	serotonina::Network *neural_network;
 
 	// Id del thread dell'addestramento
 	pthread_t thread_id;
@@ -151,13 +151,13 @@ private:
 	size_t output_size;
 
 	// Ingressi del training set
-	std::vector< Serotonina::T_Precision > inputs_data;
+	std::vector< serotonina::T_Precision > inputs_data;
 
 	// Uscite del training set
-	std::vector< Serotonina::T_Precision > outputs_data;
+	std::vector< serotonina::T_Precision > outputs_data;
 
 	// Dati sull'errore massimo
-	std::vector< Serotonina::T_Precision > error_data;
+	std::vector< serotonina::T_Precision > error_data;
 
 	// Uscita mostrata nel grafico
 	size_t graph_output;

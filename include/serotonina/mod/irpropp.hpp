@@ -27,9 +27,9 @@
 
 #include <serotonina/mod/rprop.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
-namespace Algorithms { // Namespace degli algoritmi
+namespace algorithms { // Namespace degli algoritmi
 
 /*!
  * @class IRpropPlus
@@ -51,7 +51,7 @@ public:
 	static const char *description;
 
 	// Esegue la correzione dei pesi
-	static void UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+	static void updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 								T_Precision net_error, T_Precision old_net_error );
 };
 

@@ -57,7 +57,7 @@ Gym::load_training_set_button_callback( Fl_Widget *widget, void *data ) {
 	if ( ( path = fl_file_chooser( "Carica un training set...", "Training Set (*.train)\tTest Set (*.test)", "" ) ) != NULL ) {
 
 		// Chiama il metodo corrispondente
-		gym->LoadTrainingSet( path );
+		gym->loadTrainingSet( path );
 	}
 }
 
@@ -74,7 +74,7 @@ Gym::load_test_set_button_callback( Fl_Widget *widget, void *data ) {
 	if ( ( path = fl_file_chooser( "Carica un test set...", "Test Set (*.test)\tTraining Set (*.train)", "" ) ) != NULL ) {
 
 		// Chiama il metodo corrispondente
-		gym->LoadTestSet( path );
+		gym->loadTestSet( path );
 	}
 }
 
@@ -132,7 +132,7 @@ Gym::save_button_callback( Fl_Widget *widget, void *data ) {
 	if ( ( path = fl_file_chooser( "Salva in un file...", "Neural Network (*.net)", "" ) ) != NULL ) {
 
 		// Chiama il metodo corrispondente
-		gym->SaveNeuralNetwork( path );
+		gym->saveNeuralNetwork( path );
 	}
 }
 
@@ -415,7 +415,7 @@ Gym::~Gym() {
 }
 
 void
-Gym::CommandLine( int argc, char **argv ) {
+Gym::commandLine( int argc, char **argv ) {
 
 	// Iteratore
 	size_t i = 1;
@@ -425,7 +425,7 @@ Gym::CommandLine( int argc, char **argv ) {
 		if ( strcmp( _GYM_CMD_TRAINING_SET_, argv[i] ) == 0 ) {
 
 			printf( "TRAINING SET: %s\n", argv[i + 1] );
-			//this->LoadTrainingSet( argv[i + 1] );
+			//this->loadTrainingSet( argv[i + 1] );
 		}
 	}
 
@@ -453,7 +453,7 @@ Gym::handle( int event ) {
 
 					// Aggiorno il grafico dell'addestramento se uno è in corso
 					if ( this->neural_network != NULL )
-						this->UpdatePlot( NULL, 0, 0, 0, NULL );
+						this->updatePlot( NULL, 0, 0, 0, NULL );
 				}
 
 			} else {
@@ -480,7 +480,7 @@ Gym::handle( int event ) {
 
 							// Aggiorno il grafico dell'addestramento se uno è in corso
 							if ( this->neural_network != NULL )
-								this->UpdatePlot( NULL, 0, 0, 0, NULL );
+								this->updatePlot( NULL, 0, 0, 0, NULL );
 						}
 
 						break;
@@ -499,7 +499,7 @@ Gym::handle( int event ) {
 
 							// Aggiorno il grafico dell'addestramento se uno è in corso
 							if ( this->neural_network != NULL )
-								this->UpdatePlot( NULL, 0, 0, 0, NULL );
+								this->updatePlot( NULL, 0, 0, 0, NULL );
 						}
 
 						break;
@@ -518,7 +518,7 @@ Gym::handle( int event ) {
 }
 
 void
-Gym::LoadTrainingSet( const char *path ) {
+Gym::loadTrainingSet( const char *path ) {
 
 	// Termino il thread per l'addestramento
 	if ( this->training_flag )
@@ -600,7 +600,7 @@ Gym::LoadTrainingSet( const char *path ) {
 }
 
 void
-Gym::LoadTestSet( const char *path ) {
+Gym::loadTestSet( const char *path ) {
 
 	// Termino il thread per l'addestramento
 	if ( this->training_flag )
@@ -723,7 +723,7 @@ Gym::LoadTestSet( const char *path ) {
 }
 
 void
-Gym::StartTraining() {
+Gym::startTraining() {
 
 	// Imposto la cancellazione asincrona del thread
 	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
@@ -931,7 +931,7 @@ Gym::StartTraining() {
 }
 
 int
-Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time,
+Gym::updatePlot(	Network *network, size_t epochs, time_t elapsed_time,
 					T_Precision current_error, const T_Precision *outputs ) {
 
 	// Prendo il controllo sulle FLTK
@@ -1042,7 +1042,7 @@ Gym::UpdatePlot(	Network *network, size_t epochs, time_t elapsed_time,
 }
 
 void
-Gym::SaveNeuralNetwork( const char *path ) {
+Gym::saveNeuralNetwork( const char *path ) {
 
 	// Controllo se la rete neurale è stata creata
 	if ( this->neural_network != NULL ) {
@@ -1060,7 +1060,7 @@ main( int argc, char **argv ) {
 	// Creo la finestra principale
 	Gym gym_window( 640, 640 );
 
-	gym_window.CommandLine( argc, argv );
+	gym_window.commandLine( argc, argv );
 	gym_window.resizable( gym_window );
 	gym_window.show();
 

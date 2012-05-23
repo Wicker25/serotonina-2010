@@ -24,7 +24,7 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
 /*!
  * @class Exception

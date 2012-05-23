@@ -23,25 +23,25 @@
 
 #include <serotonina/mod/rpropm.hpp>
 
-namespace Serotonina { // Namespace di Serotonina
+namespace serotonina { // Namespace di Serotonina
 
-namespace Algorithms { // Namespace degli algoritmi
+namespace algorithms { // Namespace degli algoritmi
 
 // Imposto la descrizione dell'algoritmo
 const char *RpropMinus::description = "Rprop-";
 
 void
-RpropMinus::UpdateWeights(	Network &network, std::vector< T_Precision > &train_params,
+RpropMinus::updateWeights(	Network &network, std::vector< T_Precision > &train_params,
 							T_Precision net_error, T_Precision old_net_error ) {
 
 	// Iteratori
-	short int t = ( network.GetLayers().size() - 1 );
+	short int t = ( network.getLayers().size() - 1 );
 
 	// Concordanza della derivata dell'errore
 	T_Precision delta_sign;
 
 	// Puntatore alla struttura contenente i dati dell'addestramento
-	RpropMinus::TrainingData *training_data;
+	RpropMinus::TrainData *training_data;
 
 	// Iteratori delle sinapsi
 	Synapse *synapse_t;
@@ -51,16 +51,16 @@ RpropMinus::UpdateWeights(	Network &network, std::vector< T_Precision > &train_p
 	for ( ; t > 0; t-- ) {
 
 		// Preparo l'iteratore delle sinapsi
-		synapse_t = network.GetLayer(t).first_synapse;
+		synapse_t = network.getLayer(t).first_synapse;
 
 		// Ricavo la sinapsi finale
-		end_synapse_t = network.GetLayer(t).last_synapse;
+		end_synapse_t = network.getLayer(t).last_synapse;
 
 		// Ciclo per tutti i pesi sinaptici tra i due strati
 		for ( ; synapse_t <= end_synapse_t; synapse_t++ ) {
 
 			// Ricavo la struttura contenente i dati dell'addestramento
-			training_data = ((RpropMinus::TrainingData *) synapse_t->train);
+			training_data = ((RpropMinus::TrainData *) synapse_t->train);
 
 			// Calcolo la variazione della derivata rispetto all'epoca precedente
 			delta_sign = training_data->prev_dEdw * synapse_t->dEdw;
