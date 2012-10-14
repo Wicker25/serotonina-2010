@@ -57,13 +57,9 @@ Building with CMake
 
 Linking with Serotonina
 =======================
-To link statically:
+To link:
 
  $ g++ `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
-
-To link dynamically:
-
- $ g++ -static `pkg-config --libs --cflags serotonina` <SOURCE> -o <BIN>
 
 
  
