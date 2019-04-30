@@ -1,4 +1,4 @@
-/* 
+/*
     Title --- plot.cpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
@@ -156,7 +156,7 @@ Plot::DrawAxis( float offx, float offy, float min, float max, float xdiv, float 
 	// Imposto il carattere del testo
 	gl_font( FL_HELVETICA, (int) ( 8.0 * eps ) );
 
-	// Buffer del testo		
+	// Buffer del testo
 	char buffer[20];
 
 	// Iteratore
@@ -191,7 +191,7 @@ Plot::DrawAxis( float offx, float offy, float min, float max, float xdiv, float 
 
 			// Disegno il valore della tacca nell'asse
 			if ( (float) this->data_set[0].size / step_x < 5.0 || !alternate )
-				gl_draw( buffer, (float) xpos - (float) gl_width( buffer ) / 2.0f, offy - 17.0 * eps ); 
+				gl_draw( buffer, (float) xpos - (float) gl_width( buffer ) / 2.0f, offy - 17.0 * eps );
 
 			// Visualizzo le etichette a sbalzi
 			alternate = ( alternate ) ? false : true;
@@ -220,7 +220,7 @@ Plot::DrawAxis( float offx, float offy, float min, float max, float xdiv, float 
 			snprintf( buffer, 20, "%.1f", i );
 
 		// Disegno il valore della tacca nell'asse
-		gl_draw( buffer, (float) offx - (float) gl_width( buffer ) - 10, ypos - 3 ); 
+		gl_draw( buffer, (float) offx - (float) gl_width( buffer ) - 10, ypos - 3 );
 	}
 }
 
@@ -339,7 +339,7 @@ Plot::draw() {
 	}
 
 	// Richiamo la funzione originale
-	Fl_Gl_Window::draw();
+	// REMOVED FROM LEGACY CODE: Fl_Gl_Window::draw();
 }
 
 #endif

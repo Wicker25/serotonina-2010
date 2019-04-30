@@ -1,4 +1,4 @@
-/* 
+/*
     Title --- ocr.cpp
 
     Copyright (C) 2010 Giacomo Trudu - wicker25[at]gmail[dot]com
@@ -50,7 +50,7 @@ Ocr::train_button_callback( Fl_Widget *widget, void *data ) {
 	Ocr *ocr = static_cast< Ocr * >( data );
 
 	// Controllo se l'addestramento è già stato avviato
-	if ( !ocr->training_flag ) { 
+	if ( !ocr->training_flag ) {
 
 		// Memorizzo l'inizio del thread
 		ocr->training_flag = true;
@@ -686,7 +686,7 @@ Ocr::handle( int event ) {
 		case FL_KEYDOWN: {
 
 			// Controllo il tasto premuto
-			switch ( Fl::event_key() ) { 
+			switch ( Fl::event_key() ) {
 
 				// Funzione di uscita
 				case FL_Escape: {
@@ -699,7 +699,7 @@ Ocr::handle( int event ) {
 				case 'C': {
 
 					// Controllo che sia non in corso l'addestramento
-					if ( !this->training_flag ) { 
+					if ( !this->training_flag ) {
 
 						// Pulisco la tavola da disegno
 						this->ClearArtboard();
@@ -732,7 +732,7 @@ Ocr::handle( int event ) {
 		case FL_DRAG: {
 
 			// Controllo che non sia in corso l'addestramento
-			if ( !this->training_flag ) { 
+			if ( !this->training_flag ) {
 
 				// Ricavo le coordinate all'interno della tavola da disegno
 				int pencil_x = ( Fl::event_x() - 20 ) / ARTBOARD_SCALE;
@@ -933,7 +933,7 @@ Ocr::draw() {
 	glClear( GL_COLOR_BUFFER_BIT );
 
 	// Controllo che non sia in corso l'addestramento
-	if ( !this->training_flag ) { 
+	if ( !this->training_flag ) {
 
 		// Delimito l'area del carattere
 		this->FindCharacter();
@@ -973,7 +973,7 @@ Ocr::draw() {
 		snprintf( buffer, 50, "Carattere: '%c' (%.1f%%)\n", this->recognized_character, this->precision_character );
 
 		// Disegno il messaggio
-		gl_draw( buffer, 45, 45 ); 
+		gl_draw( buffer, 45, 45 );
 	}
 
 	// Imposto il colore
@@ -981,10 +981,10 @@ Ocr::draw() {
 
 	// Disegno alcuni messaggi per l'utente
 	gl_draw( "[M] Menu'", 20, 20 + ARTBOARD_H * ARTBOARD_SCALE + 25 );
-	gl_draw( "[C] Pulisci", 130, 20 + ARTBOARD_H * ARTBOARD_SCALE + 25 ); 
+	gl_draw( "[C] Pulisci", 130, 20 + ARTBOARD_H * ARTBOARD_SCALE + 25 );
 
 	// Richiamo la funzione originale
-	Fl_Gl_Window::draw();
+	// REMOVED FROM LEGACY CODE: Fl_Gl_Window::draw();
 }
 
 /* INIZIO FUNZIONE PRINCIPALE */
