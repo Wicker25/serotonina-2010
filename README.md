@@ -2,7 +2,7 @@
 
 My high school graduation project (before Machine Learning was a real thing). The project includes a handwriting recognition tool and a trainer with UI.
 
-Full thesis at [Le Reti Neurali Artificiali](http://www.hackyourmind.org/public/files/Le%20reti%20neurali%20artificiali%20-%20tesi%20di%20maturita.pdf).
+Full thesis at [Le Reti Neurali Artificiali](https://github.com/Wicker25/serotonina-2010/raw/master/doc/Le%20reti%20neurali%20artificiali%20-%20tesi%20di%20maturita.pdf).
 
 ![screenshot](doc/ocr.gif)
 

@@ -56,12 +56,12 @@
  *
  *   The library began as a school-leaving project and it is related to a thesis:
  *
- *       - <a href="http://www.hackyourmind.org/downloads/documenti/Le%20reti%20neurali%20artificiali%20-%20tesi%20di%20maturita.pdf" target="_blank">Le reti neurali artificiali - tesi di maturita.pdf</a>
+ *       - <a href="https://github.com/Wicker25/serotonina-2010/raw/master/doc/Le%20reti%20neurali%20artificiali%20-%20tesi%20di%20maturita.pdf" target="_blank">Le reti neurali artificiali - tesi di maturita.pdf</a>
  *
  *   The reference manual is available here:
  *
- *       - <a href="http://www.serotonina.hackyourmind.org/doc/en/">Reference manual (english)</a>
- *       - <a href="http://www.serotonina.hackyourmind.org/doc/it/">Manuale di riferimento (italiano)</a>
+ *       - <a href="https://github.com/Wicker25/serotonina-2010">Reference manual (english)</a>
+ *       - <a href="https://github.com/Wicker25/serotonina-2010">Manuale di riferimento (italiano)</a>
  *
  *   \section download Download
  *
@@ -108,12 +108,12 @@
  *
  *   La libreria nasce come un progetto di maturità ed è correlata da una tesi:
  *
- *       - <a href="http://www.hackyourmind.org/downloads/documenti/Le%20reti%20neurali%20artificiali%20-%20tesi%20di%20maturita.pdf" target="_blank">Le reti neurali artificiali - tesi di maturita.pdf</a>
+ *       - <a href="https://github.com/Wicker25/serotonina-2010/raw/master/doc/Le%20reti%20neurali%20artificiali%20-%20tesi%20di%20maturita.pdf" target="_blank">Le reti neurali artificiali - tesi di maturita.pdf</a>
  *
  *   Il manuale di riferimento, invece, è disponibile (in lingua italiana e inglese) ai seguenti indirizzi:
  *
- *       - <a href="http://www.serotonina.hackyourmind.org/doc/it/">Manuale di riferimento (italiano)</a>
- *       - <a href="http://www.serotonina.hackyourmind.org/doc/en/">Reference manual (english)</a>
+ *       - <a href="https://github.com/Wicker25/serotonina-2010">Manuale di riferimento (italiano)</a>
+ *       - <a href="https://github.com/Wicker25/serotonina-2010">Reference manual (english)</a>
  *
  *   \section download Download
  *
